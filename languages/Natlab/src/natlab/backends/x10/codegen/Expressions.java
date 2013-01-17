@@ -95,8 +95,7 @@ public class Expressions {
 			return new Literal(NatlabExp.getNodeString());
 		}
 		if (NatlabExp instanceof NameExpr) {
-			 System.out.println(((NameExpr)
-			 NatlabExp).getName().getID()+"~~~");
+			 
 			return new IDUse(((NameExpr) NatlabExp).getName().getID());
 
 		}

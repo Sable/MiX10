@@ -56,7 +56,7 @@ public class ForLoopStmt {
 		DeclStmt TempDeclStmt = new DeclStmt();
 		TempDeclStmt.setLHS(for_assign.getLHS());
 		block.addStmt(TempDeclStmt);
-		target.symbolMap.put(LHSinfo.getName(), null);
+		target.symbolMap.put(LHSinfo.getName(), LHSinfo);
 		for_stmt.setCondition(new LTExp(
 				new IDUse(for_assign.getLHS().getName()), upper));
 		for_stmt.setStepper(new IncExp(

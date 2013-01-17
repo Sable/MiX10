@@ -48,9 +48,9 @@ public class builtinMaker {
 		
 		try {
 			StringBuffer mix10Builtins = new StringBuffer();
-			BufferedWriter out = new BufferedWriter(new FileWriter("/home/2011/vkumar5/mclab/Project/languages/Natlab/src/natlab/backends/x10/benchmarks/unit/mix10.x10", false));
+			BufferedWriter out = new BufferedWriter(new FileWriter("/media/vineet/19F5-FD4C/Thesis/mclab_git/mclab/languages/Natlab/src/natlab/backends/x10/benchmarks/unit/mix10.x10", false));
 			out.close();
-			BufferedWriter outAgain = new BufferedWriter(new FileWriter("/home/2011/vkumar5/mclab/Project/languages/Natlab/src/natlab/backends/x10/benchmarks/unit/mix10.x10", true));
+			BufferedWriter outAgain = new BufferedWriter(new FileWriter("/media/vineet/19F5-FD4C/Thesis/mclab_git/mclab/languages/Natlab/src/natlab/backends/x10/benchmarks/unit/mix10.x10", true));
 			outAgain.write(builtin);
 			outAgain.close();
 		} catch (IOException e) {
@@ -68,7 +68,7 @@ public class builtinMaker {
 			String builtin;
 		DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
-		Document doc = docBuilder.parse (new File("/home/2011/vkumar5/mclab/Project/languages/Natlab/src/natlab/backends/x10/codegen/mix10_builtins.xml"));
+		Document doc = docBuilder.parse (new File("/media/vineet/19F5-FD4C/Thesis/mclab_git/mclab/languages/Natlab/src/natlab/backends/x10/codegen/mix10_builtins.xml"));
 		doc.getDocumentElement ().normalize ();
 		
 		NodeList builtinList = doc.getElementsByTagName(natlabExp.getVarName());

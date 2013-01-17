@@ -7,6 +7,7 @@ import java.util.HashMap;
 import natlab.backends.x10.IRx10.ast.AssignStmt;
 import natlab.backends.x10.IRx10.ast.ClassBlock;
 import natlab.backends.x10.IRx10.ast.DeclStmt;
+import natlab.backends.x10.IRx10.ast.IDInfo;
 import natlab.backends.x10.IRx10.ast.List;
 import natlab.backends.x10.IRx10.ast.Method;
 import natlab.backends.x10.IRx10.ast.MethodBlock;
@@ -46,7 +47,8 @@ import natlab.tame.valueanalysis.aggrvalue.AggrValue;
 public class IRx10ASTGenerator extends TIRAbstractNodeCaseHandler {
 	ValueAnalysis<AggrValue<AdvancedMatrixValue>> analysis;
 	x10Mapping x10Map;
-	HashMap<String, Collection<ClassReference>> symbolMap = new HashMap<String, Collection<ClassReference>>();
+//	HashMap<String, Collection<ClassReference>> symbolMap = new HashMap<String, Collection<ClassReference>>();
+	HashMap<String, IDInfo> symbolMap = new HashMap<String, IDInfo>();
 	String symbolMapKey;
 	private int graphSize;
 	int index;
@@ -82,6 +84,7 @@ public class IRx10ASTGenerator extends TIRAbstractNodeCaseHandler {
 			subAST = new IRx10ASTGenerator(analysis2, graphSize, i, fileDir,
 					classname);
 			methodList.add(subAST.method);
+			
 		}
 		ClassBlock class_block = new ClassBlock(declStmtList, methodList);
 		return class_block;

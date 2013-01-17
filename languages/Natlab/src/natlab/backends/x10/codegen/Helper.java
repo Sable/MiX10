@@ -119,6 +119,37 @@ public class Helper {
 		}
 
 	}
+	
+	static IDInfo generateIDInfo(
+			ValueAnalysis<AggrValue<AdvancedMatrixValue>> analysis,
+			int graphIndex, TIRFunction node, String ID) {
+
+		if (analysis.getNodeList().get(graphIndex).getAnalysis()
+				.getOutFlowSets().get(node).isViable()) {
+			AdvancedMatrixValue temp = ((AdvancedMatrixValue) (analysis
+					.getNodeList().get(graphIndex).getAnalysis()
+					.getOutFlowSets().get(node).get(ID).getSingleton()));
+
+			IDInfo id_info = new IDInfo();
+			if (null != temp.getMatlabClass()) {
+				id_info.setType(x10Mapping.getX10TypeMapping(temp
+						.getMatlabClass().getName()));
+			}
+			if (null != temp.getShape()){
+				id_info.setShape((ArrayList<Integer>) temp.getShape()
+						.getDimensions());
+			}
+			if (null != temp.getisComplexInfo()){
+				id_info.setisComplex(temp.getisComplexInfo().toString());
+			}
+			return id_info;
+		}
+
+		else {
+			return new IDInfo();
+		}
+
+	}
 
 	static IDInfo generateIDInfo(
 			ValueAnalysis<AggrValue<AdvancedMatrixValue>> analysis,

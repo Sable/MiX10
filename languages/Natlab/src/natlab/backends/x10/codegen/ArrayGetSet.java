@@ -31,9 +31,7 @@ public class ArrayGetSet {
 
 			array_decl.getLHS().setName(LHS);
 			array_decl.setRHS(new EmptyExp());
-			target.symbolMap.put(target.symbolMapKey, Helper
-					.getAnalysisValue(target.analysis, target.index, node,
-							LHS));
+			target.symbolMap.put(target.symbolMapKey, array_decl.getLHS());
 			block.addStmt(array_decl);
 			
 		}
@@ -46,6 +44,8 @@ public class ArrayGetSet {
 			array_set.setLHS(Helper.generateIDInfo(target.analysis,
 					target.index, node, LHS));
 			array_set.getLHS().setName(LHS.toString());
+			target.symbolMap.put(target.symbolMapKey, array_set.getLHS());
+
 			
 			array_set.getLHS()
 					.setValue(

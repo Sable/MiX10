@@ -29,9 +29,8 @@ public class Function {
 			arguments.add(new Args(x10Mapping.getX10TypeMapping(Helper
 					.getArgumentType(target.analysis, target.index, node,
 							param.getID())), param.getPrettyPrinted()));
-			target.symbolMap.put(param.getID().toString(), Helper
-					.getAnalysisValue(target.analysis, target.index, node,
-							param.getID()));
+			target.symbolMap.put(param.getID().toString(), Helper.generateIDInfo(target.analysis,
+					target.index, node, param.getID()));
 		}
 		method_header.setArgsList(arguments);
 		MethodBlock method_block = new MethodBlock(new List<Stmt>());

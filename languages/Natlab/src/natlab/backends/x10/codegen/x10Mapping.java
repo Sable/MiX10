@@ -15,9 +15,11 @@ public class x10Mapping {
 
 	public x10Mapping() {
 		makex10TypeMap();
+/*
 		makex10BinOperatorMap();
 		makex10UnOperatorMap();
 		makex10DirectBuiltinMap();
+*/
 		makex10BuiltinConstMap();
 		makex10MethodMap();
 	}
@@ -37,7 +39,7 @@ public class x10Mapping {
 		x10TypeMap.put("logical", new Type("Boolean"));
 		x10TypeMap.put(null, new Type("Double")); /*This is the default type*/
 	}
-
+/*
 	private void makex10BinOperatorMap() {
 		x10BinOperatorMap.put("plus", "+");
 		x10BinOperatorMap.put("minus", "-");
@@ -78,7 +80,7 @@ public class x10Mapping {
 		x10DirectBuiltinMap.put("cos", "cos");
 
 	}
-
+*/
 	private void makex10BuiltinConstMap() {
 		// TODO create a categorical map here
 

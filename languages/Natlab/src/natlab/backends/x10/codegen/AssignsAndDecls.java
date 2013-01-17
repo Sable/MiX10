@@ -51,6 +51,9 @@ public class AssignsAndDecls {
 			
 			//tf=true => scalar
 			setRHSValue(isDecl, assign_stmt, node, tf, target);
+			
+			target.symbolMap.put(target.symbolMapKey, assign_stmt.getLHS());
+			
 			block.addStmt(assign_stmt);
 			// TODO : Handle expressions of various types
 			// Set parent's value in various expressions
@@ -78,9 +81,7 @@ public class AssignsAndDecls {
 //							.getAnalysisValue(target.analysis, target.index,
 //									node, LHS));
 			target.symbolMap
-			.put(target.symbolMapKey, Helper
-					.getAnalysisValue(target.analysis, target.index,
-							node, LHS));
+			.put(target.symbolMapKey, decl_stmt.getLHS());
 			block.addStmt(decl_stmt);
 
 		}
@@ -140,6 +141,10 @@ public class AssignsAndDecls {
 				list_single_assign_stmt.getLHS().setName(
 						((TIRAbstractAssignToListStmt) node).getTargets().getChild(0).getVarName());
 				setRHSValue(false, list_single_assign_stmt, node, false, target);
+				
+				
+				target.symbolMap.put(target.symbolMapKey, list_single_assign_stmt.getLHS());
+				
 				block.addStmt(list_single_assign_stmt);
 
 			} else {
@@ -152,9 +157,7 @@ public class AssignsAndDecls {
 				decl_stmt.getLHS().setName(((TIRAbstractAssignToListStmt)node).getTargets().getChild(0).getVarName());
 				setRHSValue(isDecl, decl_stmt, node, false, target);
 
-				target.symbolMap.put(target.symbolMapKey, Helper
-						.getAnalysisValue(target.analysis, target.index, node,
-								LHS));
+				target.symbolMap.put(target.symbolMapKey, decl_stmt.getLHS());
 				block.addStmt(decl_stmt);
 
 			}
@@ -177,6 +180,8 @@ public class AssignsAndDecls {
 				.addIDInfo(
 						Helper.generateIDInfo(target.analysis, target.index,
 								node, name.getID()));
+				target.symbolMap.put(name.getID(),Helper.generateIDInfo(target.analysis, target.index,
+						node, name.getID()) );
 
 //		list_assign_stmt
 //				.getMultiAssignLHS()
@@ -220,7 +225,8 @@ public class AssignsAndDecls {
 				.addIDInfo(
 						Helper.generateIDInfo(target.analysis, target.index,
 								node, LHS));
-
+		target.symbolMap.put(LHS,Helper.generateIDInfo(target.analysis, target.index,
+				node, name.getID()) );
 		assign_stmt
 				.getMultiAssignLHS()
 				.getIDInfo(assign_stmt.getMultiAssignLHS().getNumIDInfo() - 1)
