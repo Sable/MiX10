@@ -68,8 +68,9 @@ public class Expressions {
 		List<Exp> Args = new List<Exp>();
 		int numArgs = NatlabExp.getChild(1).getNumChild();
 		for (int i = 0; i < numArgs; i++) {
-			System.out.println("!!!");
+			System.out.println("!!!"+i);
 			Args.add(makeIRx10Exp((ast.Expr) NatlabExp.getChild(1).getChild(i), false, target));//TODO 11 dec Test it
+			
 		}
 		return Args;
 	}
@@ -95,8 +96,17 @@ public class Expressions {
 			return new Literal(NatlabExp.getNodeString());
 		}
 		if (NatlabExp instanceof NameExpr) {
-			 
-			return new IDUse(((NameExpr) NatlabExp).getName().getID());
+			
+			
+			
+			if (target.symbolMap.containsKey(((NameExpr) NatlabExp).getName().getID()))
+			{
+				IDInfo nameIdInfo = new IDInfo();
+				nameIdInfo = target.symbolMap.get(((NameExpr) NatlabExp).getName().getID());
+				return nameIdInfo;
+			}
+			else return new IDInfo(null,((NameExpr) NatlabExp).getName().getID(),null,null,null );
+			
 
 		}
 
@@ -137,14 +147,18 @@ public class Expressions {
 
 			List<Exp> Args = new List<Exp>();
 			Args = getArgs(NatlabExp, target);
+			
+			System.out.println(((IDInfo)Args.getChild(0)).getName());
+			
+			
 			//if (!((ParameterizedExpr) NatlabExp).isVariable){//TODO check if isVariable works
-			if (builtinMaker.isBuiltin(NatlabExp.getVarName())){
+			if (x10Mapping.isBuiltin(NatlabExp.getVarName())){
 				
 			BuiltinMethodCall libCall = new BuiltinMethodCall();
 			libCall.setBuiltinMethodName(new MethodId("mix10."+NatlabExp.getVarName()));
 			libCall.setArgumentList(Args);
 			//builtinMaker makeBuiltinClass = new builtinMaker();
-			builtinMaker.makeBuiltin(NatlabExp);
+			builtinMaker.makeBuiltin(NatlabExp, Args);
 			return libCall;
 			}
 			

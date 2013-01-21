@@ -25,7 +25,8 @@ public class Function {
 		System.out.println("###"+node.getInputParams().getNumChild());
 		
 		for (Name param : node.getInputParams()) {
-
+			
+			
 			arguments.add(new Args(x10Mapping.getX10TypeMapping(Helper
 					.getArgumentType(target.analysis, target.index, node,
 							param.getID())), param.getPrettyPrinted()));
@@ -42,7 +43,7 @@ public class Function {
 		 * extend it to support multiple returns
 		 * Add a return type stmt with a list of return values
 		 */
-		System.out.println(node.getNodeString()+"$$$");
+		System.out.println(node.getNodeString());
 		if (null != node.getOutputParams() && node.getOutputParams().getNumChild()>0){
 		Type returnType = Helper.getReturnType(target.analysis, target.index, node, node.getOutputParam(0).getID());
 		target.method.getMethodHeader().setReturnType(returnType);

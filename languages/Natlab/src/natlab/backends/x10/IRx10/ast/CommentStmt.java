@@ -61,7 +61,7 @@ public class CommentStmt extends Stmt implements Cloneable {
   /**
    * @ast method 
    * @aspect PrettyPrinter
-   * @declaredat ./astgen/pretty.jadd:392
+   * @declaredat ./astgen/pretty.jadd:406
    */
   String pp(String indent)
 {

@@ -61,7 +61,7 @@ public class DivExp extends MultiplicativeExp implements Cloneable {
   /**
    * @ast method 
    * @aspect PrettyPrinter
-   * @declaredat ./astgen/pretty.jadd:265
+   * @declaredat ./astgen/pretty.jadd:279
    */
   String pp(String indent)
 {

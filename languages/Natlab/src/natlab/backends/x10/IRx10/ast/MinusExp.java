@@ -61,16 +61,11 @@ public class MinusExp extends UnaryExp implements Cloneable {
   /**
    * @ast method 
    * @aspect PrettyPrinter
-   * @declaredat ./astgen/pretty.jadd:240
+   * @declaredat ./astgen/pretty.jadd:254
    */
   String pp(String indent)
 {
-	try{
 	return (indent+"(-"+getOperand().pp("")+")");
-	}
-	catch (NullPointerException e){
-		return (indent+"(-"+"NULL"+")");
-	}
 }
   /**
    * @ast method 

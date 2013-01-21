@@ -62,7 +62,7 @@ public class NEExp extends EqualityExp implements Cloneable {
   /**
    * @ast method 
    * @aspect PrettyPrinter
-   * @declaredat ./astgen/pretty.jadd:315
+   * @declaredat ./astgen/pretty.jadd:329
    */
   String pp(String indent)
 {

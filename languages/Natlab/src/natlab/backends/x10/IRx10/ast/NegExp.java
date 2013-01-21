@@ -61,7 +61,7 @@ public class NegExp extends UnaryExp implements Cloneable {
   /**
    * @ast method 
    * @aspect PrettyPrinter
-   * @declaredat ./astgen/pretty.jadd:250
+   * @declaredat ./astgen/pretty.jadd:264
    */
   String pp(String indent)
 {

@@ -126,12 +126,18 @@ public class Helper {
 
 		if (analysis.getNodeList().get(graphIndex).getAnalysis()
 				.getOutFlowSets().get(node).isViable()) {
+			
+			
+
+			
 			AdvancedMatrixValue temp = ((AdvancedMatrixValue) (analysis
 					.getNodeList().get(graphIndex).getAnalysis()
 					.getOutFlowSets().get(node).get(ID).getSingleton()));
 
 			IDInfo id_info = new IDInfo();
-			if (null != temp.getMatlabClass()) {
+			if (null != temp.getMatlabClass()) {   
+				//System.out.println("$$$$"+x10Mapping.getX10TypeMapping(temp
+				//	.getMatlabClass().getName()).getName());
 				id_info.setType(x10Mapping.getX10TypeMapping(temp
 						.getMatlabClass().getName()));
 			}

@@ -61,11 +61,11 @@ public class LTExp extends RelationalExp implements Cloneable {
   /**
    * @ast method 
    * @aspect PrettyPrinter
-   * @declaredat ./astgen/pretty.jadd:295
+   * @declaredat ./astgen/pretty.jadd:309
    */
   String pp(String indent)
 {
-	return(indent+"("+getLeftOp().pp("")+" < "+getRightOp().pp("")+")");
+	return(indent+"("+getLeftOp().pp("")+" > "+getRightOp().pp("")+")");
 }
   /**
    * @ast method 

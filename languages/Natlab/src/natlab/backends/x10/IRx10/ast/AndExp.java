@@ -61,7 +61,7 @@ public class AndExp extends LogicalExp implements Cloneable {
   /**
    * @ast method 
    * @aspect PrettyPrinter
-   * @declaredat ./astgen/pretty.jadd:320
+   * @declaredat ./astgen/pretty.jadd:334
    */
   String pp(String indent)
 {

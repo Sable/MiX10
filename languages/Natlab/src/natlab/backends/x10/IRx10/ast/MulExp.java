@@ -61,7 +61,7 @@ public class MulExp extends MultiplicativeExp implements Cloneable {
   /**
    * @ast method 
    * @aspect PrettyPrinter
-   * @declaredat ./astgen/pretty.jadd:260
+   * @declaredat ./astgen/pretty.jadd:274
    */
   String pp(String indent)
 {

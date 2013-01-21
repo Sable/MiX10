@@ -61,7 +61,7 @@ public class ArraySetStmt extends Stmt implements Cloneable {
   /**
    * @ast method 
    * @aspect PrettyPrinter
-   * @declaredat ./astgen/pretty.jadd:77
+   * @declaredat ./astgen/pretty.jadd:85
    */
   String pp(String indent){
 		StringBuffer x = new StringBuffer();

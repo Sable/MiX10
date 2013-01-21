@@ -61,7 +61,7 @@ public class BuiltinMethodCall extends MethodCall implements Cloneable {
   /**
    * @ast method 
    * @aspect PrettyPrinter
-   * @declaredat ./astgen/pretty.jadd:363
+   * @declaredat ./astgen/pretty.jadd:377
    */
   String pp(String indent)
 {

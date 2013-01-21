@@ -61,7 +61,7 @@ public class IfElseStmt extends Stmt implements Cloneable {
   /**
    * @ast method 
    * @aspect PrettyPrinter
-   * @declaredat ./astgen/pretty.jadd:345
+   * @declaredat ./astgen/pretty.jadd:359
    */
   String pp(String indent)
 {   

@@ -61,7 +61,7 @@ public class ForStmt extends Stmt implements Cloneable {
   /**
    * @ast method 
    * @aspect PrettyPrinter
-   * @declaredat ./astgen/pretty.jadd:330
+   * @declaredat ./astgen/pretty.jadd:344
    */
   String pp (String indent){
 	  StringBuffer x= new StringBuffer();

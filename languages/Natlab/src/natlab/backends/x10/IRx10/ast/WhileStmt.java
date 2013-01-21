@@ -61,7 +61,7 @@ public class WhileStmt extends Stmt implements Cloneable {
   /**
    * @ast method 
    * @aspect PrettyPrinter
-   * @declaredat ./astgen/pretty.jadd:337
+   * @declaredat ./astgen/pretty.jadd:351
    */
   String pp(String indent)
 {
