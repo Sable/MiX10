@@ -1,4 +1,4 @@
-function [x] =  forTest1(a)
-
+function [x] =  simplest(a)
+a=a+2;
 x=a;
 end

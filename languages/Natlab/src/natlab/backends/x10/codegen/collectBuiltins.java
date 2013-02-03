@@ -1,6 +1,7 @@
 package natlab.backends.x10.codegen;
 
 import java.util.ArrayList;
+
 import java.util.HashMap;
 
 import ast.ASTNode;
@@ -16,10 +17,19 @@ import natlab.tame.valueanalysis.advancedMatrix.AdvancedMatrixValue;
 import natlab.tame.valueanalysis.aggrvalue.AggrValue;
 import natlab.tame.tir.*;
 import natlab.tame.tir.analysis.TIRAbstractNodeCaseHandler;
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 public class collectBuiltins extends TIRAbstractNodeCaseHandler {
 	
-	HashMap<String,String> usedBuiltins = new HashMap<String,String>();
+	HashMap<String, NodeList> usedBuiltins = new HashMap<String,NodeList>();
 	
 	private collectBuiltins(
 			ValueAnalysis<AggrValue<AdvancedMatrixValue>> analysis, int size,

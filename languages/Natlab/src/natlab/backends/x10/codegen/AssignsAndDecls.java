@@ -252,7 +252,7 @@ public class AssignsAndDecls {
 		Expr expression = node.getRHS();
 		if (expression instanceof ParameterizedExpr) {
 			System.out.println("comes in here ");
-			collectBuiltins.usedBuiltins.put(expression.getVarName(),expression.getVarName());
+			collectBuiltins.usedBuiltins.put(expression.getVarName(),null);
 		}
 		
 		
@@ -263,7 +263,7 @@ public class AssignsAndDecls {
 			TIRAbstractAssignStmt node, collectBuiltins collectBuiltins) {
 		Expr expression = node.getRHS();
 		if (expression instanceof ParameterizedExpr) {
-			collectBuiltins.usedBuiltins.put(expression.getVarName(),expression.getVarName());
+			collectBuiltins.usedBuiltins.put(expression.getVarName(),null);
 		}
 		
 	}

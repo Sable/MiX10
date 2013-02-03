@@ -1,1 +1,1 @@
-This is type 1..arrays
+This is type 2

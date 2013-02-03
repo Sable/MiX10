@@ -158,7 +158,7 @@ public class Expressions {
 			libCall.setBuiltinMethodName(new MethodId("mix10."+NatlabExp.getVarName()));
 			libCall.setArgumentList(Args);
 			//builtinMaker makeBuiltinClass = new builtinMaker();
-			builtinMaker.makeBuiltin(NatlabExp, Args);
+			builtinMaker.makeBuiltin(NatlabExp, NatlabExp.getVarName(), target);
 			return libCall;
 			}
 			
