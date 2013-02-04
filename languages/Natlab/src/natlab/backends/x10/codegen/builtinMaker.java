@@ -21,7 +21,8 @@ import natlab.tame.valueanalysis.ValueAnalysisPrinter;
 import ast.Expr;
 
 public class builtinMaker {
-	ArrayList<String> builtinList = new ArrayList<String>();
+	private static ArrayList<String> builtinList = new ArrayList<String>(); //stores consumed builtins
+	static String builtin = new String();
 	public builtinMaker(){
 
 	}
@@ -31,21 +32,26 @@ public class builtinMaker {
 		 * This is the method that picks up the right method from the xml 
 		 * and creates a x10 method ("literally" node in the mix10 class
 		 */
-		String builtin = new String();
+		
+		
 		builtin = getBuiltinFromXml(natlabExp, builtinName,target);
-		
-		
-		try {
-			StringBuffer mix10Builtins = new StringBuffer();
-			BufferedWriter out = new BufferedWriter(new FileWriter("/media/vineet/19F5-FD4C/Thesis/mclab_git/mclab/languages/Natlab/src/natlab/backends/x10/benchmarks/unit/mix10.x10", false));
-			out.close();
-			BufferedWriter outAgain = new BufferedWriter(new FileWriter("/media/vineet/19F5-FD4C/Thesis/mclab_git/mclab/languages/Natlab/src/natlab/backends/x10/benchmarks/unit/mix10.x10", true));
-			outAgain.write(builtin);
-			outAgain.close();
-		} catch (IOException e) {
-			System.out.println("File IOException - cannot create mix10 class ");
-
+		if (!builtin.equals("processed")){
+			BuiltinWriter.mix10Append(builtin);
+			
 		}
+		
+		
+//		try {
+//			StringBuffer mix10Builtins = new StringBuffer();
+//			BufferedWriter out = new BufferedWriter(new FileWriter("/media/vineet/19F5-FD4C/Thesis/mclab_git/mclab/languages/Natlab/src/natlab/backends/x10/benchmarks/unit/mix10.x10", false));
+//			out.close();
+//			BufferedWriter outAgain = new BufferedWriter(new FileWriter("/media/vineet/19F5-FD4C/Thesis/mclab_git/mclab/languages/Natlab/src/natlab/backends/x10/benchmarks/unit/mix10.x10", true));
+//			outAgain.write(builtin);
+//			outAgain.close();
+//		} catch (IOException e) {
+//			System.out.println("File IOException - cannot create mix10 class ");
+//
+//		}
 	}
 
 	private static String getBuiltinFromXml(Expr natlabExp, String builtinName, IRx10ASTGenerator target) {
@@ -53,36 +59,41 @@ public class builtinMaker {
 		
 		int arrayOrGml = specialize(natlabExp);
 		String exprType = getExprType(natlabExp,target);
-		try {
-			String builtin;
-		DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
-		Document doc = docBuilder.parse (new File("/media/vineet/19F5-FD4C/Thesis/mclab_git/mclab/languages/Natlab/src/natlab/backends/x10/codegen/mix10_builtins.xml"));
-		doc.getDocumentElement ().normalize ();
+		String builtin;
+		if (! builtinList.contains(builtinName+"-"+exprType)){
 		
-		NodeList builtinList = target.collectedBuiltins.usedBuiltins.get(builtinName);
-		Element builtinArrayOrGml = (Element)builtinList.item(arrayOrGml);
+		
+//		try {
+			
+//		DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
+//        DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
+//		Document doc = docBuilder.parse (new File("/media/vineet/19F5-FD4C/Thesis/mclab_git/mclab/languages/Natlab/src/natlab/backends/x10/codegen/mix10_builtins.xml"));
+//		doc.getDocumentElement ().normalize ();
+		
+		NodeList builtinNodeList = target.collectedBuiltins.usedBuiltins.get(builtinName);
+		Element builtinArrayOrGml = (Element)builtinNodeList.item(arrayOrGml);
 		 builtin = ((Node)(
 				 ((Element)(builtinArrayOrGml.getElementsByTagName(exprType).item(0))).getChildNodes().item(0)
 				 )).getNodeValue().trim();
 		
 		System.out.println(builtin+"------");
+		builtinList.add(builtinName+"-"+exprType);
 		return builtin;
 		
-		
-		
-		} catch (ParserConfigurationException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}catch (SAXException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
 		}
 		
-		return null;
+//		} catch (ParserConfigurationException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}catch (SAXException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+		
+		return "processed";
 	}
 	
 	

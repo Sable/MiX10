@@ -159,7 +159,7 @@ public class Expressions {
 			if (x10Mapping.isBuiltin(NatlabExp.getVarName())){
 				
 			BuiltinMethodCall libCall = new BuiltinMethodCall();
-			libCall.setBuiltinMethodName(new MethodId("mix10."+NatlabExp.getVarName()));
+			libCall.setBuiltinMethodName(new MethodId("Mix10."+NatlabExp.getVarName()));
 			libCall.setArgumentList(Args);
 			//builtinMaker makeBuiltinClass = new builtinMaker();
 			builtinMaker.makeBuiltin(NatlabExp, NatlabExp.getVarName(), target);
