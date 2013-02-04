@@ -6,7 +6,6 @@ CommentStmt:Stmt ::= <Comment:String>;
 DeclStmt:Stmt ::= [MultiDeclLHS] LHS:IDInfo [RHS:Exp];
 Method ::= MethodHeader MethodBlock;
 MethodHeader ::= ReturnType:AccessVal <Name:String> Args:IDInfo*;
-//Args ::= Type <Name:String>;
 Type:AccessVal ::= <Name:String>;
 MethodBlock:StmtBlock;
 AssignStmt:ExpStmt ::=  [MultiAssignLHS] LHS:IDInfo RHS:Exp;
