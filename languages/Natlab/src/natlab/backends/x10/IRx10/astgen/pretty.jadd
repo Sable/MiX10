@@ -1,4 +1,4 @@
-import natlab.backends.x10.IRx10.ast.Args;
+//import natlab.backends.x10.IRx10.ast.Args;
 import natlab.backends.x10.IRx10.ast.List;
 import natlab.backends.x10.IRx10.ast.PPHelper;
 import natlab.backends.x10.IRx10.ast.Stmt;
@@ -136,7 +136,7 @@ String MethodHeader.pp(String indent)
 	return x.toString();
 }
 
-static String PPHelper.makeArgs(List<Args> argsList) 
+static String PPHelper.makeArgs(List<IDInfo> argsList) 
 {
 	StringBuffer s = new StringBuffer();
 	if (argsList.getNumChild()>0){

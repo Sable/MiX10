@@ -1,6 +1,5 @@
 package natlab.backends.x10.IRx10.ast;
 
-import natlab.backends.x10.IRx10.ast.Args;
 import natlab.backends.x10.IRx10.ast.List;
 import natlab.backends.x10.IRx10.ast.PPHelper;
 import natlab.backends.x10.IRx10.ast.Stmt;
@@ -77,14 +76,14 @@ public class PPHelper extends ASTNode<ASTNode> implements Cloneable {
    * @aspect PrettyPrinter
    * @declaredat ./astgen/pretty.jadd:139
    */
-  static String makeArgs(List<IDInfo> list) 
+  static String makeArgs(List<IDInfo> argsList) 
 {
 	StringBuffer s = new StringBuffer();
-	if (list.getNumChild()>0){
-	s.append(list.getChild(0).getName()+": "+list.getChild(0).getType().getName());
-	for (int i=1; i<list.numChildren ; i++)
+	if (argsList.getNumChild()>0){
+	s.append(argsList.getChild(0).getName()+": "+argsList.getChild(0).getType().getName());
+	for (int i=1; i<argsList.numChildren ; i++)
 	{
-		s.append(", "+list.getChild(i).getName()+": "+list.getChild(i).getType().getName());
+		s.append(", "+argsList.getChild(i).getName()+": "+argsList.getChild(i).getType().getName());
 	}
 	}
 	return s.toString();
