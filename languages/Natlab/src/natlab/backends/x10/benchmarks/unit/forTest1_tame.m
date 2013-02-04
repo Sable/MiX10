@@ -1,5 +1,6 @@
 % args: {a=(double,[2, 2],{REAL})}
 function  [x] = forTest1(a)
+  y = a;                              % y=(double,[2, 2],{REAL})
   mc_t1 = 1;                          % mc_t1=(double,1.0,[1, 1],{REAL})
   mc_t2 = 10;                         % mc_t2=(double,10.0,[1, 1],{REAL})
   for b = (mc_t1 : mc_t2);

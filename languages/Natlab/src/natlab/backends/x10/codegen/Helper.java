@@ -3,8 +3,6 @@ package natlab.backends.x10.codegen;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import ast.Name;
-
 import natlab.backends.x10.IRx10.ast.IDInfo;
 import natlab.backends.x10.IRx10.ast.Type;
 import natlab.tame.classes.reference.ClassReference;
@@ -122,7 +120,7 @@ public class Helper {
 	
 	static IDInfo generateIDInfo(
 			ValueAnalysis<AggrValue<AdvancedMatrixValue>> analysis,
-			int graphIndex, TIRFunction node, String ID) {
+			int graphIndex, TIRFunction node, String ID, int i) {
 
 		if (analysis.getNodeList().get(graphIndex).getAnalysis()
 				.getOutFlowSets().get(node).isViable()) {
@@ -131,8 +129,8 @@ public class Helper {
 
 			
 			AdvancedMatrixValue temp = ((AdvancedMatrixValue) (analysis
-					.getNodeList().get(graphIndex).getAnalysis()
-					.getOutFlowSets().get(node).get(ID).getSingleton()));
+					.getNodeList().get(graphIndex).getAnalysis().getArgs().get(i)));
+	//				.getOutFlowSets().get(node).get(ID).getSingleton()));
 
 			IDInfo id_info = new IDInfo();
 			if (null != temp.getMatlabClass()) {   
@@ -148,6 +146,8 @@ public class Helper {
 			if (null != temp.getisComplexInfo()){
 				id_info.setisComplex(temp.getisComplexInfo().toString());
 			}
+			id_info.setName(ID);
+			
 			return id_info;
 		}
 
@@ -179,6 +179,15 @@ public class Helper {
 		else {
 			return new IDInfo();
 		}
+	}
+
+	public static boolean isScalar(ArrayList<Integer> shape) {
+		boolean scal = true;
+		//for (i : shape)
+		if (1==shape.get(0).intValue() )
+			return true;
+
+		return false;
 	}
 
 }

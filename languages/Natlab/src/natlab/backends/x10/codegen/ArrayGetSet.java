@@ -47,10 +47,10 @@ public class ArrayGetSet {
 			target.symbolMap.put(target.symbolMapKey, array_set.getLHS());
 
 			
-			array_set.getLHS()
-					.setValue(
-							new ArrayAccess(new IDUse(LHS), Expressions.getArgs(node.getLHS(), target))
-							);
+//			array_set.getLHS()
+//					.setValue(
+//							new ArrayAccess(new IDUse(LHS), Expressions.getArgs(node.getLHS(), target))
+//							);
 			
 			boolean tf = true;
 			if (null != array_set.getLHS().getShape())

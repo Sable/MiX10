@@ -85,7 +85,7 @@ public class MethodHeader extends ASTNode<ASTNode> implements Cloneable {
    * @ast method 
    * @declaredat irx10.ast:8
    */
-  public MethodHeader(AccessVal p0, String p1, List<Args> p2) {
+  public MethodHeader(AccessVal p0, String p1, List<IDInfo> p2) {
     setChild(p0, 0);
     setName(p1);
     setChild(p2, 1);
@@ -153,7 +153,7 @@ public class MethodHeader extends ASTNode<ASTNode> implements Cloneable {
    * @ast method 
    * @declaredat irx10.ast:5
    */
-  public void setArgsList(List<Args> list) {
+  public void setArgsList(List<IDInfo> list) {
     setChild(list, 1);
   }
   /**
@@ -172,8 +172,8 @@ public class MethodHeader extends ASTNode<ASTNode> implements Cloneable {
    * @declaredat irx10.ast:19
    */
   @SuppressWarnings({"unchecked", "cast"})
-  public Args getArgs(int i) {
-    return (Args)getArgsList().getChild(i);
+  public IDInfo getArgs(int i) {
+    return (IDInfo)getArgsList().getChild(i);
   }
   /**
    * Add element to list ArgsList
@@ -181,8 +181,8 @@ public class MethodHeader extends ASTNode<ASTNode> implements Cloneable {
    * @ast method 
    * @declaredat irx10.ast:27
    */
-  public void addArgs(Args node) {
-    List<Args> list = (parent == null || state == null) ? getArgsListNoTransform() : getArgsList();
+  public void addArgs(IDInfo node) {
+    List<IDInfo> list = (parent == null || state == null) ? getArgsListNoTransform() : getArgsList();
     list.addChild(node);
   }
   /**
@@ -190,8 +190,8 @@ public class MethodHeader extends ASTNode<ASTNode> implements Cloneable {
    * @ast method 
    * @declaredat irx10.ast:34
    */
-  public void addArgsNoTransform(Args node) {
-    List<Args> list = getArgsListNoTransform();
+  public void addArgsNoTransform(IDInfo node) {
+    List<IDInfo> list = getArgsListNoTransform();
     list.addChild(node);
   }
   /**
@@ -200,8 +200,8 @@ public class MethodHeader extends ASTNode<ASTNode> implements Cloneable {
    * @ast method 
    * @declaredat irx10.ast:42
    */
-  public void setArgs(Args node, int i) {
-    List<Args> list = getArgsList();
+  public void setArgs(IDInfo node, int i) {
+    List<IDInfo> list = getArgsList();
     list.setChild(node, i);
   }
   /**
@@ -210,7 +210,7 @@ public class MethodHeader extends ASTNode<ASTNode> implements Cloneable {
    * @ast method 
    * @declaredat irx10.ast:50
    */
-  public List<Args> getArgss() {
+  public List<IDInfo> getArgss() {
     return getArgsList();
   }
   /**
@@ -218,7 +218,7 @@ public class MethodHeader extends ASTNode<ASTNode> implements Cloneable {
    * @ast method 
    * @declaredat irx10.ast:56
    */
-  public List<Args> getArgssNoTransform() {
+  public List<IDInfo> getArgssNoTransform() {
     return getArgsListNoTransform();
   }
   /**
@@ -228,8 +228,8 @@ public class MethodHeader extends ASTNode<ASTNode> implements Cloneable {
    * @declaredat irx10.ast:63
    */
   @SuppressWarnings({"unchecked", "cast"})
-  public List<Args> getArgsList() {
-    List<Args> list = (List<Args>)getChild(1);
+  public List<IDInfo> getArgsList() {
+    List<IDInfo> list = (List<IDInfo>)getChild(1);
     list.getNumChild();
     return list;
   }
@@ -239,7 +239,7 @@ public class MethodHeader extends ASTNode<ASTNode> implements Cloneable {
    * @declaredat irx10.ast:72
    */
   @SuppressWarnings({"unchecked", "cast"})
-  public List<Args> getArgsListNoTransform() {
-    return (List<Args>)getChildNoTransform(1);
+  public List<IDInfo> getArgsListNoTransform() {
+    return (List<IDInfo>)getChildNoTransform(1);
   }
 }

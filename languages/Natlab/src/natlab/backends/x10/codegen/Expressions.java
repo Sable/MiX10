@@ -64,12 +64,12 @@ public class Expressions {
 		return RHS;
 	}
 
-	static List<Exp> getArgs(ast.Expr NatlabExp, IRx10ASTGenerator target) {
-		List<Exp> Args = new List<Exp>();
+	static List<IDUse> getArgs(ast.Expr NatlabExp, IRx10ASTGenerator target) {
+		List<IDUse> Args = new List<IDUse>();
 		int numArgs = NatlabExp.getChild(1).getNumChild();
 		for (int i = 0; i < numArgs; i++) {
 			System.out.println("!!!"+i);
-			Args.add(makeIRx10Exp((ast.Expr) NatlabExp.getChild(1).getChild(i), false, target));//TODO 11 dec Test it
+			Args.add((IDUse) makeIRx10Exp((ast.Expr) NatlabExp.getChild(1).getChild(i), false, target));//TODO 11 dec Test it
 			
 		}
 		return Args;
@@ -97,16 +97,20 @@ public class Expressions {
 		}
 		if (NatlabExp instanceof NameExpr) {
 			
-			
-			
-			if (target.symbolMap.containsKey(((NameExpr) NatlabExp).getName().getID()))
-			{
-				IDInfo nameIdInfo = new IDInfo();
-				nameIdInfo = target.symbolMap.get(((NameExpr) NatlabExp).getName().getID());
-				return nameIdInfo;
-			}
-			else return new IDInfo(null,((NameExpr) NatlabExp).getName().getID(),null,null,null );
-			
+			/*
+			 * Return just IDUse instead of IDInfo. This is just a use of variable
+			 */
+//			
+//			if (target.symbolMap.containsKey(((NameExpr) NatlabExp).getName().getID()))
+//			{
+//				IDInfo nameIdInfo = new IDInfo();
+//				nameIdInfo = target.symbolMap.get(((NameExpr) NatlabExp).getName().getID());
+//				System.out.println(nameIdInfo.getName()+"$$$$");
+//				return nameIdInfo;
+//			}
+//			else return new IDInfo(null,((NameExpr) NatlabExp).getName().getID(),null,null,null );
+//			
+			return new IDUse(((NameExpr) NatlabExp).getName().getID());
 
 		}
 
@@ -145,10 +149,10 @@ public class Expressions {
 			// Operand2 = makeIRx10Exp(((BinaryExpr) NatlabExp).getRHS());
 			// }
 
-			List<Exp> Args = new List<Exp>();
+			List<IDUse> Args = new List<IDUse>();
 			Args = getArgs(NatlabExp, target);
 			
-			System.out.println(((IDInfo)Args.getChild(0)).getName());
+			System.out.println(((IDUse)Args.getChild(0)).getID());
 			
 			
 			//if (!((ParameterizedExpr) NatlabExp).isVariable){//TODO check if isVariable works

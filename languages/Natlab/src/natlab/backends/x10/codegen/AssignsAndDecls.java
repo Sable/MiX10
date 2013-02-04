@@ -77,10 +77,10 @@ public class AssignsAndDecls {
 					.toString());
 			}
 			}
-			
+			setRHSValue(isDecl, decl_stmt, node, tf, target);
 			target.symbolMap
 			.put(target.symbolMapKey, decl_stmt.getLHS());
-			setRHSValue(isDecl, decl_stmt, node, tf, target);
+			
 
 //			target.symbolMap
 //					.put(((TIRAbstractAssignToVarStmt)node).getLHS().getVarName(), Helper
@@ -145,8 +145,10 @@ public class AssignsAndDecls {
 						target.index, node, LHS));
 				list_single_assign_stmt.getLHS().setName(
 						((TIRAbstractAssignToListStmt) node).getTargets().getChild(0).getVarName());
-				target.symbolMap.put(target.symbolMapKey, list_single_assign_stmt.getLHS());
+				
 				setRHSValue(false, list_single_assign_stmt, node, false, target);
+				target.symbolMap.put(target.symbolMapKey, list_single_assign_stmt.getLHS());
+				
 				
 				
 				
@@ -161,8 +163,10 @@ public class AssignsAndDecls {
 						target.index, node, LHS));
 
 				decl_stmt.getLHS().setName(((TIRAbstractAssignToListStmt)node).getTargets().getChild(0).getVarName());
-				target.symbolMap.put(target.symbolMapKey, decl_stmt.getLHS());
+				
 				setRHSValue(isDecl, decl_stmt, node, false, target);
+				target.symbolMap.put(target.symbolMapKey, decl_stmt.getLHS());
+				
 
 				
 				block.addStmt(decl_stmt);

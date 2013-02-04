@@ -77,14 +77,14 @@ public class PPHelper extends ASTNode<ASTNode> implements Cloneable {
    * @aspect PrettyPrinter
    * @declaredat ./astgen/pretty.jadd:139
    */
-  static String makeArgs(List<Args> argsList) 
+  static String makeArgs(List<IDInfo> list) 
 {
 	StringBuffer s = new StringBuffer();
-	if (argsList.getNumChild()>0){
-	s.append(argsList.getChild(0).getName()+": "+argsList.getChild(0).getType().getName());
-	for (int i=1; i<argsList.numChildren ; i++)
+	if (list.getNumChild()>0){
+	s.append(list.getChild(0).getName()+": "+list.getChild(0).getType().getName());
+	for (int i=1; i<list.numChildren ; i++)
 	{
-		s.append(", "+argsList.getChild(i).getName()+": "+argsList.getChild(i).getType().getName());
+		s.append(", "+list.getChild(i).getName()+": "+list.getChild(i).getType().getName());
 	}
 	}
 	return s.toString();

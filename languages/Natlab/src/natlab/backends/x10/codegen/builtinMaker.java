@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 import natlab.backends.x10.IRx10.ast.Exp;
+import natlab.backends.x10.IRx10.ast.IDUse;
 import natlab.backends.x10.IRx10.ast.List;
 import natlab.tame.valueanalysis.ValueAnalysisPrinter;
 import ast.Expr;
@@ -65,7 +66,7 @@ public class builtinMaker {
 				 ((Element)(builtinArrayOrGml.getElementsByTagName(exprType).item(0))).getChildNodes().item(0)
 				 )).getNodeValue().trim();
 		
-		System.out.println(builtin);
+		System.out.println(builtin+"------");
 		return builtin;
 		
 		
@@ -86,6 +87,7 @@ public class builtinMaker {
 	
 	
 
+	@SuppressWarnings("unchecked")
 	private static String getExprType(Expr natlabExp, IRx10ASTGenerator target) {
 		/*
 		 * Returns what type of expression it is according
@@ -100,9 +102,33 @@ public class builtinMaker {
 		 * decide which type to return.
 		 */
 		
-		List<Exp> args=Expressions.getArgs(natlabExp, target);
+		List<IDUse> args=Expressions.getArgs(natlabExp, target);
 		
-		return "type2";
+		int scalarCounter = 0;
+		for (IDUse arg : args)
+		{
+			if (target.symbolMap.containsKey(arg.getID())){
+				if (target.symbolMap.get(arg.getID()).getShape() == null)
+					return "type4"; //TODO check if it is correct. if a shape is unknown, revert to type 4
+				if (target.symbolMap.get(arg.getID()).getShape() != null && Helper.isScalar((ArrayList<Integer>) target.symbolMap.get(arg.getID()).getShape())){
+					scalarCounter++;
+				}
+				
+				System.out.println((ArrayList<Integer>) target.symbolMap.get(arg.getID()).getShape()+arg.getID());
+				
+				
+			}
+			else return "type4";
+		}
+		System.out.println("sctr="+scalarCounter);
+		if (scalarCounter == args.getNumChild())
+			return "type1"; //all scalar
+		else if (scalarCounter == 1)
+			return "type3";
+		else if (scalarCounter == 0)
+			return "type2";
+		else
+			return "type4";
 	}
 
 	private static int specialize(Expr natlabExp) {

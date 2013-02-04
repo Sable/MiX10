@@ -5,8 +5,8 @@ abstract Stmt;
 CommentStmt:Stmt ::= <Comment:String>;
 DeclStmt:Stmt ::= [MultiDeclLHS] LHS:IDInfo [RHS:Exp];
 Method ::= MethodHeader MethodBlock;
-MethodHeader ::= ReturnType:AccessVal <Name:String> Args*;
-Args ::= Type <Name:String>;
+MethodHeader ::= ReturnType:AccessVal <Name:String> Args:IDInfo*;
+//Args ::= Type <Name:String>;
 Type:AccessVal ::= <Name:String>;
 MethodBlock:StmtBlock;
 AssignStmt:ExpStmt ::=  [MultiAssignLHS] LHS:IDInfo RHS:Exp;
@@ -85,8 +85,8 @@ abstract Exp;
 
 abstract AccessVal:Exp;
 abstract MethodCall:Exp;
-BuiltinMethodCall:MethodCall ::= BuiltinMethodName:MethodId Argument:Exp*;
+BuiltinMethodCall:MethodCall ::= BuiltinMethodName:MethodId Argument:IDUse*;
 MethodId:AccessVal ::= <Name:String>;
-UserDefMethodCall:MethodCall ::= UserDefMethodName:MethodId Argument:Exp*;
+UserDefMethodCall:MethodCall ::= UserDefMethodName:MethodId Argument:IDUse*;
 
 
