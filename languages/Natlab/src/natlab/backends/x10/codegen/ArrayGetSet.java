@@ -31,9 +31,7 @@ public class ArrayGetSet {
 
 			array_decl.getLHS().setName(LHS);
 			array_decl.setRHS(new EmptyExp());
-			target.symbolMap.put(target.symbolMapKey, Helper
-					.getAnalysisValue(target.analysis, target.index, node,
-							LHS));
+			target.symbolMap.put(target.symbolMapKey, array_decl.getLHS());
 			block.addStmt(array_decl);
 			
 		}
@@ -46,11 +44,13 @@ public class ArrayGetSet {
 			array_set.setLHS(Helper.generateIDInfo(target.analysis,
 					target.index, node, LHS));
 			array_set.getLHS().setName(LHS.toString());
+			target.symbolMap.put(target.symbolMapKey, array_set.getLHS());
+
 			
-			array_set.getLHS()
-					.setValue(
-							new ArrayAccess(new IDUse(LHS), Expressions.getArgs(node.getLHS(), target))
-							);
+//			array_set.getLHS()
+//					.setValue(
+//							new ArrayAccess(new IDUse(LHS), Expressions.getArgs(node.getLHS(), target))
+//							);
 			
 			boolean tf = true;
 			if (null != array_set.getLHS().getShape())

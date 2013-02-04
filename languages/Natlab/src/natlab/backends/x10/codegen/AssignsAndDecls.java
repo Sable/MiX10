@@ -11,8 +11,10 @@ import natlab.tame.tir.TIRArraySetStmt;
 import natlab.tame.tir.TIRAssignLiteralStmt;
 import natlab.tame.tir.TIRCallStmt;
 import natlab.tame.tir.TIRCopyStmt;
+import ast.Expr;
 import ast.FPLiteralExpr;
 import ast.IntLiteralExpr;
+import ast.ParameterizedExpr;
 import ast.StringLiteralExpr;
 
 public class AssignsAndDecls {
@@ -50,7 +52,11 @@ public class AssignsAndDecls {
 			}
 			
 			//tf=true => scalar
+			target.symbolMap.put(target.symbolMapKey, assign_stmt.getLHS());
 			setRHSValue(isDecl, assign_stmt, node, tf, target);
+			
+			
+			
 			block.addStmt(assign_stmt);
 			// TODO : Handle expressions of various types
 			// Set parent's value in various expressions
@@ -72,15 +78,15 @@ public class AssignsAndDecls {
 			}
 			}
 			setRHSValue(isDecl, decl_stmt, node, tf, target);
+			target.symbolMap
+			.put(target.symbolMapKey, decl_stmt.getLHS());
+			
 
 //			target.symbolMap
 //					.put(((TIRAbstractAssignToVarStmt)node).getLHS().getVarName(), Helper
 //							.getAnalysisValue(target.analysis, target.index,
 //									node, LHS));
-			target.symbolMap
-			.put(target.symbolMapKey, Helper
-					.getAnalysisValue(target.analysis, target.index,
-							node, LHS));
+			
 			block.addStmt(decl_stmt);
 
 		}
@@ -139,7 +145,14 @@ public class AssignsAndDecls {
 						target.index, node, LHS));
 				list_single_assign_stmt.getLHS().setName(
 						((TIRAbstractAssignToListStmt) node).getTargets().getChild(0).getVarName());
+				
 				setRHSValue(false, list_single_assign_stmt, node, false, target);
+				target.symbolMap.put(target.symbolMapKey, list_single_assign_stmt.getLHS());
+				
+				
+				
+				
+				
 				block.addStmt(list_single_assign_stmt);
 
 			} else {
@@ -150,11 +163,12 @@ public class AssignsAndDecls {
 						target.index, node, LHS));
 
 				decl_stmt.getLHS().setName(((TIRAbstractAssignToListStmt)node).getTargets().getChild(0).getVarName());
+				
 				setRHSValue(isDecl, decl_stmt, node, false, target);
+				target.symbolMap.put(target.symbolMapKey, decl_stmt.getLHS());
+				
 
-				target.symbolMap.put(target.symbolMapKey, Helper
-						.getAnalysisValue(target.analysis, target.index, node,
-								LHS));
+				
 				block.addStmt(decl_stmt);
 
 			}
@@ -177,6 +191,8 @@ public class AssignsAndDecls {
 				.addIDInfo(
 						Helper.generateIDInfo(target.analysis, target.index,
 								node, name.getID()));
+				target.symbolMap.put(name.getID(),Helper.generateIDInfo(target.analysis, target.index,
+						node, name.getID()) );
 
 //		list_assign_stmt
 //				.getMultiAssignLHS()
@@ -220,7 +236,8 @@ public class AssignsAndDecls {
 				.addIDInfo(
 						Helper.generateIDInfo(target.analysis, target.index,
 								node, LHS));
-
+		target.symbolMap.put(LHS,Helper.generateIDInfo(target.analysis, target.index,
+				node, name.getID()) );
 		assign_stmt
 				.getMultiAssignLHS()
 				.getIDInfo(assign_stmt.getMultiAssignLHS().getNumIDInfo() - 1)
@@ -231,6 +248,28 @@ public class AssignsAndDecls {
 		 }
 		 
 
+	}
+
+	public static void handleTIRAbstractAssignToVarStmtPass1(
+			TIRAbstractAssignStmt node, collectBuiltins collectBuiltins) {
+		System.out.println("comes in here 1");
+		Expr expression = node.getRHS();
+		if (expression instanceof ParameterizedExpr) {
+			System.out.println("comes in here ");
+			collectBuiltins.usedBuiltins.put(expression.getVarName(),null);
+		}
+		
+		
+		
+	}
+
+	public static void handleTIRAbstractAssignToListStmtPass1(
+			TIRAbstractAssignStmt node, collectBuiltins collectBuiltins) {
+		Expr expression = node.getRHS();
+		if (expression instanceof ParameterizedExpr) {
+			collectBuiltins.usedBuiltins.put(expression.getVarName(),null);
+		}
+		
 	}
 
 	
