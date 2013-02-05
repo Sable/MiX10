@@ -27,7 +27,6 @@ import natlab.backends.x10.IRx10.ast.Method;
 import natlab.backends.x10.IRx10.ast.MethodBlock;
 import natlab.backends.x10.IRx10.ast.MethodHeader;
 import natlab.backends.x10.IRx10.ast.Program;
-import natlab.backends.x10.IRx10.ast.Args;
 import natlab.backends.x10.IRx10.ast.StmtBlock;
 import natlab.backends.x10.IRx10.ast.Type;
 import natlab.backends.x10.IRx10.ast.Stmt;
