@@ -8,7 +8,7 @@ import natlab.tame.valueanalysis.*;
 import natlab.tame.valueanalysis.advancedMatrix.AdvancedMatrixValue;
 import natlab.tame.valueanalysis.aggrvalue.*;
 import natlab.tame.AdvancedTamerTool;
-import natlab.toolkits.filehandling.genericFile.GenericFile;
+import natlab.toolkits.filehandling.GenericFile;
 import natlab.toolkits.path.FileEnvironment;
 import natlab.backends.x10.IRx10.ast.AssignStmt;
 import natlab.backends.x10.IRx10.ast.DeclStmt;
