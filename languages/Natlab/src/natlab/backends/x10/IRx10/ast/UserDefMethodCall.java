@@ -60,7 +60,7 @@ public class UserDefMethodCall extends MethodCall implements Cloneable {
   /**
    * @ast method 
    * @aspect PrettyPrinter
-   * @declaredat ./astgen/pretty.jadd:391
+   * @declaredat ./astgen/pretty.jadd:397
    */
   String pp(String indent)
 {

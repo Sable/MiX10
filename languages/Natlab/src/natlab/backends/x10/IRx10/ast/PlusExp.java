@@ -60,7 +60,7 @@ public class PlusExp extends UnaryExp implements Cloneable {
   /**
    * @ast method 
    * @aspect PrettyPrinter
-   * @declaredat ./astgen/pretty.jadd:259
+   * @declaredat ./astgen/pretty.jadd:265
    */
   String pp(String indent)
 {

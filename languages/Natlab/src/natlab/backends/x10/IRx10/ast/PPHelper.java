@@ -60,7 +60,7 @@ public class PPHelper extends ASTNode<ASTNode> implements Cloneable {
   /**
    * @ast method 
    * @aspect PrettyPrinter
-   * @declaredat ./astgen/pretty.jadd:112
+   * @declaredat ./astgen/pretty.jadd:118
    */
   static String makeRange(ArrayList Shape){
 	StringBuffer s = new StringBuffer();
@@ -74,7 +74,7 @@ public class PPHelper extends ASTNode<ASTNode> implements Cloneable {
   /**
    * @ast method 
    * @aspect PrettyPrinter
-   * @declaredat ./astgen/pretty.jadd:139
+   * @declaredat ./astgen/pretty.jadd:145
    */
   static String makeArgs(List<IDInfo> argsList) 
 {

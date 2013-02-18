@@ -60,14 +60,14 @@ public class IfElseStmt extends Stmt implements Cloneable {
   /**
    * @ast method 
    * @aspect PrettyPrinter
-   * @declaredat ./astgen/pretty.jadd:359
+   * @declaredat ./astgen/pretty.jadd:365
    */
   String pp(String indent)
 {   
 	
 	StringBuffer x = new StringBuffer();
 	x.append(indent);
-	  x.append("inside if else ");
+	//  x.append("inside if else ");
 	x.append("if ("+getIfElseIfList().getChild(0).getCondition().pp("")+")\n");
 	x.append(getIfElseIfList().getChild(0).getIfBody().pp(indent+"    "));
 	for (int i=1; i<getIfElseIfList().getNumChild() ; i++){

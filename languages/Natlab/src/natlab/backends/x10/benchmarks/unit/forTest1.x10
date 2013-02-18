@@ -11,14 +11,14 @@ var mc_t1: Double;
 (b > mc_t3);b = (b + 1))
 	        {
 mc_t0 = 3;
-a = mix10.plus(a, mc_t0);
+a = Mix10.plus(a, mc_t0);
 mc_t1 = 2;
-a = mix10.plus(a, mc_t1);
+a = Mix10.plus(a, mc_t1);
 }
 var c: Double = 1;
 var mc_t4: Double = 2;
-var d: Double = mix10.plus(c, mc_t4);
-var x: Double = a;
+var d: Double = Mix10.plus(c, mc_t4);
+val x = new Array[Double]((1..2)*(1..2), a);
 }
 
 }

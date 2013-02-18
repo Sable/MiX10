@@ -60,7 +60,7 @@ public class ArrayAccess extends AccessVal implements Cloneable {
   /**
    * @ast method 
    * @aspect PrettyPrinter
-   * @declaredat ./astgen/pretty.jadd:96
+   * @declaredat ./astgen/pretty.jadd:102
    */
   String pp(String indent)
   {

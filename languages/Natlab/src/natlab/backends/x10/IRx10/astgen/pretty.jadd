@@ -86,7 +86,13 @@ String ArraySetStmt.pp(String indent){
 		StringBuffer x = new StringBuffer();
 		
 						
-			x.append(getLHS().getValue().pp(indent));
+			x.append(getLHS().getName()+"(");
+			x.append(getIndicesList().getChild(0).pp(""));
+		  	  for(int i=1; i<getIndicesList().getNumChild() ; i++)
+		  	  {
+		  		  x.append(", "+getIndicesList().getChild(i).pp(""));
+		  	  }
+		  	  x.append(")");
 			x.append(" = ");
 			x.append(getRHS().pp("")+" ;\n");
 		return x.toString();
@@ -308,7 +314,7 @@ String DecExp.pp(String indent)
 
 String LTExp.pp(String indent)
 {
-	return(indent+"("+getLeftOp().pp("")+" > "+getRightOp().pp("")+")");
+	return(indent+"("+getLeftOp().pp("")+" < "+getRightOp().pp("")+")");
 }
 
 String LEExp.pp(String indent)
@@ -361,7 +367,7 @@ String IfElseStmt.pp(String indent)
 	
 	StringBuffer x = new StringBuffer();
 	x.append(indent);
-	  x.append("inside if else ");
+	//  x.append("inside if else ");
 	x.append("if ("+getIfElseIfList().getChild(0).getCondition().pp("")+")\n");
 	x.append(getIfElseIfList().getChild(0).getIfBody().pp(indent+"    "));
 	for (int i=1; i<getIfElseIfList().getNumChild() ; i++){

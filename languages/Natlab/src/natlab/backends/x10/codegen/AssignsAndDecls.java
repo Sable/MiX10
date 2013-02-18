@@ -96,6 +96,9 @@ public class AssignsAndDecls {
 	public static void setRHSValue(boolean isDecl, Stmt decl_or_assgn,
 			TIRAbstractAssignStmt node, boolean isScalar, IRx10ASTGenerator target) {
 		if (isDecl) {
+			
+			
+			
 			((DeclStmt) decl_or_assgn).setRHS(Expressions.makeIRx10Exp(node
 					.getRHS(), isScalar, target));
 		} else {

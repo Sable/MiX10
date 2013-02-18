@@ -66,7 +66,13 @@ public class ArraySetStmt extends Stmt implements Cloneable {
 		StringBuffer x = new StringBuffer();
 		
 						
-			x.append(getLHS().getValue().pp(indent));
+			x.append(getLHS().getName()+"(");
+			x.append(getIndicesList().getChild(0).pp(""));
+		  	  for(int i=1; i<getIndicesList().getNumChild() ; i++)
+		  	  {
+		  		  x.append(", "+getIndicesList().getChild(i).pp(""));
+		  	  }
+		  	  x.append(")");
 			x.append(" = ");
 			x.append(getRHS().pp("")+" ;\n");
 		return x.toString();
@@ -78,23 +84,25 @@ public class ArraySetStmt extends Stmt implements Cloneable {
   public ArraySetStmt() {
     super();
 
+    setChild(new List(), 1);
 
   }
   /**
    * @ast method 
-   * @declaredat irx10.ast:7
+   * @declaredat irx10.ast:8
    */
-  public ArraySetStmt(IDInfo p0, Exp p1) {
+  public ArraySetStmt(IDInfo p0, List<Exp> p1, Exp p2) {
     setChild(p0, 0);
     setChild(p1, 1);
+    setChild(p2, 2);
   }
   /**
    * @apilevel low-level
    * @ast method 
-   * @declaredat irx10.ast:14
+   * @declaredat irx10.ast:16
    */
   protected int numChildren() {
-    return 2;
+    return 3;
   }
   /**
    * Setter for LHS
@@ -123,13 +131,108 @@ public class ArraySetStmt extends Stmt implements Cloneable {
     return (IDInfo)getChildNoTransform(0);
   }
   /**
+   * Setter for IndicesList
+   * @apilevel high-level
+   * @ast method 
+   * @declaredat irx10.ast:5
+   */
+  public void setIndicesList(List<Exp> list) {
+    setChild(list, 1);
+  }
+  /**
+   * @return number of children in IndicesList
+   * @apilevel high-level
+   * @ast method 
+   * @declaredat irx10.ast:12
+   */
+  public int getNumIndices() {
+    return getIndicesList().getNumChild();
+  }
+  /**
+   * Getter for child in list IndicesList
+   * @apilevel high-level
+   * @ast method 
+   * @declaredat irx10.ast:19
+   */
+  @SuppressWarnings({"unchecked", "cast"})
+  public Exp getIndices(int i) {
+    return (Exp)getIndicesList().getChild(i);
+  }
+  /**
+   * Add element to list IndicesList
+   * @apilevel high-level
+   * @ast method 
+   * @declaredat irx10.ast:27
+   */
+  public void addIndices(Exp node) {
+    List<Exp> list = (parent == null || state == null) ? getIndicesListNoTransform() : getIndicesList();
+    list.addChild(node);
+  }
+  /**
+   * @apilevel low-level
+   * @ast method 
+   * @declaredat irx10.ast:34
+   */
+  public void addIndicesNoTransform(Exp node) {
+    List<Exp> list = getIndicesListNoTransform();
+    list.addChild(node);
+  }
+  /**
+   * Setter for child in list IndicesList
+   * @apilevel high-level
+   * @ast method 
+   * @declaredat irx10.ast:42
+   */
+  public void setIndices(Exp node, int i) {
+    List<Exp> list = getIndicesList();
+    list.setChild(node, i);
+  }
+  /**
+   * Getter for Indices list.
+   * @apilevel high-level
+   * @ast method 
+   * @declaredat irx10.ast:50
+   */
+  public List<Exp> getIndicess() {
+    return getIndicesList();
+  }
+  /**
+   * @apilevel low-level
+   * @ast method 
+   * @declaredat irx10.ast:56
+   */
+  public List<Exp> getIndicessNoTransform() {
+    return getIndicesListNoTransform();
+  }
+  /**
+   * Getter for list IndicesList
+   * @apilevel high-level
+   * @ast method 
+   * @declaredat irx10.ast:63
+   */
+  @SuppressWarnings({"unchecked", "cast"})
+  public List<Exp> getIndicesList() {
+    List<Exp> list = (List<Exp>)getChild(1);
+    list.getNumChild();
+    return list;
+  }
+  /**
+   * @apilevel low-level
+   * @ast method 
+   * @declaredat irx10.ast:72
+   */
+  @SuppressWarnings({"unchecked", "cast"})
+  public List<Exp> getIndicesListNoTransform() {
+    return (List<Exp>)getChildNoTransform(1);
+  }
+  /**
    * Setter for RHS
    * @apilevel high-level
    * @ast method 
    * @declaredat irx10.ast:5
    */
   public void setRHS(Exp node) {
-    setChild(node, 1);
+    setChild(node, 2);
   }
   /**
    * Getter for RHS
@@ -138,7 +241,7 @@ public class ArraySetStmt extends Stmt implements Cloneable {
    * @declaredat irx10.ast:12
    */
   public Exp getRHS() {
-    return (Exp)getChild(1);
+    return (Exp)getChild(2);
   }
   /**
    * @apilevel low-level
@@ -146,6 +249,6 @@ public class ArraySetStmt extends Stmt implements Cloneable {
    * @declaredat irx10.ast:18
    */
   public Exp getRHSNoTransform() {
-    return (Exp)getChildNoTransform(1);
+    return (Exp)getChildNoTransform(2);
   }
 }

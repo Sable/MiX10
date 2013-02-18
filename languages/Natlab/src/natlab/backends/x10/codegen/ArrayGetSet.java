@@ -11,9 +11,9 @@ public class ArrayGetSet {
 
 	public static void handleTIRAbstractArraySetStmt(TIRArraySetStmt node,
 			IRx10ASTGenerator target, StmtBlock block) {
-
-		System.out.println(node.getArrayName().getID());
-		System.out.println(node.getRHS().getPrettyPrinted());
+          
+		System.out.println(node.getIndizes().getChild(0));
+		System.out.println(node.getLHS().getPrettyPrinted()+"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
 		//System.out.println(node.getTargetName().getID());
 
 		String LHS;
@@ -28,7 +28,8 @@ public class ArrayGetSet {
 			IDInfo LHSinfo = new IDInfo();
 			array_decl.setLHS(Helper.generateIDInfo(target.analysis,
 					target.index, node, LHS));
-
+            
+			
 			array_decl.getLHS().setName(LHS);
 			array_decl.setRHS(new EmptyExp());
 			target.symbolMap.put(target.symbolMapKey, array_decl.getLHS());
@@ -44,6 +45,13 @@ public class ArrayGetSet {
 			array_set.setLHS(Helper.generateIDInfo(target.analysis,
 					target.index, node, LHS));
 			array_set.getLHS().setName(LHS.toString());
+			
+			for (int i=0; i<node.getIndizes().getNumChild();i++)
+			{
+				array_set.setIndices(Expressions.makeIRx10Exp(node.getIndizes().getChild(i), false, target), i);
+			}
+			
+			
 			target.symbolMap.put(target.symbolMapKey, array_set.getLHS());
 
 			
