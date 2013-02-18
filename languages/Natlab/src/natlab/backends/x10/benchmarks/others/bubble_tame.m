@@ -9,20 +9,20 @@ function  [x] = bubble(A)
     [mc_t6] = minus(n, mc_t9);          % mc_t6=(double,[1, 1],{REAL})
     mc_t14 = 1;                         % mc_t14=(double,1.0,[1, 1],{REAL})
     for i = (mc_t14 : mc_t6);
-      [mc_t2] = A(i);                     % mc_t2=(double,[1, 1],{REAL})
+      [mc_t0] = A(i);                     % mc_t0=(double,[1, 1],{REAL})
       mc_t10 = 1;                         % mc_t10=(double,1.0,[1, 1],{REAL})
       [mc_t4] = plus(i, mc_t10);          % mc_t4=(double,[1, 1],{REAL})
-      [mc_t3] = A(mc_t4);                 % mc_t3=(double,[1, 1],{REAL})
-      [mc_t13] = gt(mc_t2, mc_t3);        % mc_t13=(logical,[1, 1],{REAL})
+      [mc_t1] = A(mc_t4);                 % mc_t1=(double,[1, 1],{REAL})
+      [mc_t13] = gt(mc_t0, mc_t1);        % mc_t13=(logical,[1, 1],{REAL})
       if mc_t13
         [temp] = A(i);                      % temp=(double,[1, 1],{REAL})
         mc_t11 = 1;                         % mc_t11=(double,1.0,[1, 1],{REAL})
         [mc_t5] = plus(i, mc_t11);          % mc_t5=(double,[1, 1],{REAL})
-        [mc_t0] = A(mc_t5);                 % mc_t0=(double,[1, 1],{REAL})
-        A(i) = mc_t0;                       % A=(double,[1, 5],{REAL})
+        [mc_t2] = A(mc_t5);                 % mc_t2=(double,[1, 1],{REAL})
+        A(i) = mc_t2;                       % A=(double,[1, 5],{REAL})
         mc_t12 = 1;                         % mc_t12=(double,1.0,[1, 1],{REAL})
-        [mc_t1] = plus(i, mc_t12);          % mc_t1=(double,[1, 1],{REAL})
-        A(mc_t1) = temp;                    % A=(double,[1, 5],{REAL})
+        [mc_t3] = plus(i, mc_t12);          % mc_t3=(double,[1, 1],{REAL})
+        A(mc_t3) = temp;                    % A=(double,[1, 5],{REAL})
       else
       end
     end

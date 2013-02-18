@@ -68,7 +68,7 @@ public class BuiltinWriter {
 
 			BufferedWriter out = new BufferedWriter(
 					new FileWriter(
-							"/media/vineet/19F5-FD4C/Thesis/mclab_git/mclab/languages/Natlab/src/natlab/backends/x10/benchmarks/unit/mix10.x10",
+							"/media/vineet/19F5-FD4C/Thesis/mclab_git/mclab/languages/Natlab/src/natlab/backends/x10/benchmarks/unit/Mix10.x10",
 							false));
 			out.write("public class Mix10 {\n");
 

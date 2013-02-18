@@ -9,7 +9,7 @@ import java.util.*;
  * @ast node
  * @declaredat irx10.ast:11
  */
-public class AssignStmt extends ExpStmt implements Cloneable {
+public class AssignStmt extends Stmt implements Cloneable {
   /**
    * @apilevel low-level
    */
@@ -140,52 +140,25 @@ public class AssignStmt extends ExpStmt implements Cloneable {
   public AssignStmt() {
     super();
 
-    setChild(new Opt(), 1);
+    setChild(new Opt(), 0);
 
   }
   /**
    * @ast method 
    * @declaredat irx10.ast:8
    */
-  public AssignStmt(Exp p0, Opt<MultiAssignLHS> p1, IDInfo p2, Exp p3) {
+  public AssignStmt(Opt<MultiAssignLHS> p0, IDInfo p1, Exp p2) {
     setChild(p0, 0);
     setChild(p1, 1);
     setChild(p2, 2);
-    setChild(p3, 3);
   }
   /**
    * @apilevel low-level
    * @ast method 
-   * @declaredat irx10.ast:17
+   * @declaredat irx10.ast:16
    */
   protected int numChildren() {
-    return 4;
-  }
-  /**
-   * Setter for Exp
-   * @apilevel high-level
-   * @ast method 
-   * @declaredat irx10.ast:5
-   */
-  public void setExp(Exp node) {
-    setChild(node, 0);
-  }
-  /**
-   * Getter for Exp
-   * @apilevel high-level
-   * @ast method 
-   * @declaredat irx10.ast:12
-   */
-  public Exp getExp() {
-    return (Exp)getChild(0);
-  }
-  /**
-   * @apilevel low-level
-   * @ast method 
-   * @declaredat irx10.ast:18
-   */
-  public Exp getExpNoTransform() {
-    return (Exp)getChildNoTransform(0);
+    return 3;
   }
   /**
    * Setter for MultiAssignLHSOpt
@@ -194,7 +167,7 @@ public class AssignStmt extends ExpStmt implements Cloneable {
    * @declaredat irx10.ast:5
    */
   public void setMultiAssignLHSOpt(Opt<MultiAssignLHS> opt) {
-    setChild(opt, 1);
+    setChild(opt, 0);
   }
   /**
    * Does this node have a MultiAssignLHS child?
@@ -231,7 +204,7 @@ public class AssignStmt extends ExpStmt implements Cloneable {
    */
   @SuppressWarnings({"unchecked", "cast"})
   public Opt<MultiAssignLHS> getMultiAssignLHSOpt() {
-    return (Opt<MultiAssignLHS>)getChild(1);
+    return (Opt<MultiAssignLHS>)getChild(0);
   }
   /**
    * @apilevel low-level
@@ -240,7 +213,7 @@ public class AssignStmt extends ExpStmt implements Cloneable {
    */
   @SuppressWarnings({"unchecked", "cast"})
   public Opt<MultiAssignLHS> getMultiAssignLHSOptNoTransform() {
-    return (Opt<MultiAssignLHS>)getChildNoTransform(1);
+    return (Opt<MultiAssignLHS>)getChildNoTransform(0);
   }
   /**
    * Setter for LHS
@@ -249,7 +222,7 @@ public class AssignStmt extends ExpStmt implements Cloneable {
    * @declaredat irx10.ast:5
    */
   public void setLHS(IDInfo node) {
-    setChild(node, 2);
+    setChild(node, 1);
   }
   /**
    * Getter for LHS
@@ -258,7 +231,7 @@ public class AssignStmt extends ExpStmt implements Cloneable {
    * @declaredat irx10.ast:12
    */
   public IDInfo getLHS() {
-    return (IDInfo)getChild(2);
+    return (IDInfo)getChild(1);
   }
   /**
    * @apilevel low-level
@@ -266,7 +239,7 @@ public class AssignStmt extends ExpStmt implements Cloneable {
    * @declaredat irx10.ast:18
    */
   public IDInfo getLHSNoTransform() {
-    return (IDInfo)getChildNoTransform(2);
+    return (IDInfo)getChildNoTransform(1);
   }
   /**
    * Setter for RHS
@@ -275,7 +248,7 @@ public class AssignStmt extends ExpStmt implements Cloneable {
    * @declaredat irx10.ast:5
    */
   public void setRHS(Exp node) {
-    setChild(node, 3);
+    setChild(node, 2);
   }
   /**
    * Getter for RHS
@@ -284,7 +257,7 @@ public class AssignStmt extends ExpStmt implements Cloneable {
    * @declaredat irx10.ast:12
    */
   public Exp getRHS() {
-    return (Exp)getChild(3);
+    return (Exp)getChild(2);
   }
   /**
    * @apilevel low-level
@@ -292,6 +265,6 @@ public class AssignStmt extends ExpStmt implements Cloneable {
    * @declaredat irx10.ast:18
    */
   public Exp getRHSNoTransform() {
-    return (Exp)getChildNoTransform(3);
+    return (Exp)getChildNoTransform(2);
   }
 }

@@ -30,6 +30,7 @@ public class x10Mapping {
 		
 		x10BuiltinList.add("plus");
 		x10BuiltinList.add("minus");
+		x10BuiltinList.add("gt");
 	}
 
 	private void makex10TypeMap() {

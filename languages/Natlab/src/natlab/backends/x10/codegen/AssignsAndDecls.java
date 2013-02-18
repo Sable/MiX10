@@ -63,6 +63,7 @@ public class AssignsAndDecls {
 		} else {
 			isDecl = true;
 			DeclStmt decl_stmt = new DeclStmt();
+			
 			IDInfo LHSinfo = new IDInfo();
 			decl_stmt.setLHS(Helper.generateIDInfo(target.analysis,
 					target.index, node, LHS));
@@ -77,17 +78,77 @@ public class AssignsAndDecls {
 					.toString());
 			}
 			}
+			
+			
+			//block.addStmt(decl_stmt);
 			setRHSValue(isDecl, decl_stmt, node, tf, target);
-			target.symbolMap
-			.put(target.symbolMapKey, decl_stmt.getLHS());
+			
+			
+			DeclStmt pseudoDecl = new DeclStmt();
+			pseudoDecl.setLHS(decl_stmt.getLHS());
+//			
+			AssignStmt pseudoAssign = new AssignStmt();
+			pseudoAssign.setLHS(decl_stmt.getLHS());
+			pseudoAssign.setRHS(decl_stmt.getRHS());
+			//FIXIT - URGENT
+//			//block.addStmt(pseudoAssign);
+//			
+//	        
+//			if (target.currentBlock.size()>1 ){
+//				target.currentBlock.get(0).addStmt(pseudoDecl);
+//				
+//				block.addStmt(pseudoAssign);
+//				target.symbolMap.put(target.symbolMapKey, decl_stmt.getLHS());
+//				//target.currentBlock.get(target.currentBlock.size()-1).addStmt(decl_stmt);
+//			}
+//			
+//			else 
+			{
+				target.symbolMap.put(target.symbolMapKey, decl_stmt.getLHS());
+				block.addStmt(decl_stmt);
+			}
 			
 
 //			target.symbolMap
 //					.put(((TIRAbstractAssignToVarStmt)node).getLHS().getVarName(), Helper
 //							.getAnalysisValue(target.analysis, target.index,
 //									node, LHS));
+//			DeclStmt pseudoDecl = new DeclStmt();
+//			pseudoDecl.setLHS(decl_stmt.getLHS());
+//			
+//			AssignStmt pseudoAssign = new AssignStmt();
+//			pseudoAssign.setLHS(decl_stmt.getLHS());
+//			pseudoAssign.setRHS(decl_stmt.getRHS());
+//			//block.addStmt(pseudoAssign);
+//			
+//	        
+//			if (target.currentBlock.size()>1 ){
+//				target.currentBlock.get(0).addStmt(pseudoDecl);
+//				//block.addStmt(pseudoAssign);
+//				//target.currentBlock.get(target.currentBlock.size()-1).addStmt(decl_stmt);
+//			}
+//			
+//			
+//				block.addStmt(decl_stmt);
 			
-			block.addStmt(decl_stmt);
+			
+			
+			
+			
+//			ASTNode temp_node = block;
+//			while(!(temp_node instanceof MethodBlock)
+//		          && !(temp_node instanceof ClassBlock) 
+//		          && !(null == temp_node)){
+//				
+//				temp_node = temp_node.getParent();
+//				System.out.println((temp_node)+"~~~~~~~");
+//			}
+//			
+//			//temp_node= (MethodBlock)temp_node.getParent();
+//			if(null!=temp_node && !(temp_node instanceof ClassBlock) && !(block instanceof MethodBlock)){
+//				System.out.println(((MethodBlock)temp_node)+"~~~~~~~");
+//			((MethodBlock)temp_node).addStmt(decl_stmt);
+//			}
 
 		}
 
@@ -152,7 +213,7 @@ public class AssignsAndDecls {
 				setRHSValue(false, list_single_assign_stmt, node, false, target);
 				target.symbolMap.put(target.symbolMapKey, list_single_assign_stmt.getLHS());
 				
-				
+				System.out.println("#####!"+target.symbolMapKey);
 				
 				
 				
@@ -168,11 +229,34 @@ public class AssignsAndDecls {
 				decl_stmt.getLHS().setName(((TIRAbstractAssignToListStmt)node).getTargets().getChild(0).getVarName());
 				
 				setRHSValue(isDecl, decl_stmt, node, false, target);
-				target.symbolMap.put(target.symbolMapKey, decl_stmt.getLHS());
 				
-
+				System.out.println("#####!"+target.symbolMapKey);
 				
-				block.addStmt(decl_stmt);
+				//block.addStmt(decl_stmt);
+				
+				
+				DeclStmt pseudoDecl = new DeclStmt();
+				pseudoDecl.setLHS(decl_stmt.getLHS());
+//				
+				AssignStmt pseudoAssign = new AssignStmt();
+				pseudoAssign.setLHS(decl_stmt.getLHS());
+				pseudoAssign.setRHS(decl_stmt.getRHS());
+//				//block.addStmt(pseudoAssign);
+//				
+//		        
+				if (target.currentBlock.size()>1 ){
+					target.currentBlock.get(0).addStmt(pseudoDecl);
+					
+					block.addStmt(pseudoAssign);
+					target.symbolMap.put(target.symbolMapKey, decl_stmt.getLHS());
+					//target.currentBlock.get(target.currentBlock.size()-1).addStmt(decl_stmt);
+				}
+//				
+				else {
+					target.symbolMap.put(target.symbolMapKey, decl_stmt.getLHS());
+					block.addStmt(decl_stmt);
+				}
+					
 
 			}
 
@@ -196,6 +280,9 @@ public class AssignsAndDecls {
 								node, name.getID()));
 				target.symbolMap.put(name.getID(),Helper.generateIDInfo(target.analysis, target.index,
 						node, name.getID()) );
+				
+				
+			
 
 //		list_assign_stmt
 //				.getMultiAssignLHS()

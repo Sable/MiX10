@@ -9,7 +9,7 @@ import java.util.*;
  * @ast node
  * @declaredat irx10.ast:80
  */
-public class IfElseIf extends ASTNode<ASTNode> implements Cloneable {
+public class IfElseIf extends Stmt implements Cloneable {
   /**
    * @apilevel low-level
    */

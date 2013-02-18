@@ -1,5 +1,6 @@
 package natlab.backends.x10.codegen;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 import natlab.backends.x10.IRx10.ast.AssignStmt;
@@ -18,6 +19,7 @@ import natlab.backends.x10.IRx10.ast.Type;
 import natlab.tame.tir.TIRAbstractAssignStmt;
 import natlab.tame.tir.TIRForStmt;
 import natlab.tame.tir.TIRNode;
+import natlab.tame.valueanalysis.components.shape.ShapeFactory;
 import ast.RangeExpr;
 
 public class ForLoopStmt {
@@ -29,6 +31,16 @@ public class ForLoopStmt {
 
 		IDInfo LHSinfo = new IDInfo(new Type("Int"), node.getAssignStmt()
 				.getLHS().getVarName(), null, null, null);
+		ShapeFactory sf = new ShapeFactory();
+		/*
+		 * TODO
+		 * below is a hack assuming for loop index will be a scalar.
+		 * use range value analysis later on
+		 */
+		ArrayList<Integer> s = new ArrayList<Integer>();
+		s.add(1);
+		s.add(1);
+		LHSinfo.setShape(s);
 		/*
 		 * LHSinfo = Helper.generateIDInfo(target.analysis, target.index, node,
 		 * node.getVarName());
