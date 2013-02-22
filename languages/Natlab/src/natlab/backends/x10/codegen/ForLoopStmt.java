@@ -120,25 +120,25 @@ public class ForLoopStmt {
 					.setID(for_stmt.getAssignStmt().getLHS().getName());
 		}
 		int i = 0;
-		for (Stmt stmt : for_stmt.getLoopBody().getStmtList()) {
-			// if a statement is Decl statement, add a declaration node to the
-			// block
-			// and change to assignment node inside for stmt
-			if (stmt instanceof DeclStmt) {
-				if (((DeclStmt) stmt).hasRHS()) {
-					AssignStmt InsertAssignStmt = new AssignStmt();
-					IDInfo temp = ((DeclStmt) stmt).getLHS();
-					InsertAssignStmt.setLHS(temp);
-
-					InsertAssignStmt.setRHS(((DeclStmt) stmt).getRHS());
-					for_stmt.getLoopBody().getStmtList().insertChild(InsertAssignStmt, i);
-				}
-				block.addStmt(stmt);
-				((DeclStmt) stmt).setChild(new Opt(), 2);
-				for_stmt.getLoopBody().getStmtList().removeChild(i+1);
-			}
-			i++;
-		}
+//		for (Stmt stmt : for_stmt.getLoopBody().getStmtList()) {
+//			// if a statement is Decl statement, add a declaration node to the
+//			// block
+//			// and change to assignment node inside for stmt
+//			if (stmt instanceof DeclStmt) {
+//				if (((DeclStmt) stmt).hasRHS()) {
+//					AssignStmt InsertAssignStmt = new AssignStmt();
+//					IDInfo temp = ((DeclStmt) stmt).getLHS();
+//					InsertAssignStmt.setLHS(temp);
+//
+//					InsertAssignStmt.setRHS(((DeclStmt) stmt).getRHS());
+//					for_stmt.getLoopBody().getStmtList().insertChild(InsertAssignStmt, i);
+//				}
+//				block.addStmt(stmt);
+//				((DeclStmt) stmt).setChild(new Opt(), 2);
+//				for_stmt.getLoopBody().getStmtList().removeChild(i+1);
+//			}
+//			i++;
+//		}
 
 		return for_stmt;
 		// TODO Auto-generated method stub

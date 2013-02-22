@@ -78,77 +78,39 @@ public class AssignsAndDecls {
 					.toString());
 			}
 			}
-			
-			
-			//block.addStmt(decl_stmt);
+	
 			setRHSValue(isDecl, decl_stmt, node, tf, target);
 			
 			
-			DeclStmt pseudoDecl = new DeclStmt();
-			pseudoDecl.setLHS(decl_stmt.getLHS());
 //			
-			AssignStmt pseudoAssign = new AssignStmt();
-			pseudoAssign.setLHS(decl_stmt.getLHS());
-			pseudoAssign.setRHS(decl_stmt.getRHS());
-			//FIXIT - URGENT
+			
 //			//block.addStmt(pseudoAssign);
 //			
 //	        
-//			if (target.currentBlock.size()>1 ){
-//				target.currentBlock.get(0).addStmt(pseudoDecl);
-//				
-//				block.addStmt(pseudoAssign);
-//				target.symbolMap.put(target.symbolMapKey, decl_stmt.getLHS());
-//				//target.currentBlock.get(target.currentBlock.size()-1).addStmt(decl_stmt);
-//			}
+			if (target.currentBlock.size()>1 ){
+				DeclStmt pseudoDecl = new DeclStmt();
+				pseudoDecl.setLHS(decl_stmt.getLHS());
+				target.currentBlock.get(0).addStmt(pseudoDecl);
+				target.symbolMap.put(target.symbolMapKey, decl_stmt.getLHS());
+				
+				AssignStmt pseudoAssign = new AssignStmt();
+				
+				pseudoAssign.setLHS(decl_stmt.getLHS());
+				pseudoAssign.setRHS(decl_stmt.getRHS());
+				block.addStmt(pseudoAssign);
+				
+				//System.out.println(block.getParent().getParent().toString()+"^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+				
+				//target.currentBlock.get(target.currentBlock.size()-1).addStmt(decl_stmt);
+			}
 //			
-//			else 
-			{
+			else {
 				target.symbolMap.put(target.symbolMapKey, decl_stmt.getLHS());
 				block.addStmt(decl_stmt);
+				
+				
 			}
 			
-
-//			target.symbolMap
-//					.put(((TIRAbstractAssignToVarStmt)node).getLHS().getVarName(), Helper
-//							.getAnalysisValue(target.analysis, target.index,
-//									node, LHS));
-//			DeclStmt pseudoDecl = new DeclStmt();
-//			pseudoDecl.setLHS(decl_stmt.getLHS());
-//			
-//			AssignStmt pseudoAssign = new AssignStmt();
-//			pseudoAssign.setLHS(decl_stmt.getLHS());
-//			pseudoAssign.setRHS(decl_stmt.getRHS());
-//			//block.addStmt(pseudoAssign);
-//			
-//	        
-//			if (target.currentBlock.size()>1 ){
-//				target.currentBlock.get(0).addStmt(pseudoDecl);
-//				//block.addStmt(pseudoAssign);
-//				//target.currentBlock.get(target.currentBlock.size()-1).addStmt(decl_stmt);
-//			}
-//			
-//			
-//				block.addStmt(decl_stmt);
-			
-			
-			
-			
-			
-//			ASTNode temp_node = block;
-//			while(!(temp_node instanceof MethodBlock)
-//		          && !(temp_node instanceof ClassBlock) 
-//		          && !(null == temp_node)){
-//				
-//				temp_node = temp_node.getParent();
-//				System.out.println((temp_node)+"~~~~~~~");
-//			}
-//			
-//			//temp_node= (MethodBlock)temp_node.getParent();
-//			if(null!=temp_node && !(temp_node instanceof ClassBlock) && !(block instanceof MethodBlock)){
-//				System.out.println(((MethodBlock)temp_node)+"~~~~~~~");
-//			((MethodBlock)temp_node).addStmt(decl_stmt);
-//			}
 
 		}
 
@@ -250,11 +212,14 @@ public class AssignsAndDecls {
 					block.addStmt(pseudoAssign);
 					target.symbolMap.put(target.symbolMapKey, decl_stmt.getLHS());
 					//target.currentBlock.get(target.currentBlock.size()-1).addStmt(decl_stmt);
+					
+					System.out.println(block.getParent().toString()+"^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
 				}
 //				
 				else {
-					target.symbolMap.put(target.symbolMapKey, decl_stmt.getLHS());
 					block.addStmt(decl_stmt);
+					target.symbolMap.put(target.symbolMapKey, decl_stmt.getLHS());
+					
 				}
 					
 

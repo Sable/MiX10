@@ -5,9 +5,7 @@ n=length(A);
 for j=1:n-1
     % comparing each number with the next and swapping
     for i=1:n-1
-    if A(i)>A(i+1);
-        % temp is a variable where the numbers are kept
-        % temporarily for the switch
+    if A(i)>A(i+1)
         temp=A(i);
         A(i)=A(i+1);
         A(i+1)=temp;

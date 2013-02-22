@@ -7,18 +7,20 @@ var mc_t8: Double = 1;
 var mc_t7: Double = Mix10.minus(n, mc_t8);
 var mc_t15: Double = 1;
 var j: Int;
+var mc_t9: Double;
 var mc_t6: Double;
+var mc_t14: Double;
 var mc_t0: Double;
+var mc_t10: Double;
 var mc_t4: Double;
 var mc_t1: Double;
 var mc_t13: Boolean;
 var temp: Double;
+var mc_t11: Double;
 var mc_t5: Double;
 var mc_t2: Double;
+var mc_t12: Double;
 var mc_t3: Double;
-var mc_t9: Double;
-var mc_t14: Double;
-var i: Int;
 	    for (j = mc_t15;
 (j < mc_t7);j = (j + 1))
 	        {
@@ -37,14 +39,12 @@ mc_t1 = A(mc_t4);
 mc_t13 = Mix10.gt(mc_t0, mc_t1);
 	            if (mc_t13)
 	                {
-//% temp is a variable where the numbers are kept
-//% temporarily for the switch
 temp = A(i);
-var mc_t11: Double = 1;
+mc_t11 = 1;
 mc_t5 = Mix10.plus(i, mc_t11);
 mc_t2 = A(mc_t5);
 A(i) = mc_t2 ;
-var mc_t12: Double = 1;
+mc_t12 = 1;
 mc_t3 = Mix10.plus(i, mc_t12);
 A(mc_t3) = temp ;
 }

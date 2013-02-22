@@ -69,8 +69,11 @@ public class builtinMaker {
 //        DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
 //		Document doc = docBuilder.parse (new File("/media/vineet/19F5-FD4C/Thesis/mclab_git/mclab/languages/Natlab/src/natlab/backends/x10/codegen/mix10_builtins.xml"));
 //		doc.getDocumentElement ().normalize ();
-		
+			System.out.println(builtinName+"BNAME");
 		NodeList builtinNodeList = target.collectedBuiltins.usedBuiltins.get(builtinName);
+		if (null != builtinNodeList)
+			System.out.println(builtinName+"BNAME");
+		
 		Element builtinArrayOrGml = (Element)builtinNodeList.item(arrayOrGml);
 		 builtin = ((Node)(
 				 ((Element)(builtinArrayOrGml.getElementsByTagName(exprType).item(0))).getChildNodes().item(0)
