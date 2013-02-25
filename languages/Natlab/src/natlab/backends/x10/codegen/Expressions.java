@@ -65,6 +65,7 @@ public class Expressions {
 	}
 
 	static List<IDUse> getArgs(ast.Expr NatlabExp, IRx10ASTGenerator target) {
+		//We use IDUse assuming it is used only with TameIR.
 		List<IDUse> Args = new List<IDUse>();
 		int numArgs = NatlabExp.getChild(1).getNumChild();
 		for (int i = 0; i < numArgs; i++) {
@@ -83,6 +84,12 @@ public class Expressions {
 		if (null == NatlabExp) {
 			return new EmptyExp();
 		}
+		
+		
+//		if (NatlabExp instanceof EndExpr){
+//			System.out.println(NatlabExp.getPrettyPrinted());
+//		}
+//		
 
 		if (NatlabExp instanceof IntLiteralExpr) {
 			return new IntLiteral(NatlabExp.getNodeString());

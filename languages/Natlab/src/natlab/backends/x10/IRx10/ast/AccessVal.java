@@ -7,7 +7,7 @@ import java.util.*;
 
 /**
  * @ast node
- * @declaredat irx10.ast:85
+ * @declaredat irx10.ast:86
  */
 public abstract class AccessVal extends Exp implements Cloneable {
   /**

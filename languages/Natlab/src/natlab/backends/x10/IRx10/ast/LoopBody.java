@@ -7,7 +7,7 @@ import java.util.*;
 
 /**
  * @ast node
- * @declaredat irx10.ast:78
+ * @declaredat irx10.ast:79
  */
 public class LoopBody extends StmtBlock implements Cloneable {
   /**

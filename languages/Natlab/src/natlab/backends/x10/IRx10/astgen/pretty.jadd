@@ -68,7 +68,7 @@ String DeclStmt.pp(String indent){
 
 				x.append("val " + getLHS().getName() + " = " + "new Array["
 						+ getLHS().getType().getName() + "]" + "("
-						+ PPHelper.makeRange(getLHS().getShape()) + ", "
+						//+ PPHelper.makeRange(getLHS().getShape()) + ", "
 						+ getRHS().pp("") + ");\n");
 			}
 		} //FIX THIS IN aspect
@@ -104,10 +104,10 @@ String ArraySetStmt.pp(String indent){
   	  StringBuffer x = new StringBuffer();
   	  x.append(indent);
   	  x.append(getArrayID().getID()+"(");
-  	  x.append(getIndicesList().getChild(0).pp(""));
+  	  x.append(getIndicesList().getChild(0).pp("")+" as Int");
   	  for(int i=1; i<getIndicesList().getNumChild() ; i++)
   	  {
-  		  x.append(", "+getIndicesList().getChild(i).pp(""));
+  		  x.append(", "+getIndicesList().getChild(i).pp("")+"as Int");
   	  }
   	  x.append(")");
   	  return x.toString();
@@ -146,13 +146,32 @@ static String PPHelper.makeArgs(List<IDInfo> argsList)
 {
 	StringBuffer s = new StringBuffer();
 	if (argsList.getNumChild()>0){
+		if (!isScalar(argsList.getChild(0))){
+			s.append(argsList.getChild(0).getName()+": Array["+argsList.getChild(0).getType().getName()+"]");
+		}
+		else
 	s.append(argsList.getChild(0).getName()+": "+argsList.getChild(0).getType().getName());
 	for (int i=1; i<argsList.numChildren ; i++)
-	{
+	{	
+		if (!isScalar(argsList.getChild(i))){
+			s.append(", "+argsList.getChild(i).getName()+": Array["+argsList.getChild(i).getType().getName()+"]");
+		}
+		else		
 		s.append(", "+argsList.getChild(i).getName()+": "+argsList.getChild(i).getType().getName());
 	}
 	}
 	return s.toString();
+}
+
+static boolean PPHelper.isScalar(IDInfo id) {
+	
+	  for (int i =0 ; i<id.getShape().size();i++){
+		  if (!("1").equals(id.getShape().get(i).toString())){
+			  return false;
+			  
+		  }
+	  }
+	return true;
 }
 
 String StmtBlock.pp(String indent)
@@ -421,6 +440,26 @@ String CommentStmt.pp(String indent)
 	}
 	return x.toString();
 }
+
+String ReturnStmt.pp(String indent) {
+	  if (1 == getNumReturnVal()){
+		  return (indent+"return "+getReturnVal(0).pp("")+";\n");
+		  		  
+	  }
+	  String listOfVals;
+	  if (1< getNumReturnVal()){
+		  listOfVals = getReturnVal(0).pp("");
+		  for (int i=1;i<getNumReturnVal();i++){
+			  listOfVals = listOfVals + ","+getReturnVal(i).pp("");
+		  }
+		  
+		  return (indent+"return new Array[Any](["+listOfVals+"]);\n");
+		  
+	  }
+	  
+	  else 
+		  return ""; 
+  }
 
 }	
 	

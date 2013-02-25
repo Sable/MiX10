@@ -8,7 +8,7 @@ import java.util.*;
 
 /**
  * @ast node
- * @declaredat irx10.ast:51
+ * @declaredat irx10.ast:52
  */
 public class DecExp extends AdditiveExp implements Cloneable {
   /**
@@ -61,7 +61,7 @@ public class DecExp extends AdditiveExp implements Cloneable {
   /**
    * @ast method 
    * @aspect PrettyPrinter
-   * @declaredat ./astgen/pretty.jadd:310
+   * @declaredat ./astgen/pretty.jadd:329
    */
   String pp(String indent)
 {

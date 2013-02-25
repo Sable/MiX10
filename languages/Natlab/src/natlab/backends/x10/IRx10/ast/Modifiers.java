@@ -7,7 +7,7 @@ import java.util.*;
 
 /**
  * @ast node
- * @declaredat irx10.ast:69
+ * @declaredat irx10.ast:70
  */
 public class Modifiers extends ASTNode<ASTNode> implements Cloneable {
   /**

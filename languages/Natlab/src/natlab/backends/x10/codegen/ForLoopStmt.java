@@ -9,7 +9,7 @@ import natlab.backends.x10.IRx10.ast.ForStmt;
 import natlab.backends.x10.IRx10.ast.IDInfo;
 import natlab.backends.x10.IRx10.ast.IDUse;
 import natlab.backends.x10.IRx10.ast.IncExp;
-import natlab.backends.x10.IRx10.ast.LTExp;
+import natlab.backends.x10.IRx10.ast.LEExp;
 import natlab.backends.x10.IRx10.ast.List;
 import natlab.backends.x10.IRx10.ast.LoopBody;
 import natlab.backends.x10.IRx10.ast.Opt;
@@ -29,7 +29,7 @@ public class ForLoopStmt {
 		ForStmt for_stmt = new ForStmt();
 		AssignStmt for_assign = new AssignStmt();
 
-		IDInfo LHSinfo = new IDInfo(new Type("Int"), node.getAssignStmt()
+		IDInfo LHSinfo = new IDInfo(new Type("Double"), node.getAssignStmt()
 				.getLHS().getVarName(), null, null, null);
 		ShapeFactory sf = new ShapeFactory();
 		/*
@@ -69,7 +69,7 @@ public class ForLoopStmt {
 		TempDeclStmt.setLHS(for_assign.getLHS());
 		block.addStmt(TempDeclStmt);
 		target.symbolMap.put(LHSinfo.getName(), LHSinfo);
-		for_stmt.setCondition(new LTExp(
+		for_stmt.setCondition(new LEExp(
 				new IDUse(for_assign.getLHS().getName()), upper));
 		for_stmt.setStepper(new IncExp(
 				new IDUse(for_assign.getLHS().getName()), increment));
@@ -114,7 +114,7 @@ public class ForLoopStmt {
 					.setName(
 							for_stmt.getAssignStmt().getLHS().getName()
 									+ "_x10"+randomizer);
-			((IDUse) (((LTExp) (for_stmt.getCondition())).getLeftOp()))
+			((IDUse) (((LEExp) (for_stmt.getCondition())).getLeftOp()))
 					.setID(for_stmt.getAssignStmt().getLHS().getName());
 			((IDUse) (((IncExp) (for_stmt.getStepper())).getLeftOp()))
 					.setID(for_stmt.getAssignStmt().getLHS().getName());

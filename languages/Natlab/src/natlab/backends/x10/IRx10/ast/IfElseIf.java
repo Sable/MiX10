@@ -7,7 +7,7 @@ import java.util.*;
 
 /**
  * @ast node
- * @declaredat irx10.ast:80
+ * @declaredat irx10.ast:81
  */
 public class IfElseIf extends Stmt implements Cloneable {
   /**

@@ -7,7 +7,7 @@ import java.util.*;
 
 /**
  * @ast node
- * @declaredat irx10.ast:14
+ * @declaredat irx10.ast:15
  */
 public class Dims extends ASTNode<ASTNode> implements Cloneable {
   /**

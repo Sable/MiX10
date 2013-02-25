@@ -7,7 +7,7 @@ import java.util.*;
 
 /**
  * @ast node
- * @declaredat irx10.ast:79
+ * @declaredat irx10.ast:80
  */
 public class IfElseStmt extends Stmt implements Cloneable {
   /**
@@ -60,7 +60,7 @@ public class IfElseStmt extends Stmt implements Cloneable {
   /**
    * @ast method 
    * @aspect PrettyPrinter
-   * @declaredat ./astgen/pretty.jadd:365
+   * @declaredat ./astgen/pretty.jadd:384
    */
   String pp(String indent)
 {   

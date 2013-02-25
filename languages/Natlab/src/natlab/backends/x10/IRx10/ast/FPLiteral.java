@@ -7,7 +7,7 @@ import java.util.*;
 
 /**
  * @ast node
- * @declaredat irx10.ast:32
+ * @declaredat irx10.ast:33
  */
 public class FPLiteral extends Literal implements Cloneable {
   /**

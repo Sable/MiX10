@@ -8,7 +8,7 @@ import java.util.*;
 
 /**
  * @ast node
- * @declaredat irx10.ast:63
+ * @declaredat irx10.ast:64
  */
 public class NEExp extends EqualityExp implements Cloneable {
   /**
@@ -61,7 +61,7 @@ public class NEExp extends EqualityExp implements Cloneable {
   /**
    * @ast method 
    * @aspect PrettyPrinter
-   * @declaredat ./astgen/pretty.jadd:335
+   * @declaredat ./astgen/pretty.jadd:354
    */
   String pp(String indent)
 {

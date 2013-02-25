@@ -7,7 +7,7 @@ import java.util.*;
 
 /**
  * @ast node
- * @declaredat irx10.ast:23
+ * @declaredat irx10.ast:24
  */
 public class NegExp extends UnaryExp implements Cloneable {
   /**
@@ -60,7 +60,7 @@ public class NegExp extends UnaryExp implements Cloneable {
   /**
    * @ast method 
    * @aspect PrettyPrinter
-   * @declaredat ./astgen/pretty.jadd:270
+   * @declaredat ./astgen/pretty.jadd:289
    */
   String pp(String indent)
 {

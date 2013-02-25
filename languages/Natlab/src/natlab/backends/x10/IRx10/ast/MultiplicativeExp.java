@@ -7,7 +7,7 @@ import java.util.*;
 
 /**
  * @ast node
- * @declaredat irx10.ast:43
+ * @declaredat irx10.ast:44
  */
 public abstract class MultiplicativeExp extends ArithExp implements Cloneable {
   /**

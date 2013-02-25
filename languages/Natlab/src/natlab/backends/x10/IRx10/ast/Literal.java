@@ -7,7 +7,7 @@ import java.util.*;
 
 /**
  * @ast node
- * @declaredat irx10.ast:30
+ * @declaredat irx10.ast:31
  */
 public class Literal extends LiteralExp implements Cloneable {
   /**
@@ -60,7 +60,7 @@ public class Literal extends LiteralExp implements Cloneable {
   /**
    * @ast method 
    * @aspect PrettyPrinter
-   * @declaredat ./astgen/pretty.jadd:275
+   * @declaredat ./astgen/pretty.jadd:294
    */
   String pp(String indent)
 {

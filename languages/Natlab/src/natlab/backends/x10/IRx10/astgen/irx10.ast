@@ -6,6 +6,7 @@ CommentStmt:Stmt ::= <Comment:String>;
 DeclStmt:Stmt ::= [MultiDeclLHS] LHS:IDInfo [RHS:Exp];
 Method ::= MethodHeader MethodBlock;
 MethodHeader ::= ReturnType:AccessVal <Name:String> Args:IDInfo*;
+ReturnStmt:Stmt ::= ReturnVal:Exp*;
 Type:AccessVal ::= <Name:String>;
 MethodBlock:StmtBlock;
 AssignStmt:Stmt ::=  [MultiAssignLHS] LHS:IDInfo RHS:Exp;
@@ -23,7 +24,7 @@ PlusExp:UnaryExp;
 NegExp:UnaryExp;
 EmptyExp:Exp;
 
-ArrayAccess:AccessVal ::= ArrayID:IDUse Indices:Exp* ;
+ArrayAccess:AccessVal ::= ArrayID:IDUse Indices:IDUse* ; //specific for TameIR
 ArraySetStmt:Stmt ::= LHS:IDInfo Indices:Exp* RHS:Exp;
 
 abstract LiteralExp:Exp;

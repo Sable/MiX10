@@ -126,7 +126,7 @@ public class builtinMaker {
 			if (target.symbolMap.containsKey(arg.getID())){
 				if (target.symbolMap.get(arg.getID()).getShape() == null)
 					return "type5"; //TODO check if it is correct. if a shape is unknown, revert to type 4
-				if (target.symbolMap.get(arg.getID()).getShape() != null && Helper.isScalar((ArrayList<Integer>) target.symbolMap.get(arg.getID()).getShape())){
+				if (target.symbolMap.get(arg.getID()).getShape() != null && Helper.isScalar( target.symbolMap.get(arg.getID()).getShape())){
 					if (ctr==1)
 						isFirst=true;
 					scalarCounter++;

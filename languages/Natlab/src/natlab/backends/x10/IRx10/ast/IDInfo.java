@@ -7,7 +7,7 @@ import java.util.*;
 
 /**
  * @ast node
- * @declaredat irx10.ast:15
+ * @declaredat irx10.ast:16
  */
 public class IDInfo extends Exp implements Cloneable {
   /**
