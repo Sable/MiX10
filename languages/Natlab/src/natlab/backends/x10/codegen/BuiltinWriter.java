@@ -4,13 +4,14 @@ import java.io.BufferedWriter;
 import java.io.FileWriter;
 import java.io.IOException;
 
+import natlab.backends.x10.IRx10.ast.Exp;
 import natlab.backends.x10.IRx10.ast.IDUse;
 import natlab.backends.x10.IRx10.ast.List;
 
 public class BuiltinWriter {
 	private static StringBuffer mix10 = new StringBuffer();
 
-	public static void mix10Append(String method, List<IDUse> args,
+	public static void mix10Append(String method, List<Exp> args,
 			String methodName, String exprType, IRx10ASTGenerator target) {
 
 		mix10.append("public static def " + methodName + "(");
@@ -24,13 +25,13 @@ public class BuiltinWriter {
 			 */
 			mix10.append(((char)(i+97))
 					+ ":"
-					+ paramType(target.symbolMap.get(args.getChild(i).getID())
+					+ paramType(target.symbolMap.get(((IDUse) args.getChild(i)).getID())
 							.getType().getName(), exprType, i) + ", ");
            
 		}
 		mix10.append(((char)(i+97))
 				+ ":"
-				+ paramType(target.symbolMap.get(args.getChild(i).getID()).getType()
+				+ paramType(target.symbolMap.get(((IDUse) args.getChild(i)).getID()).getType()
 						.getName(), exprType, i));
 
 		mix10.append(")" + method + "\n");

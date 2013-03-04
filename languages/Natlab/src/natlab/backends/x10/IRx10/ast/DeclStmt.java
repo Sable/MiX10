@@ -103,10 +103,17 @@ public class DeclStmt extends Stmt implements Cloneable {
 			 else // array
 			{
 
-				x.append("val " + getLHS().getName() + " = " + "new Array["
-						+ getLHS().getType().getName() + "]" + "("
+				x.append("var " + getLHS().getName() + 
+						": Array["+getLHS().getType().getName() + "]");
+				if (hasRHS()){
+					x.append(
+						" = " + "new Array["
+						+ getLHS().getType().getName() + "]" + "(");
 						//+ PPHelper.makeRange(getLHS().getShape()) + ", "
-						+ getRHS().pp("") + ");\n");
+				   
+						x.append(getRHS().pp("")+")");
+				   }
+					x.append( ";\n");
 			}
 		} //FIX THIS IN aspect
 			

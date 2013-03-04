@@ -60,7 +60,7 @@ public class AssignStmt extends Stmt implements Cloneable {
   /**
    * @ast method 
    * @aspect PrettyPrinter
-   * @declaredat ./astgen/pretty.jadd:190
+   * @declaredat ./astgen/pretty.jadd:197
    */
   String pp(String indent) {
 		StringBuffer x = new StringBuffer();
@@ -89,7 +89,10 @@ public class AssignStmt extends Stmt implements Cloneable {
 					/* Scalar variable */
 					x.append(getLHS().getName());
 					x.append(" = ");
-					x.append(getRHS().pp("") + ";\n");
+					x.append(getRHS().pp(""));
+					if(null != getTypeCast() && true==getTypeCast())
+						x.append("as "+getLHS().getType().getName());
+					x.append(" ;\n");
 
 				}
 
@@ -101,7 +104,10 @@ public class AssignStmt extends Stmt implements Cloneable {
 					 */
 					x.append(getLHS().getName());
 					x.append(" = ");
-					x.append(getRHS().pp("") + ";\n");
+					x.append(getRHS().pp(""));
+					if(null != getTypeCast() && true==getTypeCast())
+						x.append("as Array["+getLHS().getType().getName()+"]");
+					x.append(" ;\n");
 					//
 					// x.append("val "+getLHS().getName()+" = "+
 					// "new Array["+getLHS().getType().getName()+"]"+
@@ -147,15 +153,16 @@ public class AssignStmt extends Stmt implements Cloneable {
    * @ast method 
    * @declaredat irx10.ast:8
    */
-  public AssignStmt(Opt<MultiAssignLHS> p0, IDInfo p1, Exp p2) {
+  public AssignStmt(Opt<MultiAssignLHS> p0, IDInfo p1, Exp p2, Boolean p3) {
     setChild(p0, 0);
     setChild(p1, 1);
     setChild(p2, 2);
+    setTypeCast(p3);
   }
   /**
    * @apilevel low-level
    * @ast method 
-   * @declaredat irx10.ast:16
+   * @declaredat irx10.ast:17
    */
   protected int numChildren() {
     return 3;
@@ -266,5 +273,28 @@ public class AssignStmt extends Stmt implements Cloneable {
    */
   public Exp getRHSNoTransform() {
     return (Exp)getChildNoTransform(2);
+  }
+  /**
+   * Setter for lexeme TypeCast
+   * @apilevel high-level
+   * @ast method 
+   * @declaredat irx10.ast:5
+   */
+  public void setTypeCast(Boolean value) {
+    tokenBoolean_TypeCast = value;
+  }
+  /**   * @apilevel internal   * @ast method 
+   * @declaredat irx10.ast:8
+   */
+  
+  /**   * @apilevel internal   */  protected Boolean tokenBoolean_TypeCast;
+  /**
+   * Getter for lexeme TypeCast
+   * @apilevel high-level
+   * @ast method 
+   * @declaredat irx10.ast:13
+   */
+  public Boolean getTypeCast() {
+    return tokenBoolean_TypeCast;
   }
 }

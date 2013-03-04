@@ -54,7 +54,7 @@ else
 }
 }
 val x = new Array[Double](A);
-	    return x;
+	    return [x,n];
 }
 
 }

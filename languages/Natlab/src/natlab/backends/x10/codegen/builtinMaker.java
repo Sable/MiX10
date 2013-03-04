@@ -27,7 +27,7 @@ public class builtinMaker {
 
 	}
 
-	public static void makeBuiltin(Expr natlabExp, String builtinName, IRx10ASTGenerator target, List<IDUse> args) {
+	public static void makeBuiltin(Expr natlabExp, String builtinName, IRx10ASTGenerator target, List<Exp> args) {
 		/*
 		 * This is the method that picks up the right method from the xml 
 		 * and creates a x10 method ("literally" node in the mix10 class
@@ -116,23 +116,23 @@ public class builtinMaker {
 		 * decide which type to return.
 		 */
 		
-		List<IDUse> args=Expressions.getArgs(natlabExp, target);
+		List<Exp> args=Expressions.getArgs(natlabExp, target);
 		
 		int scalarCounter = 0;
 		int ctr =0;
 		boolean isFirst = false;
-		for (IDUse arg : args)
+		for (Exp arg : args)
 		{   ctr++;
-			if (target.symbolMap.containsKey(arg.getID())){
-				if (target.symbolMap.get(arg.getID()).getShape() == null)
+			if (target.symbolMap.containsKey(((IDUse) arg).getID())){
+				if (target.symbolMap.get(((IDUse) arg).getID()).getShape() == null)
 					return "type5"; //TODO check if it is correct. if a shape is unknown, revert to type 4
-				if (target.symbolMap.get(arg.getID()).getShape() != null && Helper.isScalar( target.symbolMap.get(arg.getID()).getShape())){
+				if (target.symbolMap.get(((IDUse) arg).getID()).getShape() != null && Helper.isScalar( target.symbolMap.get(((IDUse) arg).getID()).getShape())){
 					if (ctr==1)
 						isFirst=true;
 					scalarCounter++;
 				}
 				
-				System.out.println((ArrayList<Integer>) target.symbolMap.get(arg.getID()).getShape()+arg.getID());
+				System.out.println((ArrayList<Integer>) target.symbolMap.get(((IDUse) arg).getID()).getShape()+((IDUse) arg).getID());
 				
 				
 			}

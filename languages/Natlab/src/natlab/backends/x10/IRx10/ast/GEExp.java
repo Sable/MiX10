@@ -61,7 +61,7 @@ public class GEExp extends RelationalExp implements Cloneable {
   /**
    * @ast method 
    * @aspect PrettyPrinter
-   * @declaredat ./astgen/pretty.jadd:344
+   * @declaredat ./astgen/pretty.jadd:351
    */
   String pp(String indent)
 {

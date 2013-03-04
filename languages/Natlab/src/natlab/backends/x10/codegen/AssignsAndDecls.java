@@ -223,12 +223,14 @@ public class AssignsAndDecls {
 		}
 
 		else { //this branch handles the case with multiple targets on LHS
+			String multiVarName="";
 			AssignStmt list_assign_stmt = new AssignStmt();
 			MultiAssignLHS LHSinfo = new MultiAssignLHS();
 			list_assign_stmt.setMultiAssignLHS(LHSinfo);
-			String multiVarName="";
 			for (ast.Name name : ((TIRAbstractAssignToListStmt) node)
 					.getTargets().asNameList()) {
+				
+				System.out.println(name.getID()+"!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 				list_assign_stmt.getMultiAssignLHS()
 				.addIDInfo(
 						Helper.generateIDInfo(target.analysis, target.index,
@@ -257,19 +259,34 @@ public class AssignsAndDecls {
 			list_dims.add(Integer.toString(num));
 			superDeclStmt.getLHS().setShape((list_dims));
 			superDeclStmt.getLHS().setType(new Type("Any"));
+			if(!target.symbolMap.containsKey(multiVarName)){
+				
+				target.currentBlock.get(0).addStmt(superDeclStmt);
+				target.symbolMap.put(multiVarName,superDeclStmt.getLHS() );
+				
+			}
 			
-			/*
-			 * Create a new assignment node of type
-			 * new_var_name = new Array[Any](RHSexpression);
-			 * Then create several array access statements 
-			 * for each element of the LHS list 
-			 */
+			AssignStmt pseudoAssign = new AssignStmt();
+			pseudoAssign.setLHS(superDeclStmt.getLHS());
 			
+			setRHSValue(false, pseudoAssign, node, false, target);
+			System.out.println(node.getRHS().getPrettyPrinted()+"#####################################");
+			block.addStmt(pseudoAssign);
 			
-			System.out.println("^*^"+list_assign_stmt.getMultiAssignLHS().getIDInfoList().getNumChild());
-			list_assign_stmt.setLHS(null);
-			setRHSValue(false, list_assign_stmt, node, false, target);
-			block.addStmt(list_assign_stmt);
+			target.symbolMap.put(multiVarName,pseudoAssign.getLHS() );
+			
+			ArrayAccess accessMultiRet;
+			for (int i=0; i< list_assign_stmt.getMultiAssignLHS().getNumIDInfo();i++){
+				pseudoAssign = new AssignStmt();
+				accessMultiRet = new ArrayAccess();
+				pseudoAssign.setLHS(list_assign_stmt.getMultiAssignLHS().getIDInfo(i));
+				accessMultiRet.setArrayID(new IDUse(multiVarName));
+				accessMultiRet.getIndicess().add(new IntLiteral(Integer.toString(i)));
+				pseudoAssign.setRHS(accessMultiRet);
+				pseudoAssign.setTypeCast(true);
+				block.addStmt(pseudoAssign);
+				target.symbolMap.put(pseudoAssign.getLHS().getName(),pseudoAssign.getLHS());
+			}
 		}
 
 	}

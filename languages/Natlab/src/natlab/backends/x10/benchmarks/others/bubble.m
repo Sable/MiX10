@@ -1,4 +1,4 @@
-function [x] = bubble(A)
+function [x,n] = bubble(A)
 n=length(A);
 
 % making (n-1) passes

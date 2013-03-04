@@ -60,7 +60,7 @@ public class ModExp extends MultiplicativeExp implements Cloneable {
   /**
    * @ast method 
    * @aspect PrettyPrinter
-   * @declaredat ./astgen/pretty.jadd:309
+   * @declaredat ./astgen/pretty.jadd:316
    */
   String pp(String indent)
 {

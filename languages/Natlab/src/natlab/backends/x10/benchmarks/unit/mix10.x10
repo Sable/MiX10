@@ -2,8 +2,6 @@ public class Mix10 {
 public static def length(a:Array[Double]){
 		return a.size;
 		}
-		return x;
-	}
 public static def minus(a:Double, b:Double){
 		val x: Double;
 		x = a-b;

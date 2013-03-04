@@ -188,8 +188,7 @@
 				{
 		return a.size;
 		}
-		return x;
-	} 
+		
 			</type2>
 			<type3>
 				{

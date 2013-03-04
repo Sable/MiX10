@@ -60,7 +60,7 @@ public class ArrayAccess extends AccessVal implements Cloneable {
   /**
    * @ast method 
    * @aspect PrettyPrinter
-   * @declaredat ./astgen/pretty.jadd:102
+   * @declaredat ./astgen/pretty.jadd:109
    */
   String pp(String indent)
   {
@@ -89,7 +89,7 @@ public class ArrayAccess extends AccessVal implements Cloneable {
    * @ast method 
    * @declaredat irx10.ast:8
    */
-  public ArrayAccess(IDUse p0, List<IDUse> p1) {
+  public ArrayAccess(IDUse p0, List<Exp> p1) {
     setChild(p0, 0);
     setChild(p1, 1);
   }
@@ -133,7 +133,7 @@ public class ArrayAccess extends AccessVal implements Cloneable {
    * @ast method 
    * @declaredat irx10.ast:5
    */
-  public void setIndicesList(List<IDUse> list) {
+  public void setIndicesList(List<Exp> list) {
     setChild(list, 1);
   }
   /**
@@ -152,8 +152,8 @@ public class ArrayAccess extends AccessVal implements Cloneable {
    * @declaredat irx10.ast:19
    */
   @SuppressWarnings({"unchecked", "cast"})
-  public IDUse getIndices(int i) {
-    return (IDUse)getIndicesList().getChild(i);
+  public Exp getIndices(int i) {
+    return (Exp)getIndicesList().getChild(i);
   }
   /**
    * Add element to list IndicesList
@@ -161,8 +161,8 @@ public class ArrayAccess extends AccessVal implements Cloneable {
    * @ast method 
    * @declaredat irx10.ast:27
    */
-  public void addIndices(IDUse node) {
-    List<IDUse> list = (parent == null || state == null) ? getIndicesListNoTransform() : getIndicesList();
+  public void addIndices(Exp node) {
+    List<Exp> list = (parent == null || state == null) ? getIndicesListNoTransform() : getIndicesList();
     list.addChild(node);
   }
   /**
@@ -170,8 +170,8 @@ public class ArrayAccess extends AccessVal implements Cloneable {
    * @ast method 
    * @declaredat irx10.ast:34
    */
-  public void addIndicesNoTransform(IDUse node) {
-    List<IDUse> list = getIndicesListNoTransform();
+  public void addIndicesNoTransform(Exp node) {
+    List<Exp> list = getIndicesListNoTransform();
     list.addChild(node);
   }
   /**
@@ -180,8 +180,8 @@ public class ArrayAccess extends AccessVal implements Cloneable {
    * @ast method 
    * @declaredat irx10.ast:42
    */
-  public void setIndices(IDUse node, int i) {
-    List<IDUse> list = getIndicesList();
+  public void setIndices(Exp node, int i) {
+    List<Exp> list = getIndicesList();
     list.setChild(node, i);
   }
   /**
@@ -190,7 +190,7 @@ public class ArrayAccess extends AccessVal implements Cloneable {
    * @ast method 
    * @declaredat irx10.ast:50
    */
-  public List<IDUse> getIndicess() {
+  public List<Exp> getIndicess() {
     return getIndicesList();
   }
   /**
@@ -198,7 +198,7 @@ public class ArrayAccess extends AccessVal implements Cloneable {
    * @ast method 
    * @declaredat irx10.ast:56
    */
-  public List<IDUse> getIndicessNoTransform() {
+  public List<Exp> getIndicessNoTransform() {
     return getIndicesListNoTransform();
   }
   /**
@@ -208,8 +208,8 @@ public class ArrayAccess extends AccessVal implements Cloneable {
    * @declaredat irx10.ast:63
    */
   @SuppressWarnings({"unchecked", "cast"})
-  public List<IDUse> getIndicesList() {
-    List<IDUse> list = (List<IDUse>)getChild(1);
+  public List<Exp> getIndicesList() {
+    List<Exp> list = (List<Exp>)getChild(1);
     list.getNumChild();
     return list;
   }
@@ -219,7 +219,7 @@ public class ArrayAccess extends AccessVal implements Cloneable {
    * @declaredat irx10.ast:72
    */
   @SuppressWarnings({"unchecked", "cast"})
-  public List<IDUse> getIndicesListNoTransform() {
-    return (List<IDUse>)getChildNoTransform(1);
+  public List<Exp> getIndicesListNoTransform() {
+    return (List<Exp>)getChildNoTransform(1);
   }
 }

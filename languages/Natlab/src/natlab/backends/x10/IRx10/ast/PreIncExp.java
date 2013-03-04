@@ -60,7 +60,7 @@ public class PreIncExp extends UnaryExp implements Cloneable {
   /**
    * @ast method 
    * @aspect PrettyPrinter
-   * @declaredat ./astgen/pretty.jadd:268
+   * @declaredat ./astgen/pretty.jadd:275
    */
   String pp(String indent)
 {

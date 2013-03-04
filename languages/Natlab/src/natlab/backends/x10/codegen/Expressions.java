@@ -64,9 +64,9 @@ public class Expressions {
 		return RHS;
 	}
 
-	static List<IDUse> getArgs(ast.Expr NatlabExp, IRx10ASTGenerator target) {
+	static List<Exp> getArgs(ast.Expr NatlabExp, IRx10ASTGenerator target) {
 		//We use IDUse assuming it is used only with TameIR.
-		List<IDUse> Args = new List<IDUse>();
+		List<Exp> Args = new List<Exp>();
 		int numArgs = NatlabExp.getChild(1).getNumChild();
 		for (int i = 0; i < numArgs; i++) {
 			System.out.println("!!!"+i);
@@ -156,7 +156,7 @@ public class Expressions {
 			// Operand2 = makeIRx10Exp(((BinaryExpr) NatlabExp).getRHS());
 			// }
 
-			List<IDUse> Args = new List<IDUse>();
+			List<Exp> Args = new List<Exp>();
 			Args = getArgs(NatlabExp, target);
 			
 			System.out.println(((IDUse)Args.getChild(0)).getID());
@@ -177,6 +177,7 @@ public class Expressions {
 				UserDefMethodCall libCall = new UserDefMethodCall();
 				libCall.setUserDefMethodName(new MethodId(NatlabExp.getVarName()));
 				libCall.setArgumentList(Args);
+				System.out.println(((IDUse)libCall.getArgumentList().getChild(0)).getID()+"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 				return libCall;
 			}
 			//}

@@ -9,7 +9,7 @@ MethodHeader ::= ReturnType:AccessVal <Name:String> Args:IDInfo*;
 ReturnStmt:Stmt ::= ReturnVal:Exp*;
 Type:AccessVal ::= <Name:String>;
 MethodBlock:StmtBlock;
-AssignStmt:Stmt ::=  [MultiAssignLHS] LHS:IDInfo RHS:Exp;
+AssignStmt:Stmt ::=  [MultiAssignLHS] LHS:IDInfo RHS:Exp <TypeCast:Boolean>;
 ExpStmt:Stmt ::= Exp;
 IDUse:Exp ::= <ID:String>;
 Dims ::= [Exp];
@@ -24,7 +24,7 @@ PlusExp:UnaryExp;
 NegExp:UnaryExp;
 EmptyExp:Exp;
 
-ArrayAccess:AccessVal ::= ArrayID:IDUse Indices:IDUse* ; //specific for TameIR
+ArrayAccess:AccessVal ::= ArrayID:IDUse Indices:Exp* ; //specific for TameIR
 ArraySetStmt:Stmt ::= LHS:IDInfo Indices:Exp* RHS:Exp;
 
 abstract LiteralExp:Exp;
@@ -85,8 +85,8 @@ abstract Exp;
 
 abstract AccessVal:Exp;
 abstract MethodCall:Exp;
-BuiltinMethodCall:MethodCall ::= BuiltinMethodName:MethodId Argument:IDUse*;
+BuiltinMethodCall:MethodCall ::= BuiltinMethodName:MethodId Argument:Exp*;
 MethodId:AccessVal ::= <Name:String>;
-UserDefMethodCall:MethodCall ::= UserDefMethodName:MethodId Argument:IDUse*;
+UserDefMethodCall:MethodCall ::= UserDefMethodName:MethodId Argument:Exp*;
 
 

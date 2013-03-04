@@ -60,7 +60,7 @@ public class BuiltinMethodCall extends MethodCall implements Cloneable {
   /**
    * @ast method 
    * @aspect PrettyPrinter
-   * @declaredat ./astgen/pretty.jadd:402
+   * @declaredat ./astgen/pretty.jadd:409
    */
   String pp(String indent)
 {
@@ -89,7 +89,7 @@ public class BuiltinMethodCall extends MethodCall implements Cloneable {
    * @ast method 
    * @declaredat irx10.ast:8
    */
-  public BuiltinMethodCall(MethodId p0, List<IDUse> p1) {
+  public BuiltinMethodCall(MethodId p0, List<Exp> p1) {
     setChild(p0, 0);
     setChild(p1, 1);
   }
@@ -133,7 +133,7 @@ public class BuiltinMethodCall extends MethodCall implements Cloneable {
    * @ast method 
    * @declaredat irx10.ast:5
    */
-  public void setArgumentList(List<IDUse> list) {
+  public void setArgumentList(List<Exp> list) {
     setChild(list, 1);
   }
   /**
@@ -152,8 +152,8 @@ public class BuiltinMethodCall extends MethodCall implements Cloneable {
    * @declaredat irx10.ast:19
    */
   @SuppressWarnings({"unchecked", "cast"})
-  public IDUse getArgument(int i) {
-    return (IDUse)getArgumentList().getChild(i);
+  public Exp getArgument(int i) {
+    return (Exp)getArgumentList().getChild(i);
   }
   /**
    * Add element to list ArgumentList
@@ -161,8 +161,8 @@ public class BuiltinMethodCall extends MethodCall implements Cloneable {
    * @ast method 
    * @declaredat irx10.ast:27
    */
-  public void addArgument(IDUse node) {
-    List<IDUse> list = (parent == null || state == null) ? getArgumentListNoTransform() : getArgumentList();
+  public void addArgument(Exp node) {
+    List<Exp> list = (parent == null || state == null) ? getArgumentListNoTransform() : getArgumentList();
     list.addChild(node);
   }
   /**
@@ -170,8 +170,8 @@ public class BuiltinMethodCall extends MethodCall implements Cloneable {
    * @ast method 
    * @declaredat irx10.ast:34
    */
-  public void addArgumentNoTransform(IDUse node) {
-    List<IDUse> list = getArgumentListNoTransform();
+  public void addArgumentNoTransform(Exp node) {
+    List<Exp> list = getArgumentListNoTransform();
     list.addChild(node);
   }
   /**
@@ -180,8 +180,8 @@ public class BuiltinMethodCall extends MethodCall implements Cloneable {
    * @ast method 
    * @declaredat irx10.ast:42
    */
-  public void setArgument(IDUse node, int i) {
-    List<IDUse> list = getArgumentList();
+  public void setArgument(Exp node, int i) {
+    List<Exp> list = getArgumentList();
     list.setChild(node, i);
   }
   /**
@@ -190,7 +190,7 @@ public class BuiltinMethodCall extends MethodCall implements Cloneable {
    * @ast method 
    * @declaredat irx10.ast:50
    */
-  public List<IDUse> getArguments() {
+  public List<Exp> getArguments() {
     return getArgumentList();
   }
   /**
@@ -198,7 +198,7 @@ public class BuiltinMethodCall extends MethodCall implements Cloneable {
    * @ast method 
    * @declaredat irx10.ast:56
    */
-  public List<IDUse> getArgumentsNoTransform() {
+  public List<Exp> getArgumentsNoTransform() {
     return getArgumentListNoTransform();
   }
   /**
@@ -208,8 +208,8 @@ public class BuiltinMethodCall extends MethodCall implements Cloneable {
    * @declaredat irx10.ast:63
    */
   @SuppressWarnings({"unchecked", "cast"})
-  public List<IDUse> getArgumentList() {
-    List<IDUse> list = (List<IDUse>)getChild(1);
+  public List<Exp> getArgumentList() {
+    List<Exp> list = (List<Exp>)getChild(1);
     list.getNumChild();
     return list;
   }
@@ -219,7 +219,7 @@ public class BuiltinMethodCall extends MethodCall implements Cloneable {
    * @declaredat irx10.ast:72
    */
   @SuppressWarnings({"unchecked", "cast"})
-  public List<IDUse> getArgumentListNoTransform() {
-    return (List<IDUse>)getChildNoTransform(1);
+  public List<Exp> getArgumentListNoTransform() {
+    return (List<Exp>)getChildNoTransform(1);
   }
 }

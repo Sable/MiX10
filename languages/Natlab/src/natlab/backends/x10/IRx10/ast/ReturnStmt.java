@@ -60,7 +60,7 @@ public class ReturnStmt extends Stmt implements Cloneable {
   /**
    * @ast method 
    * @aspect PrettyPrinter
-   * @declaredat ./astgen/pretty.jadd:444
+   * @declaredat ./astgen/pretty.jadd:451
    */
   String pp(String indent) {
 	  if (1 == getNumReturnVal()){
@@ -74,7 +74,8 @@ public class ReturnStmt extends Stmt implements Cloneable {
 			  listOfVals = listOfVals + ","+getReturnVal(i).pp("");
 		  }
 		  
-		  return (indent+"return new Array[Any](["+listOfVals+"]);\n");
+		   return (indent+"return ["+listOfVals+"];\n");
+		  
 		  
 	  }
 	  

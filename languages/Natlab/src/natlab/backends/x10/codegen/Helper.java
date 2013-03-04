@@ -109,6 +109,8 @@ public class Helper {
 			if (null != temp.getisComplexInfo()){
 				id_info.setisComplex(temp.getisComplexInfo().toString());
 			}
+			
+			id_info.setName(ID);
 			return id_info;
 		}
 

@@ -61,17 +61,17 @@ public class ArraySetStmt extends Stmt implements Cloneable {
   /**
    * @ast method 
    * @aspect PrettyPrinter
-   * @declaredat ./astgen/pretty.jadd:85
+   * @declaredat ./astgen/pretty.jadd:92
    */
   String pp(String indent){
 		StringBuffer x = new StringBuffer();
 		
 						
 			x.append(getLHS().getName()+"(");
-			x.append(getIndicesList().getChild(0).pp(""));
+			x.append(getIndicesList().getChild(0).pp("")+" as Int");
 		  	  for(int i=1; i<getIndicesList().getNumChild() ; i++)
 		  	  {
-		  		  x.append(", "+getIndicesList().getChild(i).pp(""));
+		  		  x.append(", "+getIndicesList().getChild(i).pp("")+" as Int");
 		  	  }
 		  	  x.append(")");
 			x.append(" = ");

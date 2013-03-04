@@ -60,7 +60,7 @@ public class MinusExp extends UnaryExp implements Cloneable {
   /**
    * @ast method 
    * @aspect PrettyPrinter
-   * @declaredat ./astgen/pretty.jadd:279
+   * @declaredat ./astgen/pretty.jadd:286
    */
   String pp(String indent)
 {

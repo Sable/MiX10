@@ -66,10 +66,17 @@ String DeclStmt.pp(String indent){
 			 else // array
 			{
 
-				x.append("val " + getLHS().getName() + " = " + "new Array["
-						+ getLHS().getType().getName() + "]" + "("
+				x.append("var " + getLHS().getName() + 
+						": Array["+getLHS().getType().getName() + "]");
+				if (hasRHS()){
+					x.append(
+						" = " + "new Array["
+						+ getLHS().getType().getName() + "]" + "(");
 						//+ PPHelper.makeRange(getLHS().getShape()) + ", "
-						+ getRHS().pp("") + ");\n");
+				   
+						x.append(getRHS().pp("")+")");
+				   }
+					x.append( ";\n");
 			}
 		} //FIX THIS IN aspect
 			
@@ -87,10 +94,10 @@ String ArraySetStmt.pp(String indent){
 		
 						
 			x.append(getLHS().getName()+"(");
-			x.append(getIndicesList().getChild(0).pp(""));
+			x.append(getIndicesList().getChild(0).pp("")+" as Int");
 		  	  for(int i=1; i<getIndicesList().getNumChild() ; i++)
 		  	  {
-		  		  x.append(", "+getIndicesList().getChild(i).pp(""));
+		  		  x.append(", "+getIndicesList().getChild(i).pp("")+" as Int");
 		  	  }
 		  	  x.append(")");
 			x.append(" = ");
@@ -214,7 +221,10 @@ String AssignStmt.pp(String indent) {
 					/* Scalar variable */
 					x.append(getLHS().getName());
 					x.append(" = ");
-					x.append(getRHS().pp("") + ";\n");
+					x.append(getRHS().pp(""));
+					if(null != getTypeCast() && true==getTypeCast())
+						x.append("as "+getLHS().getType().getName());
+					x.append(" ;\n");
 
 				}
 
@@ -226,7 +236,10 @@ String AssignStmt.pp(String indent) {
 					 */
 					x.append(getLHS().getName());
 					x.append(" = ");
-					x.append(getRHS().pp("") + ";\n");
+					x.append(getRHS().pp(""));
+					if(null != getTypeCast() && true==getTypeCast())
+						x.append("as Array["+getLHS().getType().getName()+"]");
+					x.append(" ;\n");
 					//
 					// x.append("val "+getLHS().getName()+" = "+
 					// "new Array["+getLHS().getType().getName()+"]"+
@@ -453,7 +466,8 @@ String ReturnStmt.pp(String indent) {
 			  listOfVals = listOfVals + ","+getReturnVal(i).pp("");
 		  }
 		  
-		  return (indent+"return new Array[Any](["+listOfVals+"]);\n");
+		   return (indent+"return ["+listOfVals+"];\n");
+		  
 		  
 	  }
 	  
