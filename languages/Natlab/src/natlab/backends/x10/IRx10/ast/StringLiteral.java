@@ -7,7 +7,7 @@ import java.util.*;
 
 /**
  * @ast node
- * @declaredat irx10.ast:32
+ * @declaredat irx10.ast:35
  */
 public class StringLiteral extends Literal implements Cloneable {
   /**

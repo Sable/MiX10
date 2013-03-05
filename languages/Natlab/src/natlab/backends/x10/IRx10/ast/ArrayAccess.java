@@ -7,7 +7,7 @@ import java.util.*;
 
 /**
  * @ast node
- * @declaredat irx10.ast:27
+ * @declaredat irx10.ast:30
  */
 public class ArrayAccess extends AccessVal implements Cloneable {
   /**

@@ -7,7 +7,7 @@ import java.util.*;
 
 /**
  * @ast node
- * @declaredat irx10.ast:11
+ * @declaredat irx10.ast:12
  */
 public class MethodBlock extends StmtBlock implements Cloneable {
   /**

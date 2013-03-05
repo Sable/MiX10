@@ -7,7 +7,7 @@ import java.util.*;
 
 /**
  * @ast node
- * @declaredat irx10.ast:38
+ * @declaredat irx10.ast:41
  */
 public class CharLiteral extends Literal implements Cloneable {
   /**

@@ -7,7 +7,7 @@ import java.util.*;
 
 /**
  * @ast node
- * @declaredat irx10.ast:42
+ * @declaredat irx10.ast:45
  */
 public abstract class BinaryExp extends Exp implements Cloneable {
   /**

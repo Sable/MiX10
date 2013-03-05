@@ -7,7 +7,7 @@ import java.util.*;
 
 /**
  * @ast node
- * @declaredat irx10.ast:9
+ * @declaredat irx10.ast:10
  */
 public class ReturnStmt extends Stmt implements Cloneable {
   /**
@@ -60,7 +60,7 @@ public class ReturnStmt extends Stmt implements Cloneable {
   /**
    * @ast method 
    * @aspect PrettyPrinter
-   * @declaredat ./astgen/pretty.jadd:451
+   * @declaredat ./astgen/pretty.jadd:457
    */
   String pp(String indent) {
 	  if (1 == getNumReturnVal()){

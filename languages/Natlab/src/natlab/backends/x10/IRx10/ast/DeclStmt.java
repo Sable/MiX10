@@ -87,6 +87,8 @@ public class DeclStmt extends Stmt implements Cloneable {
 				for (int i = 0; i < getLHS().getShape().size(); i++) {
 					if(null != getLHS().getShape().get(i))
 					tf &= ("1").equals(getLHS().getShape().get(i).toString());
+					else
+						tf=false;
 				}
 				if (tf) {
 
@@ -103,7 +105,7 @@ public class DeclStmt extends Stmt implements Cloneable {
 			 else // array
 			{
 
-				x.append("var " + getLHS().getName() + 
+				x.append("val " + getLHS().getName() + 
 						": Array["+getLHS().getType().getName() + "]");
 				if (hasRHS()){
 					x.append(

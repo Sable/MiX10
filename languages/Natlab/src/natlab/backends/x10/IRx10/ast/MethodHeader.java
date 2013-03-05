@@ -7,7 +7,7 @@ import java.util.*;
 
 /**
  * @ast node
- * @declaredat irx10.ast:8
+ * @declaredat irx10.ast:9
  */
 public class MethodHeader extends ASTNode<ASTNode> implements Cloneable {
   /**

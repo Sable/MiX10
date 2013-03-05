@@ -7,7 +7,7 @@ import java.util.*;
 
 /**
  * @ast node
- * @declaredat irx10.ast:77
+ * @declaredat irx10.ast:80
  */
 public class WhileStmt extends Stmt implements Cloneable {
   /**
@@ -60,7 +60,7 @@ public class WhileStmt extends Stmt implements Cloneable {
   /**
    * @ast method 
    * @aspect PrettyPrinter
-   * @declaredat ./astgen/pretty.jadd:383
+   * @declaredat ./astgen/pretty.jadd:389
    */
   String pp(String indent)
 {

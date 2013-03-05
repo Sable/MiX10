@@ -8,7 +8,7 @@ import java.util.*;
 
 /**
  * @ast node
- * @declaredat irx10.ast:60
+ * @declaredat irx10.ast:63
  */
 public class LEExp extends RelationalExp implements Cloneable {
   /**
@@ -61,7 +61,7 @@ public class LEExp extends RelationalExp implements Cloneable {
   /**
    * @ast method 
    * @aspect PrettyPrinter
-   * @declaredat ./astgen/pretty.jadd:346
+   * @declaredat ./astgen/pretty.jadd:352
    */
   String pp(String indent)
 {

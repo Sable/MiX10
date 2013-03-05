@@ -50,6 +50,8 @@ String DeclStmt.pp(String indent){
 				for (int i = 0; i < getLHS().getShape().size(); i++) {
 					if(null != getLHS().getShape().get(i))
 					tf &= ("1").equals(getLHS().getShape().get(i).toString());
+					else
+						tf=false;
 				}
 				if (tf) {
 
@@ -66,7 +68,7 @@ String DeclStmt.pp(String indent){
 			 else // array
 			{
 
-				x.append("var " + getLHS().getName() + 
+				x.append("val " + getLHS().getName() + 
 						": Array["+getLHS().getType().getName() + "]");
 				if (hasRHS()){
 					x.append(
@@ -88,6 +90,44 @@ String DeclStmt.pp(String indent){
 		}
 		return x.toString();
 	}
+	
+	
+	String RegionBuilder.pp(String indent){
+		StringBuffer x = new StringBuffer();
+		
+		String type = ((AssignStmt)getParent()).getLHS().getType().getName();
+		x.append(indent+"new Array["+type+"](");
+		if(getLowers().getChild(0).getID().equals("__"))
+			x.append(
+			"(("+getArrayID().getID()+".region.min("+Integer.toString(0)+")).."	);
+		else
+			x.append("("+getLowers().getChild(0).getID()+" as Int..");
+		if(getUppers().getChild(0).getID().equals("__"))
+			x.append(
+			""+getArrayID().getID()+".region.max("+Integer.toString(0)+")))"	);
+		else
+			x.append(""+getLowers().getChild(0).getID()+" as Int)");
+		int i;
+		for(i=1 ; i< getLowers().getNumChild();i++){
+			x.append("*");
+			if(getLowers().getChild(i).getID().equals("__"))
+				x.append(
+				"(("+getArrayID().getID()+".region.min("+Integer.toString(i)+")).."	);
+			else
+				x.append("("+getLowers().getChild(i).getID()+" as Int..");
+			if(getUppers().getChild(i).getID().equals("__"))
+				x.append(
+				""+getArrayID().getID()+".region.max("+Integer.toString(i)+")))"	);
+			else
+				x.append(""+getLowers().getChild(i).getID()+" as Int)");
+			
+		}
+		x.append(", p:point("+Integer.toString(i)+")=>"+getArrayID().getID()+"(p));\n");
+		return x.toString();
+	}
+	
+	
+	
 	
 String ArraySetStmt.pp(String indent){
 		StringBuffer x = new StringBuffer();

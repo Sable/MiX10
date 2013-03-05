@@ -7,7 +7,7 @@ import java.util.*;
 
 /**
  * @ast node
- * @declaredat irx10.ast:88
+ * @declaredat irx10.ast:91
  */
 public class BuiltinMethodCall extends MethodCall implements Cloneable {
   /**
@@ -60,7 +60,7 @@ public class BuiltinMethodCall extends MethodCall implements Cloneable {
   /**
    * @ast method 
    * @aspect PrettyPrinter
-   * @declaredat ./astgen/pretty.jadd:409
+   * @declaredat ./astgen/pretty.jadd:415
    */
   String pp(String indent)
 {

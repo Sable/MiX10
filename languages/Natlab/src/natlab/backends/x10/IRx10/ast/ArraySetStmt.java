@@ -8,7 +8,7 @@ import java.util.*;
 
 /**
  * @ast node
- * @declaredat irx10.ast:28
+ * @declaredat irx10.ast:31
  */
 public class ArraySetStmt extends Stmt implements Cloneable {
   /**

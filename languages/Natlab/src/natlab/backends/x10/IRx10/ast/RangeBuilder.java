@@ -7,9 +7,9 @@ import java.util.*;
 
 /**
  * @ast node
- * @declaredat irx10.ast:83
+ * @declaredat irx10.ast:28
  */
-public class IfElseStmt extends Stmt implements Cloneable {
+public class RangeBuilder extends Exp implements Cloneable {
   /**
    * @apilevel low-level
    */
@@ -26,17 +26,17 @@ public class IfElseStmt extends Stmt implements Cloneable {
    * @apilevel internal
    */
   @SuppressWarnings({"unchecked", "cast"})
-  public IfElseStmt clone() throws CloneNotSupportedException {
-    IfElseStmt node = (IfElseStmt)super.clone();
+  public RangeBuilder clone() throws CloneNotSupportedException {
+    RangeBuilder node = (RangeBuilder)super.clone();
     return node;
   }
   /**
    * @apilevel internal
    */
   @SuppressWarnings({"unchecked", "cast"})
-  public IfElseStmt copy() {
+  public RangeBuilder copy() {
       try {
-        IfElseStmt node = (IfElseStmt)clone();
+        RangeBuilder node = (RangeBuilder)clone();
         if(children != null) node.children = (ASTNode[])children.clone();
         return node;
       } catch (CloneNotSupportedException e) {
@@ -48,8 +48,8 @@ public class IfElseStmt extends Stmt implements Cloneable {
    * @apilevel low-level
    */
   @SuppressWarnings({"unchecked", "cast"})
-  public IfElseStmt fullCopy() {
-    IfElseStmt res = (IfElseStmt)copy();
+  public RangeBuilder fullCopy() {
+    RangeBuilder res = (RangeBuilder)copy();
     for(int i = 0; i < getNumChildNoTransform(); i++) {
       ASTNode node = getChildNoTransform(i);
       if(node != null) node = node.fullCopy();
@@ -59,42 +59,20 @@ public class IfElseStmt extends Stmt implements Cloneable {
     }
   /**
    * @ast method 
-   * @aspect PrettyPrinter
-   * @declaredat ./astgen/pretty.jadd:397
-   */
-  String pp(String indent)
-{   
-	
-	StringBuffer x = new StringBuffer();
-	x.append(indent);
-	//  x.append("inside if else ");
-	x.append("if ("+getIfElseIfList().getChild(0).getCondition().pp("")+")\n");
-	x.append(getIfElseIfList().getChild(0).getIfBody().pp(indent+"    "));
-	for (int i=1; i<getIfElseIfList().getNumChild() ; i++){
-		x.append("else if ("+getIfElseIfList().getChild(i).getCondition().pp("")+")\n");
-	  	x.append(getIfElseIfList().getChild(i).getIfBody().pp(indent+"    "));
-	}
-	if(null != getElseBody()){
-		x.append("else \n"+getElseBody().pp(indent+"    "));
-	}
-	return x.toString();
-}
-  /**
-   * @ast method 
    * @declaredat irx10.ast:1
    */
-  public IfElseStmt() {
+  public RangeBuilder() {
     super();
 
     setChild(new List(), 0);
-    setChild(new Opt(), 1);
+    setChild(new List(), 1);
 
   }
   /**
    * @ast method 
    * @declaredat irx10.ast:9
    */
-  public IfElseStmt(List<IfElseIf> p0, Opt<ElseBody> p1) {
+  public RangeBuilder(List<IDUse> p0, List<IDUse> p1) {
     setChild(p0, 0);
     setChild(p1, 1);
   }
@@ -107,41 +85,41 @@ public class IfElseStmt extends Stmt implements Cloneable {
     return 2;
   }
   /**
-   * Setter for IfElseIfList
+   * Setter for LowerList
    * @apilevel high-level
    * @ast method 
    * @declaredat irx10.ast:5
    */
-  public void setIfElseIfList(List<IfElseIf> list) {
+  public void setLowerList(List<IDUse> list) {
     setChild(list, 0);
   }
   /**
-   * @return number of children in IfElseIfList
+   * @return number of children in LowerList
    * @apilevel high-level
    * @ast method 
    * @declaredat irx10.ast:12
    */
-  public int getNumIfElseIf() {
-    return getIfElseIfList().getNumChild();
+  public int getNumLower() {
+    return getLowerList().getNumChild();
   }
   /**
-   * Getter for child in list IfElseIfList
+   * Getter for child in list LowerList
    * @apilevel high-level
    * @ast method 
    * @declaredat irx10.ast:19
    */
   @SuppressWarnings({"unchecked", "cast"})
-  public IfElseIf getIfElseIf(int i) {
-    return (IfElseIf)getIfElseIfList().getChild(i);
+  public IDUse getLower(int i) {
+    return (IDUse)getLowerList().getChild(i);
   }
   /**
-   * Add element to list IfElseIfList
+   * Add element to list LowerList
    * @apilevel high-level
    * @ast method 
    * @declaredat irx10.ast:27
    */
-  public void addIfElseIf(IfElseIf node) {
-    List<IfElseIf> list = (parent == null || state == null) ? getIfElseIfListNoTransform() : getIfElseIfList();
+  public void addLower(IDUse node) {
+    List<IDUse> list = (parent == null || state == null) ? getLowerListNoTransform() : getLowerList();
     list.addChild(node);
   }
   /**
@@ -149,46 +127,46 @@ public class IfElseStmt extends Stmt implements Cloneable {
    * @ast method 
    * @declaredat irx10.ast:34
    */
-  public void addIfElseIfNoTransform(IfElseIf node) {
-    List<IfElseIf> list = getIfElseIfListNoTransform();
+  public void addLowerNoTransform(IDUse node) {
+    List<IDUse> list = getLowerListNoTransform();
     list.addChild(node);
   }
   /**
-   * Setter for child in list IfElseIfList
+   * Setter for child in list LowerList
    * @apilevel high-level
    * @ast method 
    * @declaredat irx10.ast:42
    */
-  public void setIfElseIf(IfElseIf node, int i) {
-    List<IfElseIf> list = getIfElseIfList();
+  public void setLower(IDUse node, int i) {
+    List<IDUse> list = getLowerList();
     list.setChild(node, i);
   }
   /**
-   * Getter for IfElseIf list.
+   * Getter for Lower list.
    * @apilevel high-level
    * @ast method 
    * @declaredat irx10.ast:50
    */
-  public List<IfElseIf> getIfElseIfs() {
-    return getIfElseIfList();
+  public List<IDUse> getLowers() {
+    return getLowerList();
   }
   /**
    * @apilevel low-level
    * @ast method 
    * @declaredat irx10.ast:56
    */
-  public List<IfElseIf> getIfElseIfsNoTransform() {
-    return getIfElseIfListNoTransform();
+  public List<IDUse> getLowersNoTransform() {
+    return getLowerListNoTransform();
   }
   /**
-   * Getter for list IfElseIfList
+   * Getter for list LowerList
    * @apilevel high-level
    * @ast method 
    * @declaredat irx10.ast:63
    */
   @SuppressWarnings({"unchecked", "cast"})
-  public List<IfElseIf> getIfElseIfList() {
-    List<IfElseIf> list = (List<IfElseIf>)getChild(0);
+  public List<IDUse> getLowerList() {
+    List<IDUse> list = (List<IDUse>)getChild(0);
     list.getNumChild();
     return list;
   }
@@ -198,62 +176,102 @@ public class IfElseStmt extends Stmt implements Cloneable {
    * @declaredat irx10.ast:72
    */
   @SuppressWarnings({"unchecked", "cast"})
-  public List<IfElseIf> getIfElseIfListNoTransform() {
-    return (List<IfElseIf>)getChildNoTransform(0);
+  public List<IDUse> getLowerListNoTransform() {
+    return (List<IDUse>)getChildNoTransform(0);
   }
   /**
-   * Setter for ElseBodyOpt
-   * @apilevel low-level
+   * Setter for UpperList
+   * @apilevel high-level
    * @ast method 
    * @declaredat irx10.ast:5
    */
-  public void setElseBodyOpt(Opt<ElseBody> opt) {
-    setChild(opt, 1);
+  public void setUpperList(List<IDUse> list) {
+    setChild(list, 1);
   }
   /**
-   * Does this node have a ElseBody child?
+   * @return number of children in UpperList
    * @apilevel high-level
    * @ast method 
    * @declaredat irx10.ast:12
    */
-  public boolean hasElseBody() {
-    return getElseBodyOpt().getNumChild() != 0;
+  public int getNumUpper() {
+    return getUpperList().getNumChild();
   }
   /**
-   * Getter for optional child ElseBody
+   * Getter for child in list UpperList
    * @apilevel high-level
    * @ast method 
    * @declaredat irx10.ast:19
    */
   @SuppressWarnings({"unchecked", "cast"})
-  public ElseBody getElseBody() {
-    return (ElseBody)getElseBodyOpt().getChild(0);
+  public IDUse getUpper(int i) {
+    return (IDUse)getUpperList().getChild(i);
   }
   /**
-   * Setter for optional child ElseBody
+   * Add element to list UpperList
    * @apilevel high-level
    * @ast method 
    * @declaredat irx10.ast:27
    */
-  public void setElseBody(ElseBody node) {
-    getElseBodyOpt().setChild(node, 0);
+  public void addUpper(IDUse node) {
+    List<IDUse> list = (parent == null || state == null) ? getUpperListNoTransform() : getUpperList();
+    list.addChild(node);
   }
   /**
    * @apilevel low-level
    * @ast method 
-   * @declaredat irx10.ast:37
+   * @declaredat irx10.ast:34
    */
-  @SuppressWarnings({"unchecked", "cast"})
-  public Opt<ElseBody> getElseBodyOpt() {
-    return (Opt<ElseBody>)getChild(1);
+  public void addUpperNoTransform(IDUse node) {
+    List<IDUse> list = getUpperListNoTransform();
+    list.addChild(node);
+  }
+  /**
+   * Setter for child in list UpperList
+   * @apilevel high-level
+   * @ast method 
+   * @declaredat irx10.ast:42
+   */
+  public void setUpper(IDUse node, int i) {
+    List<IDUse> list = getUpperList();
+    list.setChild(node, i);
+  }
+  /**
+   * Getter for Upper list.
+   * @apilevel high-level
+   * @ast method 
+   * @declaredat irx10.ast:50
+   */
+  public List<IDUse> getUppers() {
+    return getUpperList();
   }
   /**
    * @apilevel low-level
    * @ast method 
-   * @declaredat irx10.ast:44
+   * @declaredat irx10.ast:56
+   */
+  public List<IDUse> getUppersNoTransform() {
+    return getUpperListNoTransform();
+  }
+  /**
+   * Getter for list UpperList
+   * @apilevel high-level
+   * @ast method 
+   * @declaredat irx10.ast:63
    */
   @SuppressWarnings({"unchecked", "cast"})
-  public Opt<ElseBody> getElseBodyOptNoTransform() {
-    return (Opt<ElseBody>)getChildNoTransform(1);
+  public List<IDUse> getUpperList() {
+    List<IDUse> list = (List<IDUse>)getChild(1);
+    list.getNumChild();
+    return list;
+  }
+  /**
+   * @apilevel low-level
+   * @ast method 
+   * @declaredat irx10.ast:72
+   */
+  @SuppressWarnings({"unchecked", "cast"})
+  public List<IDUse> getUpperListNoTransform() {
+    return (List<IDUse>)getChildNoTransform(1);
   }
 }

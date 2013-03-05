@@ -7,7 +7,7 @@ import java.util.*;
 
 /**
  * @ast node
- * @declaredat irx10.ast:82
+ * @declaredat irx10.ast:85
  */
 public class IfBody extends StmtBlock implements Cloneable {
   /**

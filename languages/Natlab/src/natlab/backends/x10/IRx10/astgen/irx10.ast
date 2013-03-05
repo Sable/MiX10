@@ -4,6 +4,7 @@ ClassBlock ::= DeclStmt:Stmt* Method*;
 abstract Stmt;
 CommentStmt:Stmt ::= <Comment:String>;
 DeclStmt:Stmt ::= [MultiDeclLHS] LHS:IDInfo [RHS:Exp];
+PointLooper:Stmt ::= PointID:IDUse ArrayID:IDUse <DimNumber:int> [Min:Exp] [Max:Exp];
 Method ::= MethodHeader MethodBlock;
 MethodHeader ::= ReturnType:AccessVal <Name:String> Args:IDInfo*;
 ReturnStmt:Stmt ::= ReturnVal:Exp*;
@@ -23,6 +24,8 @@ MinusExp:UnaryExp;
 PlusExp:UnaryExp;
 NegExp:UnaryExp;
 EmptyExp:Exp;
+
+RegionBuilder:Exp ::= Lower:IDUse* Upper:IDUse* ArrayID:IDUse;
 
 ArrayAccess:AccessVal ::= ArrayID:IDUse Indices:Exp* ; //specific for TameIR
 ArraySetStmt:Stmt ::= LHS:IDInfo Indices:Exp* RHS:Exp;

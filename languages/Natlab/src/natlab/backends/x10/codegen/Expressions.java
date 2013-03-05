@@ -86,10 +86,10 @@ public class Expressions {
 		}
 		
 		
-//		if (NatlabExp instanceof EndExpr){
-//			System.out.println(NatlabExp.getPrettyPrinted());
-//		}
-//		
+		if (NatlabExp instanceof ColonExpr){
+			return new IDUse("__");
+		}
+		
 
 		if (NatlabExp instanceof IntLiteralExpr) {
 			return new IntLiteral(NatlabExp.getNodeString());
