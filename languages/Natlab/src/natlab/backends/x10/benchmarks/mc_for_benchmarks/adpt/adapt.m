@@ -139,10 +139,10 @@ while (state == iterating),
 		SRmat(p, :) = SR1vec;
 		SRmat(p+1, :) = SR2vec;
 		state = iterating;
-	     end;
-	  end;
-      end;
-end;
+	     end
+	  end
+      end
+end
 
 quad = sum(SRmat(:, 4));
 

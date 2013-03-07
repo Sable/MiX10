@@ -8,7 +8,7 @@ import java.util.*;
 
 /**
  * @ast node
- * @declaredat irx10.ast:31
+ * @declaredat irx10.ast:32
  */
 public class ArraySetStmt extends Stmt implements Cloneable {
   /**
@@ -61,7 +61,7 @@ public class ArraySetStmt extends Stmt implements Cloneable {
   /**
    * @ast method 
    * @aspect PrettyPrinter
-   * @declaredat ./astgen/pretty.jadd:92
+   * @declaredat ./astgen/pretty.jadd:132
    */
   String pp(String indent){
 		StringBuffer x = new StringBuffer();

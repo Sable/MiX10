@@ -7,7 +7,7 @@ import java.util.*;
 
 /**
  * @ast node
- * @declaredat irx10.ast:93
+ * @declaredat irx10.ast:94
  */
 public class UserDefMethodCall extends MethodCall implements Cloneable {
   /**
@@ -60,7 +60,7 @@ public class UserDefMethodCall extends MethodCall implements Cloneable {
   /**
    * @ast method 
    * @aspect PrettyPrinter
-   * @declaredat ./astgen/pretty.jadd:429
+   * @declaredat ./astgen/pretty.jadd:469
    */
   String pp(String indent)
 {

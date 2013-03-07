@@ -1,3 +1,5 @@
-function main(a)
-adapt(1,10,5,1);
+function[]= main(a)
+%drv_adpt(5);
+ranges(5);
+y=ones(2,3);
 end

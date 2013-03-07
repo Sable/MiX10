@@ -7,7 +7,7 @@ import java.util.*;
 
 /**
  * @ast node
- * @declaredat irx10.ast:15
+ * @declaredat irx10.ast:16
  */
 public class IDUse extends Exp implements Cloneable {
   /**
@@ -60,7 +60,7 @@ public class IDUse extends Exp implements Cloneable {
   /**
    * @ast method 
    * @aspect PrettyPrinter
-   * @declaredat ./astgen/pretty.jadd:275
+   * @declaredat ./astgen/pretty.jadd:315
    */
   String pp(String indent){
 	StringBuffer x = new StringBuffer();

@@ -7,7 +7,7 @@ import java.util.*;
 
 /**
  * @ast node
- * @declaredat irx10.ast:65
+ * @declaredat irx10.ast:66
  */
 public abstract class EqualityExp extends RelationalExp implements Cloneable {
   /**

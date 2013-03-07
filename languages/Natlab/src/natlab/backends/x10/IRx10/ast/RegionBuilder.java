@@ -7,7 +7,7 @@ import java.util.*;
 
 /**
  * @ast node
- * @declaredat irx10.ast:28
+ * @declaredat irx10.ast:29
  */
 public class RegionBuilder extends Exp implements Cloneable {
   /**
@@ -57,6 +57,55 @@ public class RegionBuilder extends Exp implements Cloneable {
     }
     return res;
     }
+  /**
+   * @ast method 
+   * @aspect PrettyPrinter
+   * @declaredat ./astgen/pretty.jadd:95
+   */
+  String pp(String indent){
+		StringBuffer x = new StringBuffer();
+		
+		String type = ((AssignStmt)getParent()).getLHS().getType().getName();
+		x.append(indent+"new Array["+type+"](");
+		if(getLowers().getChild(0).getID().equals(getUppers().getChild(0).getID()) && !getUppers().getChild(0).getID().equals("__")){
+			x.append("(1..1)");
+		}
+		else{
+		if(getLowers().getChild(0).getID().equals("__"))
+			x.append(
+			"(("+getArrayID().getID()+".region.min("+Integer.toString(0)+")).."	);
+		else
+			x.append("("+getLowers().getChild(0).getID()+" as Int..");
+		if(getUppers().getChild(0).getID().equals("__"))
+			x.append(
+			""+getArrayID().getID()+".region.max("+Integer.toString(0)+")))"	);
+		else
+			x.append(""+getUppers().getChild(0).getID()+" as Int)");
+        }
+		int i;
+		for(i=1 ; i< getLowers().getNumChild();i++){
+			x.append("*");
+			if(getLowers().getChild(i).getID().equals(getUppers().getChild(i).getID()) && !getUppers().getChild(i).getID().equals("__")){
+				x.append("(1..1)");
+			}
+			else{
+			
+			if(getLowers().getChild(i).getID().equals("__"))
+				x.append(
+				"(("+getArrayID().getID()+".region.min("+Integer.toString(i)+")).."	);
+			else
+				x.append("("+getLowers().getChild(i).getID()+" as Int..");
+			if(getUppers().getChild(i).getID().equals("__"))
+				x.append(
+				""+getArrayID().getID()+".region.max("+Integer.toString(i)+")))"	);
+			else
+				x.append(""+getUppers().getChild(i).getID()+" as Int)");
+			}
+			
+		}
+		x.append(", p:point("+Integer.toString(i)+")=>"+getArrayID().getID()+"(p.operator-("+"mix10_pt_"+getArrayID().getID()+")));\n");
+		return x.toString();
+	}
   /**
    * @ast method 
    * @declaredat irx10.ast:1
@@ -301,39 +350,4 @@ public class RegionBuilder extends Exp implements Cloneable {
   public IDUse getArrayIDNoTransform() {
     return (IDUse)getChildNoTransform(2);
   }
-  
-  
-  String pp(String indent){
-		StringBuffer x = new StringBuffer();
-		
-		String type = ((AssignStmt)getParent()).getLHS().getType().getName();
-		x.append(indent+"new Array["+type+"](");
-		if(getLowers().getChild(0).getID().equals("__"))
-			x.append(
-			"(("+getArrayID().getID()+".region.min("+Integer.toString(0)+")).."	);
-		else
-			x.append("("+getLowers().getChild(0).getID()+" as Int..");
-		if(getUppers().getChild(0).getID().equals("__"))
-			x.append(
-			""+getArrayID().getID()+".region.max("+Integer.toString(0)+")))"	);
-		else
-			x.append(""+getLowers().getChild(0).getID()+" as Int)");
-		int i;
-		for(i=1 ; i< getLowers().getNumChild();i++){
-			x.append("*");
-			if(getLowers().getChild(i).getID().equals("__"))
-				x.append(
-				"(("+getArrayID().getID()+".region.min("+Integer.toString(i)+")).."	);
-			else
-				x.append("("+getLowers().getChild(i).getID()+" as Int..");
-			if(getUppers().getChild(i).getID().equals("__"))
-				x.append(
-				""+getArrayID().getID()+".region.max("+Integer.toString(i)+")))"	);
-			else
-				x.append(""+getLowers().getChild(i).getID()+" as Int)");
-			
-		}
-		x.append(", p:point("+Integer.toString(i)+")=>"+getArrayID().getID()+"(p));\n");
-		return x.toString();
-	}
 }

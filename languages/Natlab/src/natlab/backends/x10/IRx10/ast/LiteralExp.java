@@ -7,7 +7,7 @@ import java.util.*;
 
 /**
  * @ast node
- * @declaredat irx10.ast:33
+ * @declaredat irx10.ast:34
  */
 public abstract class LiteralExp extends Exp implements Cloneable {
   /**

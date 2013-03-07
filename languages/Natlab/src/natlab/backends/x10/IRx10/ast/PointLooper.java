@@ -7,7 +7,7 @@ import java.util.*;
 
 /**
  * @ast node
- * @declaredat irx10.ast:7
+ * @declaredat irx10.ast:8
  */
 public class PointLooper extends Stmt implements Cloneable {
   /**

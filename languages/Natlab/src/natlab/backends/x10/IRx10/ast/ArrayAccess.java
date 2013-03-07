@@ -7,7 +7,7 @@ import java.util.*;
 
 /**
  * @ast node
- * @declaredat irx10.ast:30
+ * @declaredat irx10.ast:31
  */
 public class ArrayAccess extends AccessVal implements Cloneable {
   /**
@@ -60,7 +60,7 @@ public class ArrayAccess extends AccessVal implements Cloneable {
   /**
    * @ast method 
    * @aspect PrettyPrinter
-   * @declaredat ./astgen/pretty.jadd:109
+   * @declaredat ./astgen/pretty.jadd:149
    */
   String pp(String indent)
   {

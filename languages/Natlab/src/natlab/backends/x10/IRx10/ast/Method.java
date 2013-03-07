@@ -7,7 +7,7 @@ import java.util.*;
 
 /**
  * @ast node
- * @declaredat irx10.ast:8
+ * @declaredat irx10.ast:9
  */
 public class Method extends ASTNode<ASTNode> implements Cloneable {
   /**
@@ -60,7 +60,7 @@ public class Method extends ASTNode<ASTNode> implements Cloneable {
   /**
    * @ast method 
    * @aspect PrettyPrinter
-   * @declaredat ./astgen/pretty.jadd:135
+   * @declaredat ./astgen/pretty.jadd:175
    */
   String pp(String indent)
 {

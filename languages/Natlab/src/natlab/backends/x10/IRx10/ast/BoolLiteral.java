@@ -7,7 +7,7 @@ import java.util.*;
 
 /**
  * @ast node
- * @declaredat irx10.ast:39
+ * @declaredat irx10.ast:40
  */
 public class BoolLiteral extends Literal implements Cloneable {
   /**

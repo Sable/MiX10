@@ -7,9 +7,9 @@ import java.util.*;
 
 /**
  * @ast node
- * @declaredat irx10.ast:49
+ * @declaredat irx10.ast:7
  */
-public class MulExp extends MultiplicativeExp implements Cloneable {
+public class Literally extends Stmt implements Cloneable {
   /**
    * @apilevel low-level
    */
@@ -26,17 +26,17 @@ public class MulExp extends MultiplicativeExp implements Cloneable {
    * @apilevel internal
    */
   @SuppressWarnings({"unchecked", "cast"})
-  public MulExp clone() throws CloneNotSupportedException {
-    MulExp node = (MulExp)super.clone();
+  public Literally clone() throws CloneNotSupportedException {
+    Literally node = (Literally)super.clone();
     return node;
   }
   /**
    * @apilevel internal
    */
   @SuppressWarnings({"unchecked", "cast"})
-  public MulExp copy() {
+  public Literally copy() {
       try {
-        MulExp node = (MulExp)clone();
+        Literally node = (Literally)clone();
         if(children != null) node.children = (ASTNode[])children.clone();
         return node;
       } catch (CloneNotSupportedException e) {
@@ -48,8 +48,8 @@ public class MulExp extends MultiplicativeExp implements Cloneable {
    * @apilevel low-level
    */
   @SuppressWarnings({"unchecked", "cast"})
-  public MulExp fullCopy() {
-    MulExp res = (MulExp)copy();
+  public Literally fullCopy() {
+    Literally res = (Literally)copy();
     for(int i = 0; i < getNumChildNoTransform(); i++) {
       ASTNode node = getChildNoTransform(i);
       if(node != null) node = node.fullCopy();
@@ -59,18 +59,9 @@ public class MulExp extends MultiplicativeExp implements Cloneable {
     }
   /**
    * @ast method 
-   * @aspect PrettyPrinter
-   * @declaredat ./astgen/pretty.jadd:352
-   */
-  String pp(String indent)
-{
-	return(indent+"("+getLeftOp().pp("")+" * "+getRightOp().pp("")+")");
-}
-  /**
-   * @ast method 
    * @declaredat irx10.ast:1
    */
-  public MulExp() {
+  public Literally() {
     super();
 
 
@@ -79,68 +70,44 @@ public class MulExp extends MultiplicativeExp implements Cloneable {
    * @ast method 
    * @declaredat irx10.ast:7
    */
-  public MulExp(Exp p0, Exp p1) {
-    setChild(p0, 0);
-    setChild(p1, 1);
+  public Literally(String p0) {
+    setVerbatim(p0);
   }
   /**
    * @apilevel low-level
    * @ast method 
-   * @declaredat irx10.ast:14
+   * @declaredat irx10.ast:13
    */
   protected int numChildren() {
-    return 2;
+    return 0;
   }
   /**
-   * Setter for LeftOp
+   * Setter for lexeme Verbatim
    * @apilevel high-level
    * @ast method 
    * @declaredat irx10.ast:5
    */
-  public void setLeftOp(Exp node) {
-    setChild(node, 0);
+  public void setVerbatim(String value) {
+    tokenString_Verbatim = value;
   }
+  /**   * @apilevel internal   * @ast method 
+   * @declaredat irx10.ast:8
+   */
+  
+  /**   * @apilevel internal   */  protected String tokenString_Verbatim;
   /**
-   * Getter for LeftOp
+   * Getter for lexeme Verbatim
    * @apilevel high-level
    * @ast method 
-   * @declaredat irx10.ast:12
+   * @declaredat irx10.ast:13
    */
-  public Exp getLeftOp() {
-    return (Exp)getChild(0);
+  public String getVerbatim() {
+    return tokenString_Verbatim != null ? tokenString_Verbatim : "";
   }
-  /**
-   * @apilevel low-level
-   * @ast method 
-   * @declaredat irx10.ast:18
-   */
-  public Exp getLeftOpNoTransform() {
-    return (Exp)getChildNoTransform(0);
-  }
-  /**
-   * Setter for RightOp
-   * @apilevel high-level
-   * @ast method 
-   * @declaredat irx10.ast:5
-   */
-  public void setRightOp(Exp node) {
-    setChild(node, 1);
-  }
-  /**
-   * Getter for RightOp
-   * @apilevel high-level
-   * @ast method 
-   * @declaredat irx10.ast:12
-   */
-  public Exp getRightOp() {
-    return (Exp)getChild(1);
-  }
-  /**
-   * @apilevel low-level
-   * @ast method 
-   * @declaredat irx10.ast:18
-   */
-  public Exp getRightOpNoTransform() {
-    return (Exp)getChildNoTransform(1);
+  
+  String pp(String indent){
+		StringBuffer x = new StringBuffer();
+		x.append(indent+getVerbatim());
+		return x.toString();
   }
 }

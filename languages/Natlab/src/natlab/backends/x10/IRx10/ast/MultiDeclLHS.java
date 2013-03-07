@@ -7,7 +7,7 @@ import java.util.*;
 
 /**
  * @ast node
- * @declaredat irx10.ast:18
+ * @declaredat irx10.ast:19
  */
 public class MultiDeclLHS extends Exp implements Cloneable {
   /**

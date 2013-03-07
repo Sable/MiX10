@@ -72,7 +72,11 @@ public class DeclStmt extends Stmt implements Cloneable {
 
 			if (null == getLHS().getShape()) {
 				/* Scalar variable */
-				x.append("var " + getLHS().getName() + ": "
+				if(null == getMutable() || getMutable())
+					x.append("var ");
+				else if (null != getMutable() && ! getMutable())
+					x.append("val ");
+				x.append(getLHS().getName() + ": "
 						+ getLHS().getType().getName());
 				if (hasRHS()){
 				x.append(" = ");
@@ -93,7 +97,11 @@ public class DeclStmt extends Stmt implements Cloneable {
 				if (tf) {
 
 					/* Scalar variable */
-					x.append("var " + getLHS().getName() + ": "
+					if(null == getMutable() || getMutable())
+						x.append("var ");
+					else if (null != getMutable() && ! getMutable())
+						x.append("val ");
+					x.append(getLHS().getName() + ": "
 							+ getLHS().getType().getName());
 					if (hasRHS()){
 						x.append(" = ");
@@ -142,15 +150,16 @@ public class DeclStmt extends Stmt implements Cloneable {
    * @ast method 
    * @declaredat irx10.ast:9
    */
-  public DeclStmt(Opt<MultiDeclLHS> p0, IDInfo p1, Opt<Exp> p2) {
+  public DeclStmt(Opt<MultiDeclLHS> p0, IDInfo p1, Opt<Exp> p2, Boolean p3) {
     setChild(p0, 0);
     setChild(p1, 1);
     setChild(p2, 2);
+    setMutable(p3);
   }
   /**
    * @apilevel low-level
    * @ast method 
-   * @declaredat irx10.ast:17
+   * @declaredat irx10.ast:18
    */
   protected int numChildren() {
     return 3;
@@ -290,5 +299,28 @@ public class DeclStmt extends Stmt implements Cloneable {
   @SuppressWarnings({"unchecked", "cast"})
   public Opt<Exp> getRHSOptNoTransform() {
     return (Opt<Exp>)getChildNoTransform(2);
+  }
+  /**
+   * Setter for lexeme Mutable
+   * @apilevel high-level
+   * @ast method 
+   * @declaredat irx10.ast:5
+   */
+  public void setMutable(Boolean value) {
+    tokenBoolean_Mutable = value;
+  }
+  /**   * @apilevel internal   * @ast method 
+   * @declaredat irx10.ast:8
+   */
+  
+  /**   * @apilevel internal   */  protected Boolean tokenBoolean_Mutable;
+  /**
+   * Getter for lexeme Mutable
+   * @apilevel high-level
+   * @ast method 
+   * @declaredat irx10.ast:13
+   */
+  public Boolean getMutable() {
+    return tokenBoolean_Mutable;
   }
 }

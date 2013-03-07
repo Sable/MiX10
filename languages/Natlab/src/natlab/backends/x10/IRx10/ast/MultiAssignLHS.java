@@ -7,7 +7,7 @@ import java.util.*;
 
 /**
  * @ast node
- * @declaredat irx10.ast:19
+ * @declaredat irx10.ast:20
  */
 public class MultiAssignLHS extends Exp implements Cloneable {
   /**

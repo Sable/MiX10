@@ -7,7 +7,7 @@ import java.util.*;
 
 /**
  * @ast node
- * @declaredat irx10.ast:21
+ * @declaredat irx10.ast:22
  */
 public class PreIncExp extends UnaryExp implements Cloneable {
   /**
@@ -60,7 +60,7 @@ public class PreIncExp extends UnaryExp implements Cloneable {
   /**
    * @ast method 
    * @aspect PrettyPrinter
-   * @declaredat ./astgen/pretty.jadd:281
+   * @declaredat ./astgen/pretty.jadd:321
    */
   String pp(String indent)
 {

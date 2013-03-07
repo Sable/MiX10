@@ -190,14 +190,32 @@ public class ArrayGetSet {
 		arrayAccess.setArrayID(new IDUse(node.getRHS().getVarName()));
 		arrayAccess.setIndicesList(Expressions.getArgs(node.getRHS(), target));
 		
+		
+		
 		RegionBuilder region = new RegionBuilder();
 		region.setArrayID(arrayAccess.getArrayID());
 		Exp i;
 		boolean useregion=false;
 		for(int j=0; j<arrayAccess.getIndicesList().getNumChild(); j++){
 			i=arrayAccess.getIndicesList().getChild(j);
+			/*
+			 * Below is a very ugly hack to incorporate x:y type colon expressions 
+			 * in array access.
+			 * TODO : Fix it 
+			 */
+			if(target.symbolMap.containsKey(((IDUse)i).getID()) && 
+					!Helper.isScalar(target.symbolMap.get((((IDUse)i).getID())).getShape())){
+				region.addLower(new IDUse(((IDUse)i).getID()+"(1)"));  //MAKE SURE colon op returns array with indexing starting at 1
+				region.addUpper(new IDUse(((IDUse)i).getID()+"("+
+						(target.symbolMap.get((((IDUse)i).getID())).getShape()).get(1)
+						+")"));
+				useregion=true;
+			}
+			
+			else{
 			region.addLower((IDUse) i);
 			region.addUpper((IDUse)i);
+			}
 			if(i instanceof IDUse && ((IDUse)i).getID().equals("__")){ 
 				useregion=true;
 			}
@@ -213,6 +231,30 @@ public class ArrayGetSet {
 		}
 		}
 		else {
+			DeclStmt pointDecl = new DeclStmt();
+			pointDecl.setLHS(new IDInfo(new Type("Point"),"mix10_pt_"+arrayAccess.getArrayID().getID(),null,null,null));
+			pointDecl.setMutable(false);
+			target.currentBlock.get(0).addStmt(pointDecl);
+			StringBuffer x= new StringBuffer();
+			if(region.getLower(0).equals(region.getUpper(0)) && !region.getLower(0).getID().equals("__")){
+				x.append("1-("+region.getLower(0).getID()+" as Int)");
+			}
+			else{
+				x.append("0");
+			}
+				
+			for (int u=1; u<region.getLowerList().getNumChild();u++){
+				if(region.getLower(u).equals(region.getUpper(u)) && !region.getLower(u).getID().equals("__")){
+					x.append(", 1-("+region.getLower(u).getID()+" as Int)");
+				}
+				else{
+					x.append(", 0");
+				}
+				
+			}
+			block.addStmt(new Literally(
+					"mix10_pt_"+arrayAccess.getArrayID().getID()+" = Point.make("+x.toString()+");\n"
+					));
 			if (isDecl) {
 				
 				((DeclStmt) decl_or_assgn).setRHS(region);

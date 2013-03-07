@@ -8,7 +8,7 @@ import java.util.*;
 
 /**
  * @ast node
- * @declaredat irx10.ast:76
+ * @declaredat irx10.ast:77
  */
 public class Identifier extends AccessVal implements Cloneable {
   /**

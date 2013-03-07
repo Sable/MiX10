@@ -7,7 +7,7 @@ import java.util.*;
 
 /**
  * @ast node
- * @declaredat irx10.ast:78
+ * @declaredat irx10.ast:79
  */
 public class ForStmt extends Stmt implements Cloneable {
   /**
@@ -60,7 +60,7 @@ public class ForStmt extends Stmt implements Cloneable {
   /**
    * @ast method 
    * @aspect PrettyPrinter
-   * @declaredat ./astgen/pretty.jadd:382
+   * @declaredat ./astgen/pretty.jadd:422
    */
   String pp (String indent){
 	  StringBuffer x= new StringBuffer();

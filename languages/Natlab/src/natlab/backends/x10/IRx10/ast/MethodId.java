@@ -7,7 +7,7 @@ import java.util.*;
 
 /**
  * @ast node
- * @declaredat irx10.ast:92
+ * @declaredat irx10.ast:93
  */
 public class MethodId extends AccessVal implements Cloneable {
   /**

@@ -7,7 +7,7 @@ import java.util.*;
 
 /**
  * @ast node
- * @declaredat irx10.ast:69
+ * @declaredat irx10.ast:70
  */
 public abstract class LogicalExp extends BinaryExp implements Cloneable {
   /**

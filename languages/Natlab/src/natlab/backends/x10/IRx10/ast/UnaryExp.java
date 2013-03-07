@@ -7,7 +7,7 @@ import java.util.*;
 
 /**
  * @ast node
- * @declaredat irx10.ast:20
+ * @declaredat irx10.ast:21
  */
 public abstract class UnaryExp extends Exp implements Cloneable {
   /**

@@ -7,7 +7,7 @@ import java.util.*;
 
 /**
  * @ast node
- * @declaredat irx10.ast:26
+ * @declaredat irx10.ast:27
  */
 public class EmptyExp extends Exp implements Cloneable {
   /**

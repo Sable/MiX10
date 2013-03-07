@@ -7,7 +7,7 @@ import java.util.*;
 
 /**
  * @ast node
- * @declaredat irx10.ast:90
+ * @declaredat irx10.ast:91
  */
 public abstract class MethodCall extends Exp implements Cloneable {
   /**

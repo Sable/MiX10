@@ -8,7 +8,7 @@ import java.util.*;
 
 /**
  * @ast node
- * @declaredat irx10.ast:60
+ * @declaredat irx10.ast:61
  */
 public abstract class RelationalExp extends BinaryExp implements Cloneable {
   /**
