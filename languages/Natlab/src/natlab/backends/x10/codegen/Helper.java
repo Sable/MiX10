@@ -10,6 +10,7 @@ import natlab.tame.tir.TIRAbstractAssignStmt;
 import natlab.tame.tir.TIRForStmt;
 import natlab.tame.tir.TIRFunction;
 import natlab.tame.valueanalysis.ValueAnalysis;
+import natlab.tame.valueanalysis.components.shape.*;
 import natlab.tame.valueanalysis.advancedMatrix.AdvancedMatrixValue;
 import natlab.tame.valueanalysis.aggrvalue.AggrValue;
 
@@ -103,7 +104,7 @@ public class Helper {
 						.getMatlabClass().getName()));
 			}
 			if (null != temp.getShape()){
-				id_info.setShape((ArrayList<Integer>) temp.getShape()
+				id_info.setShape((ArrayList<DimValue>) temp.getShape()
 						.getDimensions());
 			}
 			if (null != temp.getisComplexInfo()){
@@ -140,7 +141,7 @@ public class Helper {
 						.getMatlabClass().getName()));
 			}
 			if (null != temp.getShape()){
-				id_info.setShape((ArrayList<Integer>) temp.getShape()
+				id_info.setShape((ArrayList<DimValue>) temp.getShape()
 						.getDimensions());
 			}
 			if (null != temp.getisComplexInfo()){
@@ -169,7 +170,7 @@ public class Helper {
 			IDInfo id_info = new IDInfo();
 			id_info.setType(x10Mapping.getX10TypeMapping(temp.getMatlabClass()
 					.getName()));
-			id_info.setShape((ArrayList<Integer>) temp.getShape()
+			id_info.setShape((ArrayList<DimValue>) temp.getShape()
 					.getDimensions());
 			id_info.setisComplex(temp.getisComplexInfo().toString());
 
