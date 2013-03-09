@@ -8,10 +8,7 @@ Literally:Stmt ::= <Verbatim:String>;
 PointLooper:Stmt ::= PointID:IDUse ArrayID:IDUse <DimNumber:int> [Min:Exp] [Max:Exp];
 Method ::= MethodHeader MethodBlock;
 MethodHeader ::= ReturnType:AccessVal <Name:String> Args:IDInfo*;
-<<<<<<< HEAD
-=======
 ReturnStmt:Stmt ::= ReturnVal:Exp*;
->>>>>>> fragile
 Type:AccessVal ::= <Name:String>;
 MethodBlock:StmtBlock;
 AssignStmt:Stmt ::=  [MultiAssignLHS] LHS:IDInfo RHS:Exp <TypeCast:Boolean>;

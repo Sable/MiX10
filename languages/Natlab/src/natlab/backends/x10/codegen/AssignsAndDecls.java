@@ -249,13 +249,13 @@ public class AssignsAndDecls {
 			}
 			
 			DeclStmt superDeclStmt = new DeclStmt();
-			superDeclStmt.setLHS(new IDInfo(null,null,null,null,null));
+			superDeclStmt.setLHS(new IDInfo());
 			superDeclStmt.getLHS().setName(multiVarName);
 			ShapeFactory s = new ShapeFactory();
 			ArrayList<String> list_dims = new ArrayList<String>();
 			list_dims.add("1");
 			int num = ((TIRAbstractAssignToListStmt)node).getNumTargets();
-			
+			 
 			list_dims.add(Integer.toString(num));
 			superDeclStmt.getLHS().setShape((list_dims));
 			superDeclStmt.getLHS().setType(new Type("Any"));
