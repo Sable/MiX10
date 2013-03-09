@@ -60,7 +60,7 @@ public class Method extends ASTNode<ASTNode> implements Cloneable {
   /**
    * @ast method 
    * @aspect PrettyPrinter
-   * @declaredat ./astgen/pretty.jadd:175
+   * @declaredat ./astgen/pretty.jadd:194
    */
   String pp(String indent)
 {

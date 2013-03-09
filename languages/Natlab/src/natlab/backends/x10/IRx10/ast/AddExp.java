@@ -60,7 +60,7 @@ public class AddExp extends AdditiveExp implements Cloneable {
   /**
    * @ast method 
    * @aspect PrettyPrinter
-   * @declaredat ./astgen/pretty.jadd:367
+   * @declaredat ./astgen/pretty.jadd:393
    */
   String pp(String indent)
 {

@@ -60,7 +60,7 @@ public class StmtBlock extends Stmt implements Cloneable {
   /**
    * @ast method 
    * @aspect PrettyPrinter
-   * @declaredat ./astgen/pretty.jadd:224
+   * @declaredat ./astgen/pretty.jadd:243
    */
   String pp(String indent)
 {

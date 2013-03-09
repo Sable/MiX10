@@ -59,6 +59,16 @@ public class Literally extends Stmt implements Cloneable {
     }
   /**
    * @ast method 
+   * @aspect PrettyPrinter
+   * @declaredat ./astgen/pretty.jadd:335
+   */
+  String pp(String indent){
+		StringBuffer x = new StringBuffer();
+		x.append(indent+getVerbatim());
+		return x.toString();
+  }
+  /**
+   * @ast method 
    * @declaredat irx10.ast:1
    */
   public Literally() {
@@ -103,11 +113,5 @@ public class Literally extends Stmt implements Cloneable {
    */
   public String getVerbatim() {
     return tokenString_Verbatim != null ? tokenString_Verbatim : "";
-  }
-  
-  String pp(String indent){
-		StringBuffer x = new StringBuffer();
-		x.append(indent+getVerbatim());
-		return x.toString();
   }
 }

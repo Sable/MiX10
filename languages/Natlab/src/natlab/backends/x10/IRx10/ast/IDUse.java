@@ -60,7 +60,7 @@ public class IDUse extends Exp implements Cloneable {
   /**
    * @ast method 
    * @aspect PrettyPrinter
-   * @declaredat ./astgen/pretty.jadd:315
+   * @declaredat ./astgen/pretty.jadd:341
    */
   String pp(String indent){
 	StringBuffer x = new StringBuffer();

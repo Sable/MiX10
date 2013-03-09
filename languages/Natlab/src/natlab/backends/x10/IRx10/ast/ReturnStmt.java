@@ -60,7 +60,7 @@ public class ReturnStmt extends Stmt implements Cloneable {
   /**
    * @ast method 
    * @aspect PrettyPrinter
-   * @declaredat ./astgen/pretty.jadd:497
+   * @declaredat ./astgen/pretty.jadd:523
    */
   String pp(String indent) {
 	  if (1 == getNumReturnVal()){

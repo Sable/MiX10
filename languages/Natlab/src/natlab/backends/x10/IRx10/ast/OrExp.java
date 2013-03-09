@@ -60,7 +60,7 @@ public class OrExp extends LogicalExp implements Cloneable {
   /**
    * @ast method 
    * @aspect PrettyPrinter
-   * @declaredat ./astgen/pretty.jadd:417
+   * @declaredat ./astgen/pretty.jadd:443
    */
   String pp(String indent)
 {

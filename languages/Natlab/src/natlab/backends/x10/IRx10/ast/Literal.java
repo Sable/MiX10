@@ -60,7 +60,7 @@ public class Literal extends LiteralExp implements Cloneable {
   /**
    * @ast method 
    * @aspect PrettyPrinter
-   * @declaredat ./astgen/pretty.jadd:347
+   * @declaredat ./astgen/pretty.jadd:373
    */
   String pp(String indent)
 {
