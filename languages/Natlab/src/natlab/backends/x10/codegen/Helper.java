@@ -10,6 +10,7 @@ import natlab.tame.tir.TIRAbstractAssignStmt;
 import natlab.tame.tir.TIRForStmt;
 import natlab.tame.tir.TIRFunction;
 import natlab.tame.valueanalysis.ValueAnalysis;
+import natlab.tame.valueanalysis.components.shape.*;
 import natlab.tame.valueanalysis.advancedMatrix.AdvancedMatrixValue;
 import natlab.tame.valueanalysis.aggrvalue.AggrValue;
 
