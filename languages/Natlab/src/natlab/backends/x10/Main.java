@@ -21,11 +21,10 @@ public class Main {
 		// String file =
 		// "/home/2011/vkumar5/mclab/Project/languages/Natlab/src/natlab/backends/x10/testing/unitTests/ut8"
 		// ;
-<<<<<<< HEAD
-		String file = "/home/2011/vkumar5/mclab_git/mclab/languages/Natlab/src/natlab/backends/x10/benchmarks/unit/forTest1";
-=======
+
+//		String file = "/home/2011/vkumar5/mclab_git/mclab/languages/Natlab/src/natlab/backends/x10/benchmarks/unit/forTest1";
+
 		String file = "/home/vineet/work/benchmarks/unit/ranges";
->>>>>>> fragile
 
 		// String file = "/home/2011/vkumar5/hello1";
 		String fileIn = file + ".m";
