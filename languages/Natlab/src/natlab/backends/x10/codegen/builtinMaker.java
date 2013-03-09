@@ -27,7 +27,7 @@ public class builtinMaker {
 
 	}
 
-	public static void makeBuiltin(Expr natlabExp, String builtinName, IRx10ASTGenerator target) {
+	public static void makeBuiltin(Expr natlabExp, String builtinName, IRx10ASTGenerator target, List<Exp> args) {
 		/*
 		 * This is the method that picks up the right method from the xml 
 		 * and creates a x10 method ("literally" node in the mix10 class
@@ -36,7 +36,7 @@ public class builtinMaker {
 		
 		builtin = getBuiltinFromXml(natlabExp, builtinName,target);
 		if (!builtin.equals("processed")){
-			BuiltinWriter.mix10Append(builtin);
+			BuiltinWriter.mix10Append(builtin, args, natlabExp.getVarName(),getExprType(natlabExp,target), target);
 			
 		}
 		
@@ -69,8 +69,11 @@ public class builtinMaker {
 //        DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
 //		Document doc = docBuilder.parse (new File("/media/vineet/19F5-FD4C/Thesis/mclab_git/mclab/languages/Natlab/src/natlab/backends/x10/codegen/mix10_builtins.xml"));
 //		doc.getDocumentElement ().normalize ();
-		
+			System.out.println(builtinName+"BNAME");
 		NodeList builtinNodeList = target.collectedBuiltins.usedBuiltins.get(builtinName);
+		if (null != builtinNodeList)
+			System.out.println(builtinName+"BNAME");
+		
 		Element builtinArrayOrGml = (Element)builtinNodeList.item(arrayOrGml);
 		 builtin = ((Node)(
 				 ((Element)(builtinArrayOrGml.getElementsByTagName(exprType).item(0))).getChildNodes().item(0)
@@ -105,41 +108,48 @@ public class builtinMaker {
 		 * to XML.
 		 * type1 - all scalar
 		 * type2 - all arrays
-		 * type3 - one scalar, other arrays
-		 * type4 - others
+		 * type3 - first scalar, other arrays
+		 * type4 - first arrays, other scalar
 		 * all
 		 * 
 		 * look for all the parameters in the symbolmap. Based on their IDinfo
 		 * decide which type to return.
 		 */
 		
-		List<IDUse> args=Expressions.getArgs(natlabExp, target);
+		List<Exp> args=Expressions.getArgs(natlabExp, target);
 		
 		int scalarCounter = 0;
-		for (IDUse arg : args)
-		{
-			if (target.symbolMap.containsKey(arg.getID())){
-				if (target.symbolMap.get(arg.getID()).getShape() == null)
-					return "type4"; //TODO check if it is correct. if a shape is unknown, revert to type 4
-				if (target.symbolMap.get(arg.getID()).getShape() != null && Helper.isScalar((ArrayList<Integer>) target.symbolMap.get(arg.getID()).getShape())){
+		int ctr =0;
+		boolean isFirst = false;
+		for (Exp arg : args)
+		{   ctr++;
+			if (target.symbolMap.containsKey(((IDUse) arg).getID())){
+				if (target.symbolMap.get(((IDUse) arg).getID()).getShape() == null)
+					return "type5"; //TODO check if it is correct. if a shape is unknown, revert to type 4
+				if (target.symbolMap.get(((IDUse) arg).getID()).getShape() != null && Helper.isScalar( target.symbolMap.get(((IDUse) arg).getID()).getShape())){
+					if (ctr==1)
+						isFirst=true;
 					scalarCounter++;
 				}
 				
-				System.out.println((ArrayList<Integer>) target.symbolMap.get(arg.getID()).getShape()+arg.getID());
+				System.out.println((ArrayList<Integer>) target.symbolMap.get(((IDUse) arg).getID()).getShape()+((IDUse) arg).getID());
 				
 				
 			}
-			else return "type4";
+			else return "type5";
 		}
 		System.out.println("sctr="+scalarCounter);
 		if (scalarCounter == args.getNumChild())
 			return "type1"; //all scalar
-		else if (scalarCounter == 1)
-			return "type3";
 		else if (scalarCounter == 0)
 			return "type2";
-		else
+		else if (scalarCounter == 1 && isFirst)
+			return "type3";
+		
+		else if (scalarCounter == 1 && !isFirst)
 			return "type4";
+		else 
+			return "type5";
 	}
 
 	private static int specialize(Expr natlabExp) {

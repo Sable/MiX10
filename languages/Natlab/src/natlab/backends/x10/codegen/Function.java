@@ -4,9 +4,11 @@ import java.util.ArrayList;
 
 import ast.Name;
 import natlab.backends.x10.IRx10.ast.IDInfo;
+import natlab.backends.x10.IRx10.ast.IDUse;
 import natlab.backends.x10.IRx10.ast.List;
 import natlab.backends.x10.IRx10.ast.MethodBlock;
 import natlab.backends.x10.IRx10.ast.MethodHeader;
+import natlab.backends.x10.IRx10.ast.ReturnStmt;
 import natlab.backends.x10.IRx10.ast.Stmt;
 import natlab.backends.x10.IRx10.ast.Type;
 import natlab.tame.tir.TIRAbstractAssignStmt;
@@ -58,6 +60,16 @@ public class Function {
 		//DEBUG
 		//System.out.println(returnType.getName());
 		buildStmtsSubAST(node.getStmts(), target);
+		//make return statement
+		
+			ReturnStmt returnStmt = new ReturnStmt();
+			for (int i=0; i<node.getNumOutputParam();i++){
+				returnStmt.addReturnVal(new IDUse(node.getOutputParam(i).getID()));
+			}
+			
+			target.method.getMethodBlock().addStmt(returnStmt);
+			
+		
 		System.out.println(target.method.getMethodHeader().getName());
 		System.out.println(target.method.getMethodBlock().getNumStmt());
 

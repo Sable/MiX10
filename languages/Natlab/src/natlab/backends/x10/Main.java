@@ -21,9 +21,13 @@ public class Main {
 		// String file =
 		// "/home/2011/vkumar5/mclab/Project/languages/Natlab/src/natlab/backends/x10/testing/unitTests/ut8"
 		// ;
+<<<<<<< HEAD
 		String file = "/home/2011/vkumar5/mclab_git/mclab/languages/Natlab/src/natlab/backends/x10/benchmarks/unit/forTest1";
+=======
+		String file = "/home/vineet/work/benchmarks/unit/ranges";
+>>>>>>> fragile
 
-		//String file = "/home/2011/vkumar5/hello1";
+		// String file = "/home/2011/vkumar5/hello1";
 		String fileIn = file + ".m";
 		String fileOut = file + ".x10";
 		String fileOutTame = file + "_tame.m";
@@ -31,13 +35,13 @@ public class Main {
 		/* /home/xuli/test/hello.m */
 		FileEnvironment env = new FileEnvironment(gFile); // get path
 															// environment obj
-		//String x10Code = "";
+		// String x10Code = "";
 		AdvancedTamerTool tool = new AdvancedTamerTool();
 		// System.out.println(args[0]);
 		ValueAnalysis<AggrValue<AdvancedMatrixValue>> analysis = tool.analyze(
 				args, env);
 		int size = analysis.getNodeList().size();
-		
+
 		try {
 			StringBuffer tamedCode = new StringBuffer();
 			BufferedWriter out = new BufferedWriter(new FileWriter(fileOutTame));
@@ -55,24 +59,22 @@ public class Main {
 		System.out.println("\n------------------------------------\n");
 
 		System.out.println("\n------------------------------------\n");
-		
 
-		//HashMap<String, String> usedBuiltins = new HashMap<String, String>();
+		// HashMap<String, String> usedBuiltins = new HashMap<String, String>();
 		ArrayList<collectBuiltins> listOfUsedBuiltins = new ArrayList<collectBuiltins>();
-		listOfUsedBuiltins = collectBuiltins.collect(analysis,size);
-		
-		
-//		System.out.println("UNCOMMENT IN MAIN");
+		listOfUsedBuiltins = collectBuiltins.collect(analysis, size);
+
+		// System.out.println("UNCOMMENT IN MAIN");
 		Program irx10Program = new Program();
 		irx10Program.setClassBlock(IRx10ASTGenerator.x10ClassMaker(analysis,
 				size, listOfUsedBuiltins, "home/2011/vkumar5/", "testclass"));
-		
-		String x10Program = irx10Program.pp("","testclass");
+
+		String x10Program = irx10Program.pp("", "testclass");
 		System.out
-		.println("\n~~~~~~~~~~~~~~~~X10 code~~~~~~~~~~~~~~~~~~~~~~~\n");
+				.println("\n~~~~~~~~~~~~~~~~X10 code~~~~~~~~~~~~~~~~~~~~~~~\n");
 		System.out.println(x10Program);
 		System.out
-		.println("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+				.println("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
 
 		try {
 			BufferedWriter out = new BufferedWriter(new FileWriter(fileOut));
@@ -82,7 +84,7 @@ public class Main {
 			System.out.println("Exception ");
 
 		}
-		
+
 		BuiltinWriter.classWriter();
 
 	}
