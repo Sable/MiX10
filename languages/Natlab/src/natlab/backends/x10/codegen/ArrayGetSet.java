@@ -43,10 +43,13 @@ public class ArrayGetSet {
 		array_set.setLHS(Helper.generateIDInfo(target.analysis, target.index,
 				node, LHS));
 		array_set.getLHS().setName(LHS.toString());
-
+		boolean hasColon = false;
 		for (int i = 0; i < node.getIndizes().getNumChild(); i++) {
 			array_set.setIndices(Expressions.makeIRx10Exp(node.getIndizes()
 					.getChild(i), false, target), i);
+			if (((IDUse) (array_set.getIndices(i))).getID().equals("__")) {
+				hasColon = true;
+			}
 		}
 
 		target.symbolMap.put(target.symbolMapKey, array_set.getLHS());
@@ -68,19 +71,71 @@ public class ArrayGetSet {
 
 		// System.out.println(((IDUse)
 		// ((ArrayAccess)array_set.getLHS().getValue()).getIndices(0)).getID()+"%%");
-
-		block.addStmt(array_set);
+		// TODO - Below is a dirty hack to
+		// manage colon expression in array set statement
+		// need to make it proper
+		//if (!hasColon)
+			block.addStmt(array_set);
+		
+//			else {
+//			Literally pointLoop = new Literally();
+//			pointLoop.setVerbatim("for (p in "
+//					+ ((IDUse) array_set.getRHS()).getID() + ".region)\n");
+//			StringBuffer x = new StringBuffer();
+//			StringBuffer pt = new StringBuffer();
+//			String rhsID = ((IDUse) array_set.getRHS()).getID();
+//
+//			if (((IDUse) array_set.getIndices(0)).getID().equals("__")) {
+//				pt.append("(" + rhsID + ".region.min(" + Integer.toString(0)
+//						+ ")-1) as Int");
+//			} else {
+//				Exp i = array_set.getIndices(0);
+//				if (target.symbolMap.containsKey(((IDUse) i).getID())
+//						&& !Helper.isScalar(target.symbolMap.get(
+//								(((IDUse) i).getID())).getShape())) {
+//					pt.append("(" + ((IDUse) i).getID() + "("
+//							+ ((IDUse) i).getID() + ".region.min(0)"
+//							+ ") -1) as Int");
+//				} else {
+//					pt.append("(" + ((IDUse) i).getID() + "-1) as Int");
+//				}
+//			}
+//
+//			for (int j = 1; j < array_set.getIndicesList().getNumChild(); j++) {
+//				
+//				System.out.println("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+//				
+//				if (((IDUse) array_set.getIndices(j)).getID().equals("__")) {
+//					pt.append(", (" + rhsID + ".region.min("
+//							+ Integer.toString(j) + ")-1) as Int");
+//				} else {
+//					Exp i = array_set.getIndices(j);
+//					if (target.symbolMap.containsKey(((IDUse) i).getID())
+//							&& !Helper.isScalar(target.symbolMap.get(
+//									(((IDUse) i).getID())).getShape())) {
+//						pt.append(", (" + ((IDUse) i).getID() + "("
+//								+ ((IDUse) i).getID() + ".region.min(0)"
+//								+ ") -1) as Int");
+//					} else {
+//						pt.append(", (" + ((IDUse) i).getID() + "-1) as Int");
+//					}
+//				}
+//			}
+//
+//			x.append(array_set.getLHS().getName() + "(p.operator+(Point.make("
+//					+ pt.toString() + ")))= ");
+//			x.append(((IDUse) array_set.getRHS()).getID() + "(p);\n");
+//			block.addStmt(new Literally(x.toString()));
+//		}
 
 	}
 
 	public static void handleTIRAbstractArrayGetStmt(TIRArrayGetStmt node,
 			IRx10ASTGenerator target, StmtBlock block) {
-		if (1 == ( node).getTargets().asNameList()
-				.size()) {
+		if (1 == (node).getTargets().asNameList().size()) {
 			String LHS;
 			boolean isDecl;
-			target.symbolMapKey = (node)
-					.getTargetName().getID();
+			target.symbolMapKey = (node).getTargetName().getID();
 			LHS = target.symbolMapKey;
 
 			if (true == target.symbolMap.containsKey(target.symbolMapKey)) {
@@ -93,7 +148,8 @@ public class ArrayGetSet {
 						((TIRAbstractAssignToListStmt) node).getTargets()
 								.getChild(0).getVarName());
 
-				setRHSValue(false, list_single_assign_stmt, node, false, target, block);
+				setRHSValue(false, list_single_assign_stmt, node, false,
+						target, block);
 				target.symbolMap.put(target.symbolMapKey,
 						list_single_assign_stmt.getLHS());
 
@@ -109,23 +165,20 @@ public class ArrayGetSet {
 						target.index, node, LHS));
 
 				decl_stmt.getLHS().setName(
-						( node).getTargets()
-								.getChild(0).getVarName());
+						(node).getTargets().getChild(0).getVarName());
 				/*
-				 * if it has a colon operator,
-				 * add a null to the shape - this is a hack to tell the 
-				 * compiler that it is an array
-				 * 
+				 * if it has a colon operator, add a null to the shape - this is
+				 * a hack to tell the compiler that it is an array
 				 */
-			
-				
-				for(Exp i: Expressions.getArgs(node.getRHS(), target)){
-					if(i instanceof IDUse && ((IDUse)i).getID().equals("__")){ 
-						System.out.println("its a colon...............................");
+
+				for (Exp i : Expressions.getArgs(node.getRHS(), target)) {
+					if (i instanceof IDUse && ((IDUse) i).getID().equals("__")) {
+						System.out
+								.println("its a colon...............................");
 						decl_stmt.getLHS().getShape().add(null);
 					}
 				}
-				
+
 				System.out.println("#####!" + target.symbolMapKey);
 
 				// block.addStmt(decl_stmt);
@@ -135,24 +188,23 @@ public class ArrayGetSet {
 				//
 				AssignStmt pseudoAssign = new AssignStmt();
 				pseudoAssign.setLHS(decl_stmt.getLHS());
-				
-//								if (target.currentBlock.size() > 1) {
-					target.currentBlock.get(0).addStmt(pseudoDecl);
-					setRHSValue(isDecl, decl_stmt, node, false, target, block);
-					pseudoAssign.setRHS(decl_stmt.getRHS());
-					block.addStmt(pseudoAssign);
-					target.symbolMap.put(target.symbolMapKey,
-							decl_stmt.getLHS());
-					System.out.println(block.getParent().toString()
-							+ "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
-//				}
+
+				// if (target.currentBlock.size() > 1) {
+				target.currentBlock.get(0).addStmt(pseudoDecl);
+				setRHSValue(isDecl, decl_stmt, node, false, target, block);
+				pseudoAssign.setRHS(decl_stmt.getRHS());
+				block.addStmt(pseudoAssign);
+				target.symbolMap.put(target.symbolMapKey, decl_stmt.getLHS());
+				System.out.println(block.getParent().toString()
+						+ "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
+				// }
 				//
-//				else {
-//					block.addStmt(decl_stmt);
-//					target.symbolMap.put(target.symbolMapKey,
-//							decl_stmt.getLHS());
-//
-//				}
+				// else {
+				// block.addStmt(decl_stmt);
+				// target.symbolMap.put(target.symbolMapKey,
+				// decl_stmt.getLHS());
+				//
+				// }
 
 			}
 
@@ -164,7 +216,7 @@ public class ArrayGetSet {
 			list_assign_stmt.setMultiAssignLHS(LHSinfo);
 			for (ast.Name name : ((TIRAbstractAssignToListStmt) node)
 					.getTargets().asNameList()) {
-					System.out.println("^^" + name.getID());
+				System.out.println("^^" + name.getID());
 				list_assign_stmt.getMultiAssignLHS().addIDInfo(
 						Helper.generateIDInfo(target.analysis, target.index,
 								node, name.getID()));
@@ -181,97 +233,100 @@ public class ArrayGetSet {
 		}
 
 	}
-	
-	
+
 	public static void setRHSValue(boolean isDecl, Stmt decl_or_assgn,
-			TIRArrayGetStmt node, boolean isScalar, IRx10ASTGenerator target, StmtBlock block) {
-		
+			TIRArrayGetStmt node, boolean isScalar, IRx10ASTGenerator target,
+			StmtBlock block) {
+
 		ArrayAccess arrayAccess = new ArrayAccess();
 		arrayAccess.setArrayID(new IDUse(node.getRHS().getVarName()));
 		arrayAccess.setIndicesList(Expressions.getArgs(node.getRHS(), target));
-		
-		
-		
+
 		RegionBuilder region = new RegionBuilder();
 		region.setArrayID(arrayAccess.getArrayID());
 		Exp i;
-		boolean useregion=false;
-		for(int j=0; j<arrayAccess.getIndicesList().getNumChild(); j++){
-			i=arrayAccess.getIndicesList().getChild(j);
+		boolean useregion = false;
+		for (int j = 0; j < arrayAccess.getIndicesList().getNumChild(); j++) {
+			i = arrayAccess.getIndicesList().getChild(j);
 			/*
-			 * Below is a very ugly hack to incorporate x:y type colon expressions 
-			 * in array access.
-			 * TODO : Fix it 
+			 * Below is a very ugly hack to incorporate x:y type colon
+			 * expressions in array access. TODO : Fix it
 			 */
-			if(target.symbolMap.containsKey(((IDUse)i).getID()) && 
-					!Helper.isScalar(target.symbolMap.get((((IDUse)i).getID())).getShape())){
-				region.addLower(new IDUse(((IDUse)i).getID()+"(1)"));  //MAKE SURE colon op returns array with indexing starting at 1
-				region.addUpper(new IDUse(((IDUse)i).getID()+"("+
-						(target.symbolMap.get((((IDUse)i).getID())).getShape()).get(1)
-						+")"));
-				useregion=true;
+			if (target.symbolMap.containsKey(((IDUse) i).getID())
+					&& !Helper.isScalar(target.symbolMap.get(
+							(((IDUse) i).getID())).getShape())) {
+				region.addLower(new IDUse(((IDUse) i).getID() + "("
+						+ ((IDUse) i).getID() + ".region.min(0)" + ")")); // MAKE
+																			// SURE
+																			// colon
+																			// op
+																			// returns
+																			// array
+																			// with
+																			// indexing
+																			// starting
+																			// at
+																			// 1
+				region.addUpper(new IDUse(((IDUse) i).getID() + "(" +
+				// (target.symbolMap.get((((IDUse)i).getID())).getShape()).get(1)
+						((IDUse) i).getID() + ".region.max(0)" + ")"));
+				useregion = true;
 			}
-			
-			else{
-			region.addLower((IDUse) i);
-			region.addUpper((IDUse)i);
+
+			else {
+				region.addLower((IDUse) i);
+				region.addUpper((IDUse) i);
 			}
-			if(i instanceof IDUse && ((IDUse)i).getID().equals("__")){ 
-				useregion=true;
+			if (i instanceof IDUse && ((IDUse) i).getID().equals("__")) {
+				useregion = true;
 			}
 		}
-		
-		if(!useregion){
-		
-		if (isDecl) {
-			
-			((DeclStmt) decl_or_assgn).setRHS(arrayAccess);
+
+		if (!useregion) {
+
+			if (isDecl) {
+
+				((DeclStmt) decl_or_assgn).setRHS(arrayAccess);
+			} else {
+				((AssignStmt) decl_or_assgn).setRHS(arrayAccess);
+			}
 		} else {
-			((AssignStmt) decl_or_assgn).setRHS(arrayAccess);
-		}
-		}
-		else {
 			DeclStmt pointDecl = new DeclStmt();
-			pointDecl.setLHS(new IDInfo(new Type("Point"),"mix10_pt_"+arrayAccess.getArrayID().getID(),null,null,null));
+			pointDecl.setLHS(new IDInfo(new Type("Point"), "mix10_pt_"
+					+ arrayAccess.getArrayID().getID(), null, null, null));
 			pointDecl.setMutable(false);
 			target.currentBlock.get(0).addStmt(pointDecl);
-			StringBuffer x= new StringBuffer();
-			if(region.getLower(0).equals(region.getUpper(0)) && !region.getLower(0).getID().equals("__")){
-				x.append("1-("+region.getLower(0).getID()+" as Int)");
-			}
-			else{
+			StringBuffer x = new StringBuffer();
+			if (/* region.getLower(0).equals(region.getUpper(0)) && */!region
+					.getLower(0).getID().equals("__")) {
+				x.append("1-(" + region.getLower(0).getID() + " as Int)");
+			} else {
 				x.append("0");
 			}
-				
-			for (int u=1; u<region.getLowerList().getNumChild();u++){
-				if(region.getLower(u).equals(region.getUpper(u)) && !region.getLower(u).getID().equals("__")){
-					x.append(", 1-("+region.getLower(u).getID()+" as Int)");
-				}
-				else{
+
+			for (int u = 1; u < region.getLowerList().getNumChild(); u++) {
+				if (/* region.getLower(u).equals(region.getUpper(u)) && */!region
+						.getLower(u).getID().equals("__")) {
+					x.append(", 1-(" + region.getLower(u).getID() + " as Int)");
+				} else {
 					x.append(", 0");
 				}
-				
+
 			}
-			block.addStmt(new Literally(
-					"mix10_pt_"+arrayAccess.getArrayID().getID()+" = Point.make("+x.toString()+");\n"
-					));
+			block.addStmt(new Literally("mix10_pt_"
+					+ arrayAccess.getArrayID().getID() + " = Point.make("
+					+ x.toString() + ");\n"));
 			if (isDecl) {
-				
+
 				((DeclStmt) decl_or_assgn).setRHS(region);
 			} else {
 				((AssignStmt) decl_or_assgn).setRHS(region);
 			}
-			
+
 		}
-		
-		
-		
-		
 
 	}
-	
 
-	
 	// This version handles assignment to multiple variables
 	public static void handleTIRAbstractAssignToListVarStmt(
 			TIRAbstractAssignStmt node, ast.Name name,
