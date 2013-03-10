@@ -65,11 +65,13 @@ public class Expressions {
 	}
 
 	static List<Exp> getArgs(ast.Expr NatlabExp, IRx10ASTGenerator target) {
+		//We use IDUse assuming it is used only with TameIR.
 		List<Exp> Args = new List<Exp>();
 		int numArgs = NatlabExp.getChild(1).getNumChild();
 		for (int i = 0; i < numArgs; i++) {
-			System.out.println("!!!");
-			Args.add(makeIRx10Exp((ast.Expr) NatlabExp.getChild(1).getChild(i), false, target));//TODO 11 dec Test it
+			System.out.println("!!!"+i);
+			Args.add((IDUse) makeIRx10Exp((ast.Expr) NatlabExp.getChild(1).getChild(i), false, target));//TODO 11 dec Test it
+			
 		}
 		return Args;
 	}
@@ -82,6 +84,12 @@ public class Expressions {
 		if (null == NatlabExp) {
 			return new EmptyExp();
 		}
+		
+		
+		if (NatlabExp instanceof ColonExpr){
+			return new IDUse("__");
+		}
+		
 
 		if (NatlabExp instanceof IntLiteralExpr) {
 			return new IntLiteral(NatlabExp.getNodeString());
@@ -95,8 +103,20 @@ public class Expressions {
 			return new Literal(NatlabExp.getNodeString());
 		}
 		if (NatlabExp instanceof NameExpr) {
-			 System.out.println(((NameExpr)
-			 NatlabExp).getName().getID()+"~~~");
+			
+			/*
+			 * Return just IDUse instead of IDInfo. This is just a use of variable
+			 */
+//			
+//			if (target.symbolMap.containsKey(((NameExpr) NatlabExp).getName().getID()))
+//			{
+//				IDInfo nameIdInfo = new IDInfo();
+//				nameIdInfo = target.symbolMap.get(((NameExpr) NatlabExp).getName().getID());
+//				System.out.println(nameIdInfo.getName()+"$$$$");
+//				return nameIdInfo;
+//			}
+//			else return new IDInfo(null,((NameExpr) NatlabExp).getName().getID(),null,null,null );
+//			
 			return new IDUse(((NameExpr) NatlabExp).getName().getID());
 
 		}
@@ -138,14 +158,18 @@ public class Expressions {
 
 			List<Exp> Args = new List<Exp>();
 			Args = getArgs(NatlabExp, target);
+			
+			System.out.println(((IDUse)Args.getChild(0)).getID());
+			
+			
 			//if (!((ParameterizedExpr) NatlabExp).isVariable){//TODO check if isVariable works
-			if (builtinMaker.isBuiltin(NatlabExp.getVarName())){
+			if (x10Mapping.isBuiltin(NatlabExp.getVarName())){
 				
 			BuiltinMethodCall libCall = new BuiltinMethodCall();
-			libCall.setBuiltinMethodName(new MethodId("mix10."+NatlabExp.getVarName()));
+			libCall.setBuiltinMethodName(new MethodId("Mix10."+NatlabExp.getVarName()));
 			libCall.setArgumentList(Args);
 			//builtinMaker makeBuiltinClass = new builtinMaker();
-			builtinMaker.makeBuiltin(NatlabExp);
+			builtinMaker.makeBuiltin(NatlabExp, NatlabExp.getVarName(), target, Args);
 			return libCall;
 			}
 			
@@ -153,6 +177,7 @@ public class Expressions {
 				UserDefMethodCall libCall = new UserDefMethodCall();
 				libCall.setUserDefMethodName(new MethodId(NatlabExp.getVarName()));
 				libCall.setArgumentList(Args);
+				System.out.println(((IDUse)libCall.getArgumentList().getChild(0)).getID()+"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 				return libCall;
 			}
 			//}

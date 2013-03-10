@@ -1,4 +1,4 @@
-import natlab.backends.x10.IRx10.ast.Args;
+//import natlab.backends.x10.IRx10.ast.Args;
 import natlab.backends.x10.IRx10.ast.List;
 import natlab.backends.x10.IRx10.ast.PPHelper;
 import natlab.backends.x10.IRx10.ast.Stmt;
@@ -35,10 +35,17 @@ String DeclStmt.pp(String indent){
 
 			if (null == getLHS().getShape()) {
 				/* Scalar variable */
-				x.append("var " + getLHS().getName() + ": "
+				if(null == getMutable() || getMutable())
+					x.append("var ");
+				else if (null != getMutable() && ! getMutable())
+					x.append("val ");
+				x.append(getLHS().getName() + ": "
 						+ getLHS().getType().getName());
+				if (hasRHS()){
 				x.append(" = ");
-				x.append(getRHS().pp("") + ";\n");
+				x.append(getRHS().pp(""));
+				}
+				x.append(";\n");
 
 			}
 
@@ -47,24 +54,42 @@ String DeclStmt.pp(String indent){
 				for (int i = 0; i < getLHS().getShape().size(); i++) {
 					if(null != getLHS().getShape().get(i))
 					tf &= ("1").equals(getLHS().getShape().get(i).toString());
+					else
+						tf=false;
 				}
 				if (tf) {
 
 					/* Scalar variable */
-					x.append("var " + getLHS().getName() + ": "
+					if(null == getMutable() || getMutable())
+						x.append("var ");
+					else if (null != getMutable() && ! getMutable())
+						x.append("val ");
+					x.append(getLHS().getName() + ": "
 							+ getLHS().getType().getName());
-					x.append(" = ");
-					x.append(getRHS().pp("") + ";\n");
+					if (hasRHS()){
+						x.append(" = ");
+						x.append(getRHS().pp(""));
+						}
+						x.append(";\n");
 				}
 
-			} else // array
+			 else // array
 			{
 
-				x.append("val " + getLHS().getName() + " = " + "new Array["
-						+ getLHS().getType().getName() + "]" + "("
-						+ PPHelper.makeRange(getLHS().getShape()) + ", "
-						+ getRHS().pp("") + ");\n");
+				x.append("val " + getLHS().getName() + 
+						": Array["+getLHS().getType().getName() + "]");
+				if (hasRHS()){
+					x.append(
+						" = " + "new Array["
+						+ getLHS().getType().getName() + "]" + "(");
+						//+ PPHelper.makeRange(getLHS().getShape()) + ", "
+				   
+						x.append(getRHS().pp("")+")");
+				   }
+					x.append( ";\n");
 			}
+		} //FIX THIS IN aspect
+			
 
 		} else {
 			/**
@@ -73,12 +98,67 @@ String DeclStmt.pp(String indent){
 		}
 		return x.toString();
 	}
-
+	
+	
+	String RegionBuilder.pp(String indent){
+		StringBuffer x = new StringBuffer();
+		
+		String type = ((AssignStmt)getParent()).getLHS().getType().getName();
+		x.append(indent+"new Array["+type+"](");
+		if(getLowers().getChild(0).getID().equals(getUppers().getChild(0).getID()) && !getUppers().getChild(0).getID().equals("__")){
+			x.append("(1..1)");
+		}
+		else{
+		if(getLowers().getChild(0).getID().equals("__"))
+			x.append(
+			"(("+getArrayID().getID()+".region.min("+Integer.toString(0)+")).."	);
+		else
+			x.append("("+getLowers().getChild(0).getID()+" as Int..");
+		if(getUppers().getChild(0).getID().equals("__"))
+			x.append(
+			""+getArrayID().getID()+".region.max("+Integer.toString(0)+")))"	);
+		else
+			x.append(""+getUppers().getChild(0).getID()+" as Int)");
+        }
+		int i;
+		for(i=1 ; i< getLowers().getNumChild();i++){
+			x.append("*");
+			if(getLowers().getChild(i).getID().equals(getUppers().getChild(i).getID()) && !getUppers().getChild(i).getID().equals("__")){
+				x.append("(1..1)");
+			}
+			else{
+			
+			if(getLowers().getChild(i).getID().equals("__"))
+				x.append(
+				"(("+getArrayID().getID()+".region.min("+Integer.toString(i)+")).."	);
+			else
+				x.append("("+getLowers().getChild(i).getID()+" as Int..");
+			if(getUppers().getChild(i).getID().equals("__"))
+				x.append(
+				""+getArrayID().getID()+".region.max("+Integer.toString(i)+")))"	);
+			else
+				x.append(""+getUppers().getChild(i).getID()+" as Int)");
+			}
+			
+		}
+		x.append(", p:point("+Integer.toString(i)+")=>"+getArrayID().getID()+"(p.operator-("+"mix10_pt_"+getArrayID().getID()+")));\n");
+		return x.toString();
+	}
+	
+	
+	
+	
 String ArraySetStmt.pp(String indent){
 		StringBuffer x = new StringBuffer();
 		
 						
-			x.append(getLHS().getValue().pp(indent));
+			x.append(getLHS().getName()+"(");
+			x.append(getIndicesList().getChild(0).pp("")+" as Int");
+		  	  for(int i=1; i<getIndicesList().getNumChild() ; i++)
+		  	  {
+		  		  x.append(", "+getIndicesList().getChild(i).pp("")+" as Int");
+		  	  }
+		  	  x.append(")");
 			x.append(" = ");
 			x.append(getRHS().pp("")+" ;\n");
 		return x.toString();
@@ -90,10 +170,10 @@ String ArraySetStmt.pp(String indent){
   	  StringBuffer x = new StringBuffer();
   	  x.append(indent);
   	  x.append(getArrayID().getID()+"(");
-  	  x.append(getIndicesList().getChild(0).pp(""));
+  	  x.append(getIndicesList().getChild(0).pp("")+" as Int");
   	  for(int i=1; i<getIndicesList().getNumChild() ; i++)
   	  {
-  		  x.append(", "+getIndicesList().getChild(i).pp(""));
+  		  x.append(", "+getIndicesList().getChild(i).pp("")+"as Int");
   	  }
   	  x.append(")");
   	  return x.toString();
@@ -103,10 +183,10 @@ String ArraySetStmt.pp(String indent){
 
 static String PPHelper.makeRange(ArrayList Shape){
 	StringBuffer s = new StringBuffer();
-	s.append("(0.."+Shape.get(0)+")");
+	s.append("(1.."+Shape.get(0)+")");
 	for(int i=1; i<Shape.size();i++)
 			{
-				s.append("*(0.."+Shape.get(i)+")");
+				s.append("*(1.."+Shape.get(i)+")");
 			}
 	return s.toString();
 }
@@ -128,17 +208,36 @@ String MethodHeader.pp(String indent)
 	return x.toString();
 }
 
-static String PPHelper.makeArgs(List<Args> argsList) 
+static String PPHelper.makeArgs(List<IDInfo> argsList) 
 {
 	StringBuffer s = new StringBuffer();
 	if (argsList.getNumChild()>0){
+		if (!isScalar(argsList.getChild(0))){
+			s.append(argsList.getChild(0).getName()+": Array["+argsList.getChild(0).getType().getName()+"]");
+		}
+		else
 	s.append(argsList.getChild(0).getName()+": "+argsList.getChild(0).getType().getName());
 	for (int i=1; i<argsList.numChildren ; i++)
-	{
+	{	
+		if (!isScalar(argsList.getChild(i))){
+			s.append(", "+argsList.getChild(i).getName()+": Array["+argsList.getChild(i).getType().getName()+"]");
+		}
+		else		
 		s.append(", "+argsList.getChild(i).getName()+": "+argsList.getChild(i).getType().getName());
 	}
 	}
 	return s.toString();
+}
+
+static boolean PPHelper.isScalar(IDInfo id) {
+	
+	  for (int i =0 ; i<id.getShape().size();i++){
+		  if (!("1").equals(id.getShape().get(i).toString())){
+			  return false;
+			  
+		  }
+	  }
+	return true;
 }
 
 String StmtBlock.pp(String indent)
@@ -154,29 +253,14 @@ String StmtBlock.pp(String indent)
   }
 
 
-String AssignStmt.pp(String indent){
-	StringBuffer x = new StringBuffer();
-	if (null != getLHS()) {
-		/**
-		 * It is not a list assignment
-		 */
+String AssignStmt.pp(String indent) {
+		StringBuffer x = new StringBuffer();
+		if (null != getLHS()) {
+			/**
+			 * It is not a list assignment
+			 */
 
-		if (null == getLHS().getShape()) {
-			/* Scalar variable */
-			x.append(getLHS().getName());
-			x.append(" = ");
-			x.append(getRHS().pp("") + ";\n");
-
-		}
-
-		else if (null != getLHS().getShape()) {
-			boolean tf = true;
-			for (int i = 0; i < getLHS().getShape().size(); i++) {
-				if(null != getLHS().getShape().get(i))
-				tf &= ("1").equals(getLHS().getShape().get(i).toString());
-			}
-			if (tf) {
-
+			if (null == getLHS().getShape()) {
 				/* Scalar variable */
 				x.append(getLHS().getName());
 				x.append(" = ");
@@ -184,42 +268,76 @@ String AssignStmt.pp(String indent){
 
 			}
 
-		}
-		else //array
-		{
-			/**TODO
-			 * Make sure if arrays can be aSSIGNED DIRECTLY LIKE VARIABLES. wHAT ARE THE RESTRICTIONS ?
+			else if (null != getLHS().getShape()) {
+				boolean tf = true;
+				for (int i = 0; i < getLHS().getShape().size(); i++) {
+					if (null != getLHS().getShape().get(i))
+						tf &= ("1").equals(getLHS().getShape().get(i)
+								.toString());
+				}
+				if (tf) {
+
+					/* Scalar variable */
+					x.append(getLHS().getName());
+					x.append(" = ");
+					x.append(getRHS().pp(""));
+					if(null != getTypeCast() && true==getTypeCast())
+						x.append("as "+getLHS().getType().getName());
+					x.append(" ;\n");
+
+				}
+
+				else // array
+				{
+					/**
+					 * TODO Make sure if arrays can be aSSIGNED DIRECTLY LIKE
+					 * VARIABLES. wHAT ARE THE RESTRICTIONS ?
+					 */
+					x.append(getLHS().getName());
+					x.append(" = ");
+					x.append(getRHS().pp(""));
+					if(null != getTypeCast() && true==getTypeCast())
+						x.append("as Array["+getLHS().getType().getName()+"]");
+					x.append(" ;\n");
+					//
+					// x.append("val "+getLHS().getName()+" = "+
+					// "new Array["+getLHS().getType().getName()+"]"+
+					// "("+PPHelper.makeRange(getLHS().getShape())+
+					// ", "+getRHS().pp("")+");\n");
+				}
+			}
+		} else {
+
+			System.out.println("list assign:" + getRHS().pp(indent));
+			/**
+			 * TODO Case when assigned to a list
 			 */
-			x.append(getLHS().getName());
-			x.append(" = ");
-			x.append(getRHS().pp("") + ";\n");
-//			
-//			x.append("val "+getLHS().getName()+" = "+
-//			"new Array["+getLHS().getType().getName()+"]"+
-//			"("+PPHelper.makeRange(getLHS().getShape())+
-//			", "+getRHS().pp("")+");\n");
-		}
+			if (!hasMultiAssignLHS()
+					|| 0 == getMultiAssignLHS().getIDInfoList().getNumChild()) { // ||
+																					// getMultiAssignLHS().getNumChild()
+																					// ==0
+				x.append(getRHS().pp(indent) + " ;\n");
+			} else {
+				x.append("val "
+						+ "generate_a_name"
+						+ " = "
+						+ "new Array[Any]"
+						+ "(0.."
+						+ (getMultiAssignLHS().getIDInfoList().getNumChild() - 1)
+						+ ", " + getRHS().pp("") + ");\n");
+			}
 
-	}
-	else
-	{
-		
-		System.out.println("list assign:"+getRHS().pp(indent));
-	  /**TODO
-	   * Case when assigned to a list
-	   */
-		if(! hasMultiAssignLHS() || 0==getMultiAssignLHS().getIDInfoList().getNumChild()){ //|| getMultiAssignLHS().getNumChild() ==0
-			x.append(getRHS().pp(indent)+" ;\n");
 		}
-		else {
-			x.append("val "+"generate_a_name"+" = "+
-		"new Array[Any]"+"(0.."+(getMultiAssignLHS().getIDInfoList().getNumChild()-1)+", "+getRHS().pp("")+");\n");
-		}
-		
+		return x.toString();
 	}
-	return x.toString();
-}
-
+	
+	
+	String Literally.pp(String indent){
+		StringBuffer x = new StringBuffer();
+		x.append(indent+getVerbatim());
+		return x.toString();
+  }
+	
 String IDUse.pp(String indent){
 	StringBuffer x = new StringBuffer();
 	x.append(indent+getID());
@@ -294,7 +412,7 @@ String DecExp.pp(String indent)
 
 String LTExp.pp(String indent)
 {
-	return(indent+"("+getLeftOp().pp("")+" > "+getRightOp().pp("")+")");
+	return(indent+"("+getLeftOp().pp("")+" < "+getRightOp().pp("")+")");
 }
 
 String LEExp.pp(String indent)
@@ -330,7 +448,7 @@ String OrExp.pp(String indent)
 String ForStmt.pp (String indent){
 	  StringBuffer x= new StringBuffer();
 	  x.append(indent);
-	  x.append("for ("+this.getAssignStmt().pp("")+";"+getCondition().pp("")+";"+getStepper().pp("")+")\n"+getLoopBody().pp(indent+"    "));
+	  x.append("for ("+this.getAssignStmt().pp("")+getCondition().pp("")+";"+getStepper().getLeftOp().pp("")+" = "+getStepper().pp("")+")\n"+getLoopBody().pp(indent+"    "));
 	  return x.toString();
 }
 
@@ -347,7 +465,7 @@ String IfElseStmt.pp(String indent)
 	
 	StringBuffer x = new StringBuffer();
 	x.append(indent);
-	  x.append("inside if else ");
+	//  x.append("inside if else ");
 	x.append("if ("+getIfElseIfList().getChild(0).getCondition().pp("")+")\n");
 	x.append(getIfElseIfList().getChild(0).getIfBody().pp(indent+"    "));
 	for (int i=1; i<getIfElseIfList().getNumChild() ; i++){
@@ -395,12 +513,33 @@ String CommentStmt.pp(String indent)
 	String trimmedComment = getComment().trim();
 	if(!(("").equals(trimmedComment)))
 	{
-	x.append("/**\n");
+	x.append("//");
 	x.append(getComment());
-	x.append("\n*/\n");
+	x.append("\n");
 	}
 	return x.toString();
 }
+
+String ReturnStmt.pp(String indent) {
+	  if (1 == getNumReturnVal()){
+		  return (indent+"return "+getReturnVal(0).pp("")+";\n");
+		  		  
+	  }
+	  String listOfVals;
+	  if (1< getNumReturnVal()){
+		  listOfVals = getReturnVal(0).pp("");
+		  for (int i=1;i<getNumReturnVal();i++){
+			  listOfVals = listOfVals + ","+getReturnVal(i).pp("");
+		  }
+		  
+		   return (indent+"return ["+listOfVals+"];\n");
+		  
+		  
+	  }
+	  
+	  else 
+		  return ""; 
+  }
 
 }	
 	

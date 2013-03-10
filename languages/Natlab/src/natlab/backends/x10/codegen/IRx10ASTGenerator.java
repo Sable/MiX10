@@ -1,18 +1,32 @@
 package natlab.backends.x10.codegen;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map.Entry;
+
+import javax.xml.parsers.DocumentBuilder;
+import javax.xml.parsers.DocumentBuilderFactory;
+import javax.xml.parsers.ParserConfigurationException;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
 
 import natlab.backends.x10.IRx10.ast.AssignStmt;
 import natlab.backends.x10.IRx10.ast.ClassBlock;
 import natlab.backends.x10.IRx10.ast.DeclStmt;
+import natlab.backends.x10.IRx10.ast.IDInfo;
 import natlab.backends.x10.IRx10.ast.List;
 import natlab.backends.x10.IRx10.ast.Method;
 import natlab.backends.x10.IRx10.ast.MethodBlock;
 import natlab.backends.x10.IRx10.ast.MethodHeader;
 import natlab.backends.x10.IRx10.ast.Program;
-import natlab.backends.x10.IRx10.ast.Args;
 import natlab.backends.x10.IRx10.ast.StmtBlock;
 import natlab.backends.x10.IRx10.ast.Type;
 import natlab.backends.x10.IRx10.ast.Stmt;
@@ -46,8 +60,10 @@ import natlab.tame.valueanalysis.aggrvalue.AggrValue;
 public class IRx10ASTGenerator extends TIRAbstractNodeCaseHandler {
 	ValueAnalysis<AggrValue<AdvancedMatrixValue>> analysis;
 	x10Mapping x10Map;
-	HashMap<String, Collection<ClassReference>> symbolMap = new HashMap<String, Collection<ClassReference>>();
+//	HashMap<String, Collection<ClassReference>> symbolMap = new HashMap<String, Collection<ClassReference>>();
+	HashMap<String, IDInfo> symbolMap = new HashMap<String, IDInfo>();
 	String symbolMapKey;
+	collectBuiltins collectedBuiltins;
 	private int graphSize;
 	int index;
 	private String fileDir;
@@ -56,9 +72,14 @@ public class IRx10ASTGenerator extends TIRAbstractNodeCaseHandler {
 
 	private IRx10ASTGenerator(
 			ValueAnalysis<AggrValue<AdvancedMatrixValue>> analysis2, int size,
-			int index, String fileDir, String classname) {
+			int index, collectBuiltins collectBuiltins, String fileDir, String classname) {
 		this.x10Map = new x10Mapping();
 		this.analysis = analysis2;
+		this.collectedBuiltins = collectBuiltins;
+		
+		
+		System.out.println(collectBuiltins.usedBuiltins.toString()+" -- builtin list");
+		
 		// this.graphSize = graphSize;
 		this.index = index;
 		this.fileDir = fileDir;
@@ -74,14 +95,62 @@ public class IRx10ASTGenerator extends TIRAbstractNodeCaseHandler {
 
 	public static ClassBlock x10ClassMaker(
 			ValueAnalysis<AggrValue<AdvancedMatrixValue>> analysis2,
-			int graphSize, String fileDir, String classname) {
+			int graphSize, ArrayList<collectBuiltins> listOfUsedBuiltins, String fileDir, String classname) {
 		List<Stmt> declStmtList = new List<Stmt>();
 		List<Method> methodList = new List<Method>();
 		IRx10ASTGenerator subAST;
+		Document doc = null;
+		
+		try {
+			String builtin;
+		DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
+        DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
+		doc = docBuilder.parse (new File("/media/vineet/19F5-FD4C/Thesis/mclab_git/mclab/languages/Natlab/src/natlab/backends/x10/codegen/mix10_builtins.xml"));
+		doc.getDocumentElement ().normalize ();
+		
+		
+		
+		
+		
+		} catch (ParserConfigurationException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}catch (SAXException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
+		
+		
 		for (int i = 0; i < graphSize; i++) {
-			subAST = new IRx10ASTGenerator(analysis2, graphSize, i, fileDir,
+			
+			
+			collectBuiltins collected = listOfUsedBuiltins.get(i);
+			NodeList builtinList;
+			
+				for (String key : collected.usedBuiltins.keySet())
+				{
+					builtinList = doc.getElementsByTagName(key);
+					collected.usedBuiltins.put(key, builtinList);
+					//TODO
+					/*
+					 * Change usedBuiltins to <String, NodeList>
+					 * pass target to builtinMaker and 
+					 * edit getBuiltinFromxml to read from target 
+					 */
+				
+					
+				}
+			
+			
+			subAST = new IRx10ASTGenerator(analysis2, graphSize, i, listOfUsedBuiltins.get(i), fileDir,
 					classname);
 			methodList.add(subAST.method);
+			
 		}
 		ClassBlock class_block = new ClassBlock(declStmtList, methodList);
 		return class_block;

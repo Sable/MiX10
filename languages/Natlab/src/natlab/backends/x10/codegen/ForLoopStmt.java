@@ -1,5 +1,6 @@
 package natlab.backends.x10.codegen;
 
+import java.util.ArrayList;
 import java.util.UUID;
 
 import natlab.backends.x10.IRx10.ast.AssignStmt;
@@ -8,7 +9,7 @@ import natlab.backends.x10.IRx10.ast.ForStmt;
 import natlab.backends.x10.IRx10.ast.IDInfo;
 import natlab.backends.x10.IRx10.ast.IDUse;
 import natlab.backends.x10.IRx10.ast.IncExp;
-import natlab.backends.x10.IRx10.ast.LTExp;
+import natlab.backends.x10.IRx10.ast.LEExp;
 import natlab.backends.x10.IRx10.ast.List;
 import natlab.backends.x10.IRx10.ast.LoopBody;
 import natlab.backends.x10.IRx10.ast.Opt;
@@ -18,6 +19,7 @@ import natlab.backends.x10.IRx10.ast.Type;
 import natlab.tame.tir.TIRAbstractAssignStmt;
 import natlab.tame.tir.TIRForStmt;
 import natlab.tame.tir.TIRNode;
+import natlab.tame.valueanalysis.components.shape.ShapeFactory;
 import ast.RangeExpr;
 
 public class ForLoopStmt {
@@ -27,8 +29,18 @@ public class ForLoopStmt {
 		ForStmt for_stmt = new ForStmt();
 		AssignStmt for_assign = new AssignStmt();
 
-		IDInfo LHSinfo = new IDInfo(new Type("Int"), node.getAssignStmt()
+		IDInfo LHSinfo = new IDInfo(new Type("Double"), node.getAssignStmt()
 				.getLHS().getVarName(), null, null, null);
+		ShapeFactory sf = new ShapeFactory();
+		/*
+		 * TODO
+		 * below is a hack assuming for loop index will be a scalar.
+		 * use range value analysis later on
+		 */
+		ArrayList<Integer> s = new ArrayList<Integer>();
+		s.add(1);
+		s.add(1);
+		LHSinfo.setShape(s);
 		/*
 		 * LHSinfo = Helper.generateIDInfo(target.analysis, target.index, node,
 		 * node.getVarName());
@@ -56,8 +68,8 @@ public class ForLoopStmt {
 		DeclStmt TempDeclStmt = new DeclStmt();
 		TempDeclStmt.setLHS(for_assign.getLHS());
 		block.addStmt(TempDeclStmt);
-		target.symbolMap.put(LHSinfo.getName(), null);
-		for_stmt.setCondition(new LTExp(
+		target.symbolMap.put(LHSinfo.getName(), LHSinfo);
+		for_stmt.setCondition(new LEExp(
 				new IDUse(for_assign.getLHS().getName()), upper));
 		for_stmt.setStepper(new IncExp(
 				new IDUse(for_assign.getLHS().getName()), increment));
@@ -102,31 +114,31 @@ public class ForLoopStmt {
 					.setName(
 							for_stmt.getAssignStmt().getLHS().getName()
 									+ "_x10"+randomizer);
-			((IDUse) (((LTExp) (for_stmt.getCondition())).getLeftOp()))
+			((IDUse) (((LEExp) (for_stmt.getCondition())).getLeftOp()))
 					.setID(for_stmt.getAssignStmt().getLHS().getName());
 			((IDUse) (((IncExp) (for_stmt.getStepper())).getLeftOp()))
 					.setID(for_stmt.getAssignStmt().getLHS().getName());
 		}
 		int i = 0;
-		for (Stmt stmt : for_stmt.getLoopBody().getStmtList()) {
-			// if a statement is Decl statement, add a declaration node to the
-			// block
-			// and change to assignment node inside for stmt
-			if (stmt instanceof DeclStmt) {
-				if (((DeclStmt) stmt).hasRHS()) {
-					AssignStmt InsertAssignStmt = new AssignStmt();
-					IDInfo temp = ((DeclStmt) stmt).getLHS();
-					InsertAssignStmt.setLHS(temp);
-
-					InsertAssignStmt.setRHS(((DeclStmt) stmt).getRHS());
-					for_stmt.getLoopBody().getStmtList().insertChild(InsertAssignStmt, i);
-				}
-				block.addStmt(stmt);
-				((DeclStmt) stmt).setChild(new Opt(), 2);
-				for_stmt.getLoopBody().getStmtList().removeChild(i+1);
-			}
-			i++;
-		}
+//		for (Stmt stmt : for_stmt.getLoopBody().getStmtList()) {
+//			// if a statement is Decl statement, add a declaration node to the
+//			// block
+//			// and change to assignment node inside for stmt
+//			if (stmt instanceof DeclStmt) {
+//				if (((DeclStmt) stmt).hasRHS()) {
+//					AssignStmt InsertAssignStmt = new AssignStmt();
+//					IDInfo temp = ((DeclStmt) stmt).getLHS();
+//					InsertAssignStmt.setLHS(temp);
+//
+//					InsertAssignStmt.setRHS(((DeclStmt) stmt).getRHS());
+//					for_stmt.getLoopBody().getStmtList().insertChild(InsertAssignStmt, i);
+//				}
+//				block.addStmt(stmt);
+//				((DeclStmt) stmt).setChild(new Opt(), 2);
+//				for_stmt.getLoopBody().getStmtList().removeChild(i+1);
+//			}
+//			i++;
+//		}
 
 		return for_stmt;
 		// TODO Auto-generated method stub

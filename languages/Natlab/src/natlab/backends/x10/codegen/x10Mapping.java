@@ -1,5 +1,6 @@
 package natlab.backends.x10.codegen;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import natlab.backends.x10.IRx10.ast.Type;
@@ -10,16 +11,27 @@ public class x10Mapping {
 	private static HashMap<String, String> x10BinOperatorMap = new HashMap<String, String>();
 	private static HashMap<String, String> x10UnOperatorMap = new HashMap<String, String>();
 	private static HashMap<String, String> x10DirectBuiltinMap = new HashMap<String, String>();
-	private static HashMap<String, String> x10BuiltinConstMap = new HashMap<String, String>();
+	private static HashMap<String, String> x10BuiltinMap = new HashMap<String, String>();
 	private static HashMap<String, String> x10MethodMap = new HashMap<String, String>();
-
+	private static ArrayList<String> x10BuiltinList = new ArrayList<String>();
 	public x10Mapping() {
 		makex10TypeMap();
+/*
 		makex10BinOperatorMap();
 		makex10UnOperatorMap();
 		makex10DirectBuiltinMap();
+*/
 		makex10BuiltinConstMap();
 		makex10MethodMap();
+		makex10BuiltinList();
+	}
+
+	private void makex10BuiltinList() {
+		
+		x10BuiltinList.add("plus");
+		x10BuiltinList.add("minus");
+		x10BuiltinList.add("gt");
+		x10BuiltinList.add("length");
 	}
 
 	private void makex10TypeMap() {
@@ -37,7 +49,7 @@ public class x10Mapping {
 		x10TypeMap.put("logical", new Type("Boolean"));
 		x10TypeMap.put(null, new Type("Double")); /*This is the default type*/
 	}
-
+/*
 	private void makex10BinOperatorMap() {
 		x10BinOperatorMap.put("plus", "+");
 		x10BinOperatorMap.put("minus", "-");
@@ -78,11 +90,11 @@ public class x10Mapping {
 		x10DirectBuiltinMap.put("cos", "cos");
 
 	}
-
+*/
 	private void makex10BuiltinConstMap() {
 		// TODO create a categorical map here
 
-		x10BuiltinConstMap.put("pi", "Math.PI");
+		x10BuiltinMap.put("pi", "Math.PI");
 	}
 
 	private void makex10MethodMap() {
@@ -129,15 +141,22 @@ public class x10Mapping {
 	}
 
 	public static Boolean isBuiltinConst(String expType) {
-		if (true == x10BuiltinConstMap.containsKey(expType))
+		if (true == x10BuiltinMap.containsKey(expType))
 			return true;
 		else
 			return false;
 	}
 
+	public static Boolean isBuiltin(String expType) {
+		if (true == x10BuiltinList.contains(expType))
+			return true;
+		else
+			return false;
+	}
+	
 	public static String getX10BuiltinConstMapping(String BuiltinName) {
 
-		return x10BuiltinConstMap.get(BuiltinName);
+		return x10BuiltinMap.get(BuiltinName);
 
 	}
 

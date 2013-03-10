@@ -31,11 +31,12 @@ public class IfElseStmt {
 			IfBody loop_body_block = temp.getIfBody();
 			target.currentBlock.add(loop_body_block);
 			buildStmtsSubAST(if_block.getStmts(), target);
-			target.currentBlock.remove(loop_body_block);
+			
 			//block.addStmt(while_stmt);
 			if_else_stmt.getIfElseIfList().add(temp);
+			target.currentBlock.remove(loop_body_block);
 			/*TESTING			 */
-			System.out.println("IF"+if_else_stmt.getIfElseIfList().getChild(0).getIfBody().getNumStmt());
+			System.out.println("IFfffff"+if_else_stmt.getIfElseIfList().getChild(0).getIfBody().getNumStmt());
 		}
 		
 		target.currentBlock.add(if_else_stmt.getElseBody());

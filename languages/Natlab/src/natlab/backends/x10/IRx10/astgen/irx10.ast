@@ -3,17 +3,19 @@ PPHelper;
 ClassBlock ::= DeclStmt:Stmt* Method*;
 abstract Stmt;
 CommentStmt:Stmt ::= <Comment:String>;
-DeclStmt:Stmt ::= [MultiDeclLHS] LHS:IDInfo [RHS:Exp];
+DeclStmt:Stmt ::= [MultiDeclLHS] LHS:IDInfo [RHS:Exp] <Mutable:Boolean>;
+Literally:Stmt ::= <Verbatim:String>;
+PointLooper:Stmt ::= PointID:IDUse ArrayID:IDUse <DimNumber:int> [Min:Exp] [Max:Exp];
 Method ::= MethodHeader MethodBlock;
-MethodHeader ::= ReturnType:AccessVal <Name:String> Args*;
-Args ::= Type <Name:String>;
+MethodHeader ::= ReturnType:AccessVal <Name:String> Args:IDInfo*;
+ReturnStmt:Stmt ::= ReturnVal:Exp*;
 Type:AccessVal ::= <Name:String>;
 MethodBlock:StmtBlock;
-AssignStmt:ExpStmt ::=  [MultiAssignLHS] LHS:IDInfo RHS:Exp;
+AssignStmt:Stmt ::=  [MultiAssignLHS] LHS:IDInfo RHS:Exp <TypeCast:Boolean>;
 ExpStmt:Stmt ::= Exp;
 IDUse:Exp ::= <ID:String>;
 Dims ::= [Exp];
-IDInfo ::= Type <Name:String> <Shape:ArrayList> <isComplex:String> Value:Exp;
+IDInfo:Exp ::= Type <Name:String> <Shape:ArrayList> <isComplex:String> Value:Exp;
 MultiDeclLHS:Exp ::=  IDInfo* ;
 MultiAssignLHS:Exp ::=  IDInfo* ;
 abstract UnaryExp:Exp ::= Operand:Exp;
@@ -24,8 +26,10 @@ PlusExp:UnaryExp;
 NegExp:UnaryExp;
 EmptyExp:Exp;
 
-ArrayAccess:AccessVal ::= ArrayID:IDUse Indices:Exp* ;
-ArraySetStmt:Stmt ::= LHS:IDInfo RHS:Exp;
+RegionBuilder:Exp ::= Lower:IDUse* Upper:IDUse* ArrayID:IDUse;
+
+ArrayAccess:AccessVal ::= ArrayID:IDUse Indices:Exp* ; //specific for TameIR
+ArraySetStmt:Stmt ::= LHS:IDInfo Indices:Exp* RHS:Exp;
 
 abstract LiteralExp:Exp;
 Literal:LiteralExp ::= <Literal:String>;
@@ -78,7 +82,7 @@ WhileStmt:Stmt ::= Condition:Exp LoopBody;
 StmtBlock:Stmt ::= Stmt*;
 LoopBody:StmtBlock;
 IfElseStmt:Stmt ::= IfElseIf* [ElseBody];
-IfElseIf ::= Condition:Exp IfBody;
+IfElseIf:Stmt ::= Condition:Exp IfBody;
 IfBody:StmtBlock;
 ElseBody:StmtBlock;
 abstract Exp;

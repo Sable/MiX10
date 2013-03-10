@@ -1,12 +1,14 @@
 package natlab.backends.x10;
 
 import java.io.*;
+import java.util.ArrayList;
+import java.util.HashMap;
 
 import natlab.tame.valueanalysis.*;
 import natlab.tame.valueanalysis.advancedMatrix.AdvancedMatrixValue;
 import natlab.tame.valueanalysis.aggrvalue.*;
 import natlab.tame.AdvancedTamerTool;
-import natlab.toolkits.filehandling.genericFile.GenericFile;
+import natlab.toolkits.filehandling.GenericFile;
 import natlab.toolkits.path.FileEnvironment;
 import natlab.backends.x10.IRx10.ast.AssignStmt;
 import natlab.backends.x10.IRx10.ast.DeclStmt;
@@ -19,9 +21,12 @@ public class Main {
 		// String file =
 		// "/home/2011/vkumar5/mclab/Project/languages/Natlab/src/natlab/backends/x10/testing/unitTests/ut8"
 		// ;
-		String file = "/home/2011/vkumar5/mclab/Project/languages/Natlab/src/natlab/backends/x10/benchmarks/unit/forTest1";
 
-		//String file = "/home/2011/vkumar5/hello1";
+//		String file = "/home/2011/vkumar5/mclab_git/mclab/languages/Natlab/src/natlab/backends/x10/benchmarks/unit/forTest1";
+
+		String file = "/home/vineet/work/benchmarks/unit/ranges";
+
+		// String file = "/home/2011/vkumar5/hello1";
 		String fileIn = file + ".m";
 		String fileOut = file + ".x10";
 		String fileOutTame = file + "_tame.m";
@@ -29,13 +34,13 @@ public class Main {
 		/* /home/xuli/test/hello.m */
 		FileEnvironment env = new FileEnvironment(gFile); // get path
 															// environment obj
-		//String x10Code = "";
+		// String x10Code = "";
 		AdvancedTamerTool tool = new AdvancedTamerTool();
 		// System.out.println(args[0]);
 		ValueAnalysis<AggrValue<AdvancedMatrixValue>> analysis = tool.analyze(
 				args, env);
 		int size = analysis.getNodeList().size();
-		
+
 		try {
 			StringBuffer tamedCode = new StringBuffer();
 			BufferedWriter out = new BufferedWriter(new FileWriter(fileOutTame));
@@ -53,22 +58,22 @@ public class Main {
 		System.out.println("\n------------------------------------\n");
 
 		System.out.println("\n------------------------------------\n");
-		
 
-		
-		
-		
-//		System.out.println("UNCOMMENT IN MAIN");
+		// HashMap<String, String> usedBuiltins = new HashMap<String, String>();
+		ArrayList<collectBuiltins> listOfUsedBuiltins = new ArrayList<collectBuiltins>();
+		listOfUsedBuiltins = collectBuiltins.collect(analysis, size);
+
+		// System.out.println("UNCOMMENT IN MAIN");
 		Program irx10Program = new Program();
 		irx10Program.setClassBlock(IRx10ASTGenerator.x10ClassMaker(analysis,
-				size, "home/2011/vkumar5/", "testclass"));
-		
-		String x10Program = irx10Program.pp("","testclass");
+				size, listOfUsedBuiltins, "home/2011/vkumar5/", "testclass"));
+
+		String x10Program = irx10Program.pp("", "testclass");
 		System.out
-		.println("\n~~~~~~~~~~~~~~~~X10 code~~~~~~~~~~~~~~~~~~~~~~~\n");
+				.println("\n~~~~~~~~~~~~~~~~X10 code~~~~~~~~~~~~~~~~~~~~~~~\n");
 		System.out.println(x10Program);
 		System.out
-		.println("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
+				.println("\n~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~\n");
 
 		try {
 			BufferedWriter out = new BufferedWriter(new FileWriter(fileOut));
@@ -78,6 +83,8 @@ public class Main {
 			System.out.println("Exception ");
 
 		}
+
+		BuiltinWriter.classWriter();
 
 	}
 
