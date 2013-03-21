@@ -1,4 +1,4 @@
-function set=mandelbrot(N, Nmax)
+ function set = mandelbrot(N, Nmax)
 %n=integer?
 %nmax=parameter
 %x,c are complex
@@ -22,13 +22,5 @@ function set=mandelbrot(N, Nmax)
 end
 
 
-function out = iterations(x,max)
-  c = x;
-  i = 0;
-  while(abs(x) < 2 & i < max)
-    x = x*x + c;
-    i = i+1;
-  end
-  out = i;
-end
+
 

@@ -76,8 +76,13 @@ public class DeclStmt extends Stmt implements Cloneable {
 					x.append("var ");
 				else if (null != getMutable() && ! getMutable())
 					x.append("val ");
+				
+				String type = getLHS().getType().getName();
+				if (getLHS().getisComplex().equals("COMPLEX"))
+					type = "Complex";
+				
 				x.append(getLHS().getName() + ": "
-						+ getLHS().getType().getName());
+						+ type);
 				if (hasRHS()){
 				x.append(" = ");
 				x.append(getRHS().pp(""));
@@ -101,8 +106,12 @@ public class DeclStmt extends Stmt implements Cloneable {
 						x.append("var ");
 					else if (null != getMutable() && ! getMutable())
 						x.append("val ");
+					String type = getLHS().getType().getName();
+					if (getLHS().getisComplex().equals("COMPLEX"))
+						type = "Complex";
+					
 					x.append(getLHS().getName() + ": "
-							+ getLHS().getType().getName());
+							+ type);
 					if (hasRHS()){
 						x.append(" = ");
 						x.append(getRHS().pp(""));
@@ -112,13 +121,19 @@ public class DeclStmt extends Stmt implements Cloneable {
 
 			 else // array
 			{
-
+				 
+				 String type = getLHS().getType().getName();
+					if (getLHS().getisComplex().equals("COMPLEX"))
+						type = "Complex";
+				 
 				x.append("val " + getLHS().getName() + 
-						": Array["+getLHS().getType().getName() + "]");
+						": Array["+type + "]");
 				if (hasRHS()){
+					
+					
 					x.append(
 						" = " + "new Array["
-						+ getLHS().getType().getName() + "]" + "(");
+						+ type + "]" + "(");
 						//+ PPHelper.makeRange(getLHS().getShape()) + ", "
 				   
 						x.append(getRHS().pp("")+")");

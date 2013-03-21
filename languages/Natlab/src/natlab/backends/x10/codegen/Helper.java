@@ -184,12 +184,14 @@ public class Helper {
 	}
 
 	public static boolean isScalar(ArrayList shape) {
+		if (shape != null){
 		for (int i =0 ; i<shape.size();i++){
-			  if (!("1").equals(shape.get(i).toString())){
+			  if (null ==shape.get(i) || !("1").equals(shape.get(i).toString())){
 				  return false;
 				  
 			  }
 		  }
+		}
 		return true;
 	}
 

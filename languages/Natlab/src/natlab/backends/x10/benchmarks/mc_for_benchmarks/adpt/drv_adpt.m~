@@ -21,8 +21,8 @@ end
 %time = (t2-t1)*[0, 0, 86400, 3600, 60, 1]';
 time = 4;
 % Store the benchmark output
-%output = {mean(SRmat(:)), mean(quad(:)), mean(err(:))};
-output = SRmat(:);
+output = {mean(SRmat(:)), mean(quad(:)), mean(err(:))};
+
 % No validation performed
 valid = 'N/A';
 

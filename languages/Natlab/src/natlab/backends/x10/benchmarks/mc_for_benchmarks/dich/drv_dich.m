@@ -3,7 +3,7 @@ function [time, output, valid] = drv_dich(scale)
 %% Driver for the Dirichlet solution to Laplace's equation.
 %%
 
-t1 = clock;
+%t1 = clock;
 
 a = 4;
 b = 4;
@@ -15,19 +15,19 @@ f1 = 20;
 f2 = 180;
 f3 = 80;
 f4 = 0;
-
+tic;
 for time=1:scale
   U = dirich(f1, f2, f3, f4, a, b, h, tol, max1);
 end
-
-t2 = clock;
+toc;
+%t2 = clock;
 
 % Compute the running time in seconds
-time = (t2-t1)*[0 0 86400 3600 60 1]';
-
+%time = (t2-t1)*[0 0 86400 3600 60 1]';
+%time = 777;
 % Store the benchmark output
-output = {mean(U(:))};
-
+%output = {mean(U(:))};
+output = U;
 % No validation performed
 valid = 'N/A';
 

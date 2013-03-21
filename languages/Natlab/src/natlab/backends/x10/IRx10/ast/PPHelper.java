@@ -102,8 +102,11 @@ public class PPHelper extends ASTNode<ASTNode> implements Cloneable {
    * @declaredat ./astgen/pretty.jadd:213
    */
   static boolean isScalar(IDInfo id) {
-	
+	  if (null == id.getShape())
+		  return false;
 	  for (int i =0 ; i<id.getShape().size();i++){
+		  if (null == id.getShape().get(i))
+			  return false;
 		  if (!("1").equals(id.getShape().get(i).toString())){
 			  return false;
 			  

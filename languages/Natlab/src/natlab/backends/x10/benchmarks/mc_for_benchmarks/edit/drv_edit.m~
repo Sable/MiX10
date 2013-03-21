@@ -314,8 +314,8 @@ end
 %time = (t2-t1)*[0 0 86400 3600 60 1]';
 time = 777;
 % Store the benchmark output
-%output = [mean(d(:))];
-output = d(:);
+output = [mean(d(:))];
+
 % No validation performed
 valid = 'N/A';
 

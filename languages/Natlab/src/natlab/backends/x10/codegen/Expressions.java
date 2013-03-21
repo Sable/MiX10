@@ -159,7 +159,7 @@ public class Expressions {
 			List<Exp> Args = new List<Exp>();
 			Args = getArgs(NatlabExp, target);
 			
-			System.out.println(((IDUse)Args.getChild(0)).getID());
+			//System.out.println(((IDUse)Args.getChild(0)).getID());
 			
 			
 			//if (!((ParameterizedExpr) NatlabExp).isVariable){//TODO check if isVariable works
@@ -177,7 +177,7 @@ public class Expressions {
 				UserDefMethodCall libCall = new UserDefMethodCall();
 				libCall.setUserDefMethodName(new MethodId(NatlabExp.getVarName()));
 				libCall.setArgumentList(Args);
-				System.out.println(((IDUse)libCall.getArgumentList().getChild(0)).getID()+"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+	//			System.out.println(((IDUse)libCall.getArgumentList().getChild(0)).getID()+"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
 				return libCall;
 			}
 			//}
