@@ -249,7 +249,7 @@ public class AssignsAndDecls {
 			}
 			
 			DeclStmt superDeclStmt = new DeclStmt();
-			superDeclStmt.setLHS(new IDInfo(null,null,null,null,null));
+			superDeclStmt.setLHS(new IDInfo());
 			superDeclStmt.getLHS().setName(multiVarName);
 			ShapeFactory s = new ShapeFactory();
 			ArrayList<String> list_dims = new ArrayList<String>();

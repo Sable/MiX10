@@ -21,11 +21,9 @@ public class Main {
 		// String file =
 		// "/home/2011/vkumar5/mclab/Project/languages/Natlab/src/natlab/backends/x10/testing/unitTests/ut8"
 		// ;
-<<<<<<< HEAD
-		String file = "/home/2011/vkumar5/mclab_git/mclab/languages/Natlab/src/natlab/backends/x10/benchmarks/others/drv_bubble";
-=======
-		String file = "/home/vineet/work/benchmarks/unit/ranges";
->>>>>>> e854f174d6e9d6c3879f7784b5204fe1b6555ae3
+         String file="";
+		//String file = "/media/vineet/19F5-FD4C/Thesis/mclab_git/mclab/languages/Natlab/src/natlab/backends/x10/benchmarks/others/drv_bubble";
+
 
 		// String file = "/home/2011/vkumar5/hello1";
 		String fileIn = file + ".m";
