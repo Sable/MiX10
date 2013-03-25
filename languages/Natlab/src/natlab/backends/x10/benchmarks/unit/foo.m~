@@ -1,4 +1,0 @@
-function[x,y] = foo(a,b)                                                        
- 20     x = a+3;                                                                    
- 21     y = b-3;                                                                    
- 22 end      
