@@ -74,59 +74,60 @@ public class ArrayGetSet {
 		// TODO - Below is a dirty hack to
 		// manage colon expression in array set statement
 		// need to make it proper
-		//if (!hasColon)
+
+		if (!hasColon)
 			block.addStmt(array_set);
-		
-//			else {
-//			Literally pointLoop = new Literally();
-//			pointLoop.setVerbatim("for (p in "
-//					+ ((IDUse) array_set.getRHS()).getID() + ".region)\n");
-//			StringBuffer x = new StringBuffer();
-//			StringBuffer pt = new StringBuffer();
-//			String rhsID = ((IDUse) array_set.getRHS()).getID();
-//
-//			if (((IDUse) array_set.getIndices(0)).getID().equals("__")) {
-//				pt.append("(" + rhsID + ".region.min(" + Integer.toString(0)
-//						+ ")-1) as Int");
-//			} else {
-//				Exp i = array_set.getIndices(0);
-//				if (target.symbolMap.containsKey(((IDUse) i).getID())
-//						&& !Helper.isScalar(target.symbolMap.get(
-//								(((IDUse) i).getID())).getShape())) {
-//					pt.append("(" + ((IDUse) i).getID() + "("
-//							+ ((IDUse) i).getID() + ".region.min(0)"
-//							+ ") -1) as Int");
-//				} else {
-//					pt.append("(" + ((IDUse) i).getID() + "-1) as Int");
-//				}
-//			}
-//
-//			for (int j = 1; j < array_set.getIndicesList().getNumChild(); j++) {
-//				
-//				System.out.println("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-//				
-//				if (((IDUse) array_set.getIndices(j)).getID().equals("__")) {
-//					pt.append(", (" + rhsID + ".region.min("
-//							+ Integer.toString(j) + ")-1) as Int");
-//				} else {
-//					Exp i = array_set.getIndices(j);
-//					if (target.symbolMap.containsKey(((IDUse) i).getID())
-//							&& !Helper.isScalar(target.symbolMap.get(
-//									(((IDUse) i).getID())).getShape())) {
-//						pt.append(", (" + ((IDUse) i).getID() + "("
-//								+ ((IDUse) i).getID() + ".region.min(0)"
-//								+ ") -1) as Int");
-//					} else {
-//						pt.append(", (" + ((IDUse) i).getID() + "-1) as Int");
-//					}
-//				}
-//			}
-//
-//			x.append(array_set.getLHS().getName() + "(p.operator+(Point.make("
-//					+ pt.toString() + ")))= ");
-//			x.append(((IDUse) array_set.getRHS()).getID() + "(p);\n");
-//			block.addStmt(new Literally(x.toString()));
-//		}
+		else {
+			Literally pointLoop = new Literally();
+			pointLoop.setVerbatim("for (p in "
+					+ ((IDUse) array_set.getRHS()).getID() + ".region)\n");
+			StringBuffer x = new StringBuffer();
+			StringBuffer pt = new StringBuffer();
+			String rhsID = ((IDUse) array_set.getRHS()).getID();
+
+			if (((IDUse) array_set.getIndices(0)).getID().equals("__")) {
+				pt.append("(" + rhsID + ".region.min(" + Integer.toString(0)
+						+ ")-1) as Int");
+			} else {
+				Exp i = array_set.getIndices(0);
+				if (target.symbolMap.containsKey(((IDUse) i).getID())
+						&& !Helper.isScalar(target.symbolMap.get(
+								(((IDUse) i).getID())).getShape())) {
+					pt.append("(" + ((IDUse) i).getID() + "("
+							+ ((IDUse) i).getID() + ".region.min(0)"
+							+ ") -1) as Int");
+				} else {
+					pt.append("(" + ((IDUse) i).getID() + "-1) as Int");
+				}
+			}
+
+			for (int j = 1; j < array_set.getIndicesList().getNumChild(); j++) {
+				
+				System.out.println("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
+				
+				if (((IDUse) array_set.getIndices(j)).getID().equals("__")) {
+					pt.append(", (" + rhsID + ".region.min("
+							+ Integer.toString(j) + ")-1) as Int");
+				} else {
+					Exp i = array_set.getIndices(j);
+					if (target.symbolMap.containsKey(((IDUse) i).getID())
+							&& !Helper.isScalar(target.symbolMap.get(
+									(((IDUse) i).getID())).getShape())) {
+						pt.append(", (" + ((IDUse) i).getID() + "("
+								+ ((IDUse) i).getID() + ".region.min(0)"
+								+ ") -1) as Int");
+					} else {
+						pt.append(", (" + ((IDUse) i).getID() + "-1) as Int");
+					}
+				}
+			}
+
+			x.append(array_set.getLHS().getName() + "(p.operator+(Point.make("
+					+ pt.toString() + ")))= ");
+			x.append(((IDUse) array_set.getRHS()).getID() + "(p);\n");
+			block.addStmt(new Literally(x.toString()));
+		}
+
 
 	}
 
@@ -255,7 +256,9 @@ public class ArrayGetSet {
 			if (target.symbolMap.containsKey(((IDUse) i).getID())
 					&& !Helper.isScalar(target.symbolMap.get(
 							(((IDUse) i).getID())).getShape())) {
-				region.addLower(new IDUse(((IDUse) i).getID() + "("
+
+				region.addLower(new IDUse(/*((IDUse) i).getID() +*/ "("
+
 						+ ((IDUse) i).getID() + ".region.min(0)" + ")")); // MAKE
 																			// SURE
 																			// colon
@@ -267,7 +270,9 @@ public class ArrayGetSet {
 																			// starting
 																			// at
 																			// 1
-				region.addUpper(new IDUse(((IDUse) i).getID() + "(" +
+
+				region.addUpper(new IDUse(/*((IDUse) i).getID() +*/ "(" +
+
 				// (target.symbolMap.get((((IDUse)i).getID())).getShape()).get(1)
 						((IDUse) i).getID() + ".region.max(0)" + ")"));
 				useregion = true;

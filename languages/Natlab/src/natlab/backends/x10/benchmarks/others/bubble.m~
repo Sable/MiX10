@@ -1,5 +1,7 @@
 function [x] = bubble(A)
 n=length(A);
+
+% making (n-1) passes
 for j=1:n-1
     % comparing each number with the next and swapping
     for i=1:n-1
