@@ -78,7 +78,7 @@ String DeclStmt.pp(String indent){
 
 				x.append("val " + getLHS().getName() + 
 						": Array["+getLHS().getType().getName() + "]");
-				if (hasRHS()){
+				if (hasRHS() && !(getRHS() instanceof SimpleArrayExp) ){
 					x.append(
 						" = " + "new Array["
 						+ getLHS().getType().getName() + "]" + "(");
@@ -86,6 +86,9 @@ String DeclStmt.pp(String indent){
 				   
 						x.append(getRHS().pp("")+")");
 				   }
+			   else if (hasRHS()) {
+			   	x.append(" = "+getRHS().pp(""));
+			   }	   
 					x.append( ";\n");
 			}
 		} //FIX THIS IN aspect
@@ -163,6 +166,22 @@ String ArraySetStmt.pp(String indent){
 			x.append(getRHS().pp("")+" ;\n");
 		return x.toString();
 	}
+  
+  
+  String SimpleArrayExp.pp(String indent){
+  	StringBuffer x = new StringBuffer();
+  	x.append("[");
+  	x.append(getValuesList().getChild(0).pp(""));
+  	for (int i=1; i<getValuesList().getNumChild(); i++)
+  	{
+  		x.append(" ,"+getValuesList().getChild(i).pp(""));
+  	}
+  	x.append("] as "+getType().getName() );
+    return x.toString();
+    }
+    		
+  
+  
   
 
   String ArrayAccess.pp(String indent)

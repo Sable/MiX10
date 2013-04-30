@@ -27,6 +27,9 @@ NegExp:UnaryExp;
 EmptyExp:Exp;
 
 RegionBuilder:Exp ::= Lower:IDUse* Upper:IDUse* ArrayID:IDUse;
+SimpleArrayExp:Exp ::= Values:Exp* Point* Type;
+Point:Exp ::= CoOrd:IntLiteral* ;
+
 
 ArrayAccess:AccessVal ::= ArrayID:IDUse Indices:Exp* ; //specific for TameIR
 ArraySetStmt:Stmt ::= LHS:IDInfo Indices:Exp* RHS:Exp;

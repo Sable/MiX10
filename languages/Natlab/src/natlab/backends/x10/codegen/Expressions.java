@@ -173,6 +173,12 @@ public class Expressions {
 			return libCall;
 			}
 			
+			
+			else if (NatlabExp.getVarName().equals("cellhorzcat")){
+				return CellArrayGetSet.createCellArray(NatlabExp, target);
+				
+			}
+			
 			else{
 				UserDefMethodCall libCall = new UserDefMethodCall();
 				libCall.setUserDefMethodName(new MethodId(NatlabExp.getVarName()));
