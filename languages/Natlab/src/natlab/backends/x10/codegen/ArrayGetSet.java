@@ -301,6 +301,7 @@ public class ArrayGetSet {
 					+ arrayAccess.getArrayID().getID(), null, null, null));
 			pointDecl.setMutable(false);
 			target.currentBlock.get(0).addStmt(pointDecl);
+			
 			StringBuffer x = new StringBuffer();
 			if (/* region.getLower(0).equals(region.getUpper(0)) && */!region
 					.getLower(0).getID().equals("__")) {
@@ -321,6 +322,18 @@ public class ArrayGetSet {
 			block.addStmt(new Literally("mix10_pt_"
 					+ arrayAccess.getArrayID().getID() + " = Point.make("
 					+ x.toString() + ");\n"));
+			
+			DeclStmt pointOffsetId = new DeclStmt();
+			pointOffsetId.setLHS( new IDInfo(target.symbolMap.get(node.getRHS().getVarName()).getType(),
+					"mix10_ptOff_"+ arrayAccess.getArrayID().getID(),
+					target.symbolMap.get(node.getRHS().getVarName()).getShape(),null,null	));
+			pointOffsetId.setMutable(false);
+			target.currentBlock.get(0).addStmt(pointOffsetId);
+			block.addStmt(new Literally("mix10_ptOff_"
+					+ arrayAccess.getArrayID().getID() + " = "
+					+ arrayAccess.getArrayID().getID() + ";\n"));
+			
+			
 			if (isDecl) {
 
 				((DeclStmt) decl_or_assgn).setRHS(region);

@@ -1,11 +1,11 @@
-function [time, output, valid] = drv_nb1d(scale)
+function [x] = drv_nb1d(scale)
 %%
 %% Driver for the N-body problem coded using 1d arrays for the
 %% displacement vectors.
 %%
 
 seed = 1;
-t1 = clock;
+%t1 = clock;
 
 n = round(scale^.4*30); %floor(28*rand);
 dT = (.5)*0.0833;
@@ -19,28 +19,28 @@ m = rand(n, 1,-.4)*345;
 
 [Fx, Fy, Fz, Vx, Vy, Vz] = nbody1d(n, Rx, Ry, Rz, m, dT, T);
 
-t2 = clock;
+%t2 = clock;
 
 % Compute the running time in seconds
-time = (t2-t1)*[0 0 86400 3600 60 1]';
+%time = (t2-t1)*[0 0 86400 3600 60 1]';
 
 % Store the benchmark output
 output = {mean(Fx(:)) mean(Fy(:)) mean(Fz(:)) mean(Vx(:)) mean(Vy(:)) mean(Vz(:))};
 
 % No validation performed
-valid = 'N/A';
-
+%valid = 'N/A';
+x=1;
 end
 
 % making random deterministic
-function M = rand(m,n,seed)
-    seed = seed+m*n;
-    M = zeros(m,n);
-    for i = 1:m
-        for j = 1:n
-            M(i,j) = mod(seed,1);
-            seed = seed+M(i,j)*sqrt(100)+sqrt(2);
-        end 
-    end
-end
+%function M = rand(m,n,seed)
+%    seed = seed+m*n;
+%    M = zeros(m,n);
+%    for i = 1:m
+%        for j = 1:n
+%            M(i,j) = mod(seed,1);
+%            seed = seed+M(i,j)*sqrt(100)+sqrt(2);
+%        end 
+%    end
+%end
 

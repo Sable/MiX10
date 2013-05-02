@@ -75,9 +75,11 @@ String DeclStmt.pp(String indent){
 
 			 else // array
 			{
-
-				x.append("val " + getLHS().getName() + 
-						": Array["+getLHS().getType().getName() + "]");
+				 if (hasRHS()|| (null != getMutable() && ! getMutable()))
+				x.append("val " + getLHS().getName()); 
+				 else
+					 x.append("var " + getLHS().getName()); 
+				x.append(": Array["+getLHS().getType().getName() + "]");
 				if (hasRHS() && !(getRHS() instanceof SimpleArrayExp) ){
 					x.append(
 						" = " + "new Array["
@@ -119,7 +121,7 @@ String DeclStmt.pp(String indent){
 			x.append("("+getLowers().getChild(0).getID()+" as Int..");
 		if(getUppers().getChild(0).getID().equals("__"))
 			x.append(
-			""+getArrayID().getID()+".region.max("+Integer.toString(0)+")))"	);
+			"("+getArrayID().getID()+".region.max("+Integer.toString(0)+")))"	);
 		else
 			x.append(""+getUppers().getChild(0).getID()+" as Int)");
         }
@@ -138,13 +140,13 @@ String DeclStmt.pp(String indent){
 				x.append("("+getLowers().getChild(i).getID()+" as Int..");
 			if(getUppers().getChild(i).getID().equals("__"))
 				x.append(
-				""+getArrayID().getID()+".region.max("+Integer.toString(i)+")))"	);
+				"("+getArrayID().getID()+".region.max("+Integer.toString(i)+")))"	);
 			else
 				x.append(""+getUppers().getChild(i).getID()+" as Int)");
 			}
 			
 		}
-		x.append(", p:point("+Integer.toString(i)+")=>"+getArrayID().getID()+"(p.operator-("+"mix10_pt_"+getArrayID().getID()+")));\n");
+		x.append(", (p:Point("+Integer.toString(i)+"))=>"+"mix10_ptOff_"+getArrayID().getID()+"(p.operator-("+"mix10_pt_"+getArrayID().getID()+")));\n");
 		return x.toString();
 	}
 	
@@ -171,12 +173,12 @@ String ArraySetStmt.pp(String indent){
   String SimpleArrayExp.pp(String indent){
   	StringBuffer x = new StringBuffer();
   	x.append("[");
-  	x.append(getValuesList().getChild(0).pp(""));
+  	x.append(getValuesList().getChild(0).pp("")+" as "+getType().getName());
   	for (int i=1; i<getValuesList().getNumChild(); i++)
   	{
-  		x.append(" ,"+getValuesList().getChild(i).pp(""));
+  		x.append(" ,"+getValuesList().getChild(i).pp("")+" as "+getType().getName());
   	}
-  	x.append("] as "+getType().getName() );
+  	x.append("]"); //as "+getType().getName() );
     return x.toString();
     }
     		
@@ -249,9 +251,10 @@ static String PPHelper.makeArgs(List<IDInfo> argsList)
 }
 
 static boolean PPHelper.isScalar(IDInfo id) {
-	
+	  
+	if (null != id.getShape())
 	  for (int i =0 ; i<id.getShape().size();i++){
-		  if (!("1").equals(id.getShape().get(i).toString())){
+		  if (null==id.getShape().get(i) || !("1").equals(id.getShape().get(i).toString()) ){
 			  return false;
 			  
 		  }
@@ -293,6 +296,8 @@ String AssignStmt.pp(String indent) {
 					if (null != getLHS().getShape().get(i))
 						tf &= ("1").equals(getLHS().getShape().get(i)
 								.toString());
+					else
+						tf &= false;
 				}
 				if (tf) {
 
@@ -349,7 +354,6 @@ String AssignStmt.pp(String indent) {
 		}
 		return x.toString();
 	}
-	
 	
 	String Literally.pp(String indent){
 		StringBuffer x = new StringBuffer();
@@ -546,9 +550,9 @@ String ReturnStmt.pp(String indent) {
 	  }
 	  String listOfVals;
 	  if (1< getNumReturnVal()){
-		  listOfVals = getReturnVal(0).pp("");
+		  listOfVals = getReturnVal(0).pp("")+" as Any";
 		  for (int i=1;i<getNumReturnVal();i++){
-			  listOfVals = listOfVals + ","+getReturnVal(i).pp("");
+			  listOfVals = listOfVals + ","+getReturnVal(i).pp("")+" as Any";
 		  }
 		  
 		   return (indent+"return ["+listOfVals+"];\n");
