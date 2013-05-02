@@ -197,13 +197,8 @@ public class Helper {
 				id_info.setType(x10Mapping.getX10TypeMapping(temp
 						.getMatlabClass().getName()));
 			}
-<<<<<<< HEAD
 			if (null != temp.getShape()){
 				id_info.setShape((ArrayList<DimValue>) temp.getShape()
-=======
-			if (null != temp.getShape()) {
-				id_info.setShape((ArrayList<Integer>) temp.getShape()
->>>>>>> fragile
 						.getDimensions());
 			}
 			if (null != temp.getisComplexInfo()) {
