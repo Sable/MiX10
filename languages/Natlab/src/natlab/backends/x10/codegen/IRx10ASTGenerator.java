@@ -235,5 +235,17 @@ public class IRx10ASTGenerator extends TIRAbstractNodeCaseHandler {
 		
 	   } 
 	
+	public void caseTIRCellArrayGetStmt(TIRCellArrayGetStmt node){
+		System.out.println("inside CellArrayGet");
+		CellArrayGetSet.handleTIRCellAbstractArrayGetStmt((TIRCellArrayGetStmt) node, this,
+				this.currentBlock.get(this.currentBlock.size() - 1));
+	}
+	
+	public void caseTIRCellArraySetStmt(TIRCellArraySetStmt node){
+		System.out.println("inside CellArraySet!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+		CellArrayGetSet.handleTIRCellAbstractArraySetStmt((TIRCellArraySetStmt) node, this,
+				this.currentBlock.get(this.currentBlock.size() - 1));
+		
+	   } 
 	
 }
