@@ -116,13 +116,13 @@ public class Helper {
 							.getisComplexInfo().toString());
 				}
 			}
-			if (null != ((AdvancedMatrixValue) temp).getShape()){
-				id_info.setShape((ArrayList<DimValue>) ((AdvancedMatrixValue) temp).getShape()
-						.getDimensions());
-			}
-			if (null != ((AdvancedMatrixValue) temp).getisComplexInfo()){
-				id_info.setisComplex(((AdvancedMatrixValue) temp).getisComplexInfo().toString());
-			}
+//			if (null != ((AdvancedMatrixValue) temp).getShape()){
+//				id_info.setShape((ArrayList<DimValue>) ((AdvancedMatrixValue) temp).getShape()
+//						.getDimensions());
+//			}
+//			if (null != ((AdvancedMatrixValue) temp).getisComplexInfo()){
+//				id_info.setisComplex(((AdvancedMatrixValue) temp).getisComplexInfo().toString());
+//			}
 			
 			if (temp instanceof CellValue){
 				
