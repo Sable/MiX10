@@ -108,7 +108,7 @@ public class Helper {
 							.getMatlabClass().getName()));
 				}
 				if (null != ((AdvancedMatrixValue) temp).getShape()) {
-					id_info.setShape((ArrayList<Integer>) ((AdvancedMatrixValue) temp)
+					id_info.setShape((ArrayList<DimValue>) ((AdvancedMatrixValue) temp)
 							.getShape().getDimensions());
 				}
 				if (null != ((AdvancedMatrixValue) temp).getisComplexInfo()) {
@@ -116,13 +116,13 @@ public class Helper {
 							.getisComplexInfo().toString());
 				}
 			}
-			if (null != temp.getShape()){
-				id_info.setShape((ArrayList<DimValue>) temp.getShape()
+			if (null != ((AdvancedMatrixValue) temp).getShape()){
+				id_info.setShape((ArrayList<DimValue>) ((AdvancedMatrixValue) temp).getShape()
 						.getDimensions());
 			}
-			if (null != temp.getisComplexInfo()){
-				id_info.setisComplex(temp.getisComplexInfo().toString());
-			
+			if (null != ((AdvancedMatrixValue) temp).getisComplexInfo()){
+				id_info.setisComplex(((AdvancedMatrixValue) temp).getisComplexInfo().toString());
+			}
 			
 			if (temp instanceof CellValue){
 				
@@ -134,14 +134,7 @@ public class Helper {
 					System.out.println(temp
 							.getMatlabClass().getName()+"celllllllllllllllllllllllllllllllll");
 				}
-// TODO - fix it
-//				if (null != ((AdvancedMatrixValue) ((CellValue<?>) temp).getValues().getSingleton())
-//						.getShape()) {
-//					id_info.setShape((ArrayList<Integer>) ((AdvancedMatrixValue) ((CellValue<?>) temp).getValues().getSingleton())
-//							.getShape().getDimensions());
-//					
-//					//System.out.println(id_info.getShape());
-//				}
+
 				
 				/*TODO
 				 * below hack assumes that cellArray is a vector. 
@@ -162,8 +155,6 @@ public class Helper {
 					id_info.setisComplex(((CellValue<?>) temp)
 							.getisComplexInfo().toString());
 					
-					System.out.println(((CellValue) temp)
-							.getisComplexInfo().toString()+"celllllllllllllllllllllllllllllllll");
 				}
 			}
 			
@@ -197,7 +188,7 @@ public class Helper {
 				id_info.setType(x10Mapping.getX10TypeMapping(temp
 						.getMatlabClass().getName()));
 			}
-			if (null != temp.getShape()){
+			if (null != temp.getShape()) {
 				id_info.setShape((ArrayList<DimValue>) temp.getShape()
 						.getDimensions());
 			}
