@@ -2,7 +2,7 @@ package natlab.backends.x10.codegen;
 
 import java.util.ArrayList;
 import java.util.Collection;
-
+import natlab.tame.valueanalysis.components.shape.*;
 import natlab.backends.x10.IRx10.ast.IDInfo;
 import natlab.backends.x10.IRx10.ast.Type;
 import natlab.tame.classes.reference.ClassReference;
@@ -10,8 +10,11 @@ import natlab.tame.tir.TIRAbstractAssignStmt;
 import natlab.tame.tir.TIRForStmt;
 import natlab.tame.tir.TIRFunction;
 import natlab.tame.valueanalysis.ValueAnalysis;
+import natlab.tame.valueanalysis.components.shape.*;
 import natlab.tame.valueanalysis.advancedMatrix.AdvancedMatrixValue;
 import natlab.tame.valueanalysis.aggrvalue.AggrValue;
+import natlab.tame.valueanalysis.aggrvalue.CellValue;
+import natlab.tame.valueanalysis.aggrvalue.CompositeValue;
 
 public class Helper {
 	/********************** HELPER METHODS ***********************************/
@@ -93,24 +96,70 @@ public class Helper {
 
 		if (analysis.getNodeList().get(graphIndex).getAnalysis()
 				.getOutFlowSets().get(node).isViable()) {
-			AdvancedMatrixValue temp = ((AdvancedMatrixValue) (analysis
-					.getNodeList().get(graphIndex).getAnalysis()
-					.getOutFlowSets().get(node).get(ID).getSingleton()));
 
+			AggrValue<?> temp = ((analysis.getNodeList().get(graphIndex)
+					.getAnalysis().getOutFlowSets().get(node).get(ID)
+					.getSingleton()));
 			IDInfo id_info = new IDInfo();
-			if (null != temp.getMatlabClass()) {
-				id_info.setType(x10Mapping.getX10TypeMapping(temp
-						.getMatlabClass().getName()));
+			if (temp instanceof AdvancedMatrixValue) {
+
+				if (null != temp.getMatlabClass()) {
+					id_info.setType(x10Mapping.getX10TypeMapping(temp
+							.getMatlabClass().getName()));
+				}
+				if (null != ((AdvancedMatrixValue) temp).getShape()) {
+					id_info.setShape((ArrayList<DimValue>) ((AdvancedMatrixValue) temp)
+							.getShape().getDimensions());
+				}
+				if (null != ((AdvancedMatrixValue) temp).getisComplexInfo()) {
+					id_info.setisComplex(((AdvancedMatrixValue) temp)
+							.getisComplexInfo().toString());
+				}
 			}
-			if (null != temp.getShape()){
-				id_info.setShape((ArrayList<Integer>) temp.getShape()
+			if (null != ((AdvancedMatrixValue) temp).getShape()){
+				id_info.setShape((ArrayList<DimValue>) ((AdvancedMatrixValue) temp).getShape()
 						.getDimensions());
 			}
-			if (null != temp.getisComplexInfo()){
-				id_info.setisComplex(temp.getisComplexInfo().toString());
+			if (null != ((AdvancedMatrixValue) temp).getisComplexInfo()){
+				id_info.setisComplex(((AdvancedMatrixValue) temp).getisComplexInfo().toString());
+			}
+			
+			if (temp instanceof CellValue){
+				
+				
+				
+				if (null != temp.getMatlabClass()) {
+					id_info.setType(new Type("Any"));
+					
+					System.out.println(temp
+							.getMatlabClass().getName()+"celllllllllllllllllllllllllllllllll");
+				}
+
+				
+				/*TODO
+				 * below hack assumes that cellArray is a vector. 
+				 * fix it when cellvertcat is fixed
+				 */
+				int numCells = (((CellValue<?>) temp)).getValues().size();
+				ArrayList<Integer> cellArraySize= new ArrayList<Integer>();
+				cellArraySize.add(1);
+				/*TODO - fixit 
+				 * ugly hack until correct analysis
+				 */
+				if (numCells == 1 )
+				{numCells+=1;}
+				
+				cellArraySize.add(numCells);
+				id_info.setShape(cellArraySize);
+				if (null != ((CellValue<?>) temp).getisComplexInfo()) {
+					id_info.setisComplex(((CellValue<?>) temp)
+							.getisComplexInfo().toString());
+					
+				}
 			}
 			
 			id_info.setName(ID);
+
 			return id_info;
 		}
 
@@ -119,37 +168,35 @@ public class Helper {
 		}
 
 	}
-	
+
 	static IDInfo generateIDInfo(
 			ValueAnalysis<AggrValue<AdvancedMatrixValue>> analysis,
 			int graphIndex, TIRFunction node, String ID, int i) {
 
 		if (analysis.getNodeList().get(graphIndex).getAnalysis()
 				.getOutFlowSets().get(node).isViable()) {
-			
-			
 
-			
 			AdvancedMatrixValue temp = ((AdvancedMatrixValue) (analysis
-					.getNodeList().get(graphIndex).getAnalysis().getArgs().get(i)));
-	//				.getOutFlowSets().get(node).get(ID).getSingleton()));
+					.getNodeList().get(graphIndex).getAnalysis().getArgs()
+					.get(i)));
+			// .getOutFlowSets().get(node).get(ID).getSingleton()));
 
 			IDInfo id_info = new IDInfo();
-			if (null != temp.getMatlabClass()) {   
-				//System.out.println("$$$$"+x10Mapping.getX10TypeMapping(temp
-				//	.getMatlabClass().getName()).getName());
+			if (null != temp.getMatlabClass()) {
+				// System.out.println("$$$$"+x10Mapping.getX10TypeMapping(temp
+				// .getMatlabClass().getName()).getName());
 				id_info.setType(x10Mapping.getX10TypeMapping(temp
 						.getMatlabClass().getName()));
 			}
-			if (null != temp.getShape()){
-				id_info.setShape((ArrayList<Integer>) temp.getShape()
+			if (null != temp.getShape()) {
+				id_info.setShape((ArrayList<DimValue>) temp.getShape()
 						.getDimensions());
 			}
-			if (null != temp.getisComplexInfo()){
+			if (null != temp.getisComplexInfo()) {
 				id_info.setisComplex(temp.getisComplexInfo().toString());
 			}
 			id_info.setName(ID);
-			
+
 			return id_info;
 		}
 
@@ -171,7 +218,7 @@ public class Helper {
 			IDInfo id_info = new IDInfo();
 			id_info.setType(x10Mapping.getX10TypeMapping(temp.getMatlabClass()
 					.getName()));
-			id_info.setShape((ArrayList<Integer>) temp.getShape()
+			id_info.setShape((ArrayList<DimValue>) temp.getShape()
 					.getDimensions());
 			id_info.setisComplex(temp.getisComplexInfo().toString());
 
@@ -183,14 +230,15 @@ public class Helper {
 		}
 	}
 
-	public static boolean isScalar(ArrayList shape) {
-		if (shape != null){
-		for (int i =0 ; i<shape.size();i++){
-			  if (null ==shape.get(i) || !("1").equals(shape.get(i).toString())){
-				  return false;
-				  
-			  }
-		  }
+	public static boolean isScalar(ArrayList<?> shape) {
+		if (shape != null) {
+			for (int i = 0; i < shape.size(); i++) {
+				if (null == shape.get(i)
+						|| !("1").equals(shape.get(i).toString())) {
+					return false;
+
+				}
+			}
 		}
 		return true;
 	}

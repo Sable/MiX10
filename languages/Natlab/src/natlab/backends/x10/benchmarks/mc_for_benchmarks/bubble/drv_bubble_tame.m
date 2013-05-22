@@ -1,4 +1,12 @@
-% args: {A=(double,[1, ?],{REAL})}
+% args: {scale=(double,[1, 1],{REAL})}
+function  [] = drv_bubble(scale)
+  mc_t0 = 1;                          % mc_t0=(double,1.0,[1, 1],{REAL})
+  [A] = rand(mc_t0, scale);           % A=(double,[1, ?],{REAL})
+  mc_t1 = 100;                        % mc_t1=(double,100.0,[1, 1],{REAL})
+  [A] = mtimes(mc_t1, A);             % A=(double,[1, ?],{REAL})
+  bubble(A); % [] = ...               
+end
+% results: []% args: {A=(double,[1, ?],{REAL})}
 function  [x] = bubble(A)
   [n] = length(A);                    % n=(double,[1, 1],{REAL})
   mc_t11 = 1;                         % mc_t11=(double,1.0,[1, 1],{REAL})
@@ -28,14 +36,5 @@ function  [x] = bubble(A)
     end
   end
   x = A;                              % x=(double,[1, ?],{REAL})
-end
-% results: [(double,[1, ?],{REAL})]% args: {n=(double,[1, 1],{REAL})}
-function  [y] = drv_bubble(n)
-  mc_t0 = 1;                          % mc_t0=(double,1.0,[1, 1],{REAL})
-  [A] = rand(mc_t0, n);               % A=(double,[1, ?],{REAL})
-  mc_t1 = 100;                        % mc_t1=(double,100.0,[1, 1],{REAL})
-  [A] = mtimes(mc_t1, A);             % A=(double,[1, ?],{REAL})
-  disp(A); % [] = ...                 
-  [y] = bubble(A);                    % y=(double,[1, ?],{REAL})
 end
 % results: [(double,[1, ?],{REAL})]

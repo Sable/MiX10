@@ -8,7 +8,7 @@ import natlab.tame.valueanalysis.*;
 import natlab.tame.valueanalysis.advancedMatrix.AdvancedMatrixValue;
 import natlab.tame.valueanalysis.aggrvalue.*;
 import natlab.tame.AdvancedTamerTool;
-import natlab.toolkits.filehandling.genericFile.GenericFile;
+import natlab.toolkits.filehandling.GenericFile;
 import natlab.toolkits.path.FileEnvironment;
 import natlab.backends.x10.IRx10.ast.AssignStmt;
 import natlab.backends.x10.IRx10.ast.DeclStmt;
@@ -21,8 +21,8 @@ public class Main {
 		// String file =
 		// "/home/2011/vkumar5/mclab/Project/languages/Natlab/src/natlab/backends/x10/testing/unitTests/ut8"
 		// ;
-         String file="";
-		//String file = "/media/vineet/19F5-FD4C/Thesis/mclab_git/mclab/languages/Natlab/src/natlab/backends/x10/benchmarks/others/drv_bubble";
+         //String file="";
+		String file = "/media/vineet/19F5-FD4C/Thesis/mclab_git/mclab/languages/Natlab/src/natlab/backends/x10/benchmarks/mc_for_benchmarks/nb1d/drv_nb1d";
 
 
 		// String file = "/home/2011/vkumar5/hello1";

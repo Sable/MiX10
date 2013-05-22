@@ -1,5 +1,15 @@
 class testclass{
-	static def bubble (A: Array[Double])
+	static def drv_bubble (scale: Double)
+	    {
+var mc_t0: Double = 1;
+val A: Array[Double] = new Array[Double](rand(mc_t0, scale));
+var mc_t1: Double = 100;
+A = mtimes(mc_t1, A) ;
+val : Array[Any];
+ = bubble(A) ;
+}
+
+}	static def bubble (A: Array[Double])
 	    {
 var n: Double = Mix10.length(A);
 var mc_t11: Double = 1;
@@ -54,18 +64,6 @@ else
 }
 val x: Array[Double] = new Array[Double](A);
 	    return x;
-}
-
-}	static def drv_bubble (n: Double)
-	    {
-var mc_t0: Double = 1;
-val A: Array[Double] = new Array[Double](rand(mc_t0, n));
-var mc_t1: Double = 100;
-A = mtimes(mc_t1, A) ;
-val : Array[Any];
- = disp(A) ;
-val y: Array[Double] = new Array[Double](bubble(A));
-	    return y;
 }
 
 }

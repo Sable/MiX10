@@ -124,6 +124,15 @@ public class AssignsAndDecls {
 			TIRAbstractAssignStmt node, boolean isScalar, IRx10ASTGenerator target) {
 		
 		
+//		if (node.getRHS().getVarName().equals("cellhorzcat")){
+//			if (isDecl) {
+//				
+//				((DeclStmt) decl_or_assgn).setRHS(CellArrayGetSet.createCellArray(node.getRHS(),target));
+//			} else {
+//				((AssignStmt) decl_or_assgn).setRHS(CellArrayGetSet.createCellArray(node.getRHS(),target));
+//			}
+//		}
+		
 		if (isDecl) {
 		
 			((DeclStmt) decl_or_assgn).setRHS(Expressions.makeIRx10Exp(node
@@ -255,7 +264,7 @@ public class AssignsAndDecls {
 			ArrayList<String> list_dims = new ArrayList<String>();
 			list_dims.add("1");
 			int num = ((TIRAbstractAssignToListStmt)node).getNumTargets();
-			
+			 
 			list_dims.add(Integer.toString(num));
 			superDeclStmt.getLHS().setShape((list_dims));
 			superDeclStmt.getLHS().setType(new Type("Any"));
