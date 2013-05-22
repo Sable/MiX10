@@ -29,7 +29,7 @@ String DeclStmt.pp(String indent){
 		StringBuffer x = new StringBuffer();
 
 		if (null != getLHS()) {
-			/**
+			/*
 			 * It is not a list assignment
 			 */
 
@@ -80,6 +80,10 @@ String DeclStmt.pp(String indent){
 				 else
 					 x.append("var " + getLHS().getName()); 
 				x.append(": Array["+getLHS().getType().getName() + "]");
+				/*
+				 * Add rank of the array if known
+				 */
+				x.append("("+getLHS().getShape().size()+")");
 				if (hasRHS() && !(getRHS() instanceof SimpleArrayExp) ){
 					x.append(
 						" = " + "new Array["
@@ -234,14 +238,26 @@ static String PPHelper.makeArgs(List<IDInfo> argsList)
 	StringBuffer s = new StringBuffer();
 	if (argsList.getNumChild()>0){
 		if (!isScalar(argsList.getChild(0))){
-			s.append(argsList.getChild(0).getName()+": Array["+argsList.getChild(0).getType().getName()+"]");
+			if(null != argsList.getChild(0).getShape()){
+			s.append(argsList.getChild(0).getName()+": Array["+argsList.getChild(0).getType().getName()+"]"+
+					"("+argsList.getChild(0).getShape().size()+")");
+			}
+			else{
+				s.append(", "+argsList.getChild(0).getName()+": Array["+argsList.getChild(0).getType().getName()+"]");
+			}
 		}
 		else
 	s.append(argsList.getChild(0).getName()+": "+argsList.getChild(0).getType().getName());
 	for (int i=1; i<argsList.numChildren ; i++)
 	{	
 		if (!isScalar(argsList.getChild(i))){
+			if(null != argsList.getChild(i).getShape()){
+				s.append(argsList.getChild(i).getName()+": Array["+argsList.getChild(i).getType().getName()+"]"+
+						"("+argsList.getChild(i).getShape().size()+")");
+				}
+				else{
 			s.append(", "+argsList.getChild(i).getName()+": Array["+argsList.getChild(i).getType().getName()+"]");
+				}
 		}
 		else		
 		s.append(", "+argsList.getChild(i).getName()+": "+argsList.getChild(i).getType().getName());
