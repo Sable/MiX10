@@ -3,6 +3,8 @@ PPHelper;
 ClassBlock ::= DeclStmt:Stmt* Method*;
 abstract Stmt;
 CommentStmt:Stmt ::= <Comment:String>;
+BreakStmt:Stmt;
+ContinueStmt:Stmt;
 DeclStmt:Stmt ::= [MultiDeclLHS] LHS:IDInfo [RHS:Exp] <Mutable:Boolean>;
 Literally:Stmt ::= <Verbatim:String>;
 PointLooper:Stmt ::= PointID:IDUse ArrayID:IDUse <DimNumber:int> [Min:Exp] [Max:Exp];

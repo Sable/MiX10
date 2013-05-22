@@ -322,9 +322,6 @@ public class CellArrayGetSet {
 			}
 
 			for (int j = 1; j < array_set.getIndicesList().getNumChild(); j++) {
-				
-				System.out.println("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-				
 				if (((IDUse) array_set.getIndices(j)).getID().equals("__")) {
 					pt.append(", (" + rhsID + ".region.min("
 							+ Integer.toString(j) + ")-1) as Int");
