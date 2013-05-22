@@ -563,6 +563,14 @@ String ReturnStmt.pp(String indent) {
 	  else 
 		  return ""; 
   }
+  
+String BreakStmt.pp(String indent){
+  return(indent+"break;\n"); 
+}
+
+String ContinueStmt.pp(String indent){
+  return(indent+"continue;\n"); 
+}
 
 }	
 	

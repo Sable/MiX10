@@ -223,29 +223,36 @@ public class IRx10ASTGenerator extends TIRAbstractNodeCaseHandler {
 	
 	@Override
 	public void caseTIRArrayGetStmt(TIRArrayGetStmt node){
-		System.out.println("inside ArrayGet");
+		//System.out.println("inside ArrayGet");
 		ArrayGetSet.handleTIRAbstractArrayGetStmt((TIRArrayGetStmt) node, this,
 				this.currentBlock.get(this.currentBlock.size() - 1));
 	}
 	
 	public void caseTIRArraySetStmt(TIRArraySetStmt node){
-		System.out.println("inside ArraySet");
+		//System.out.println("inside ArraySet");
 		ArrayGetSet.handleTIRAbstractArraySetStmt((TIRArraySetStmt) node, this,
 				this.currentBlock.get(this.currentBlock.size() - 1));
 		
 	   } 
 	
 	public void caseTIRCellArrayGetStmt(TIRCellArrayGetStmt node){
-		System.out.println("inside CellArrayGet");
+		//System.out.println("inside CellArrayGet");
 		CellArrayGetSet.handleTIRCellAbstractArrayGetStmt((TIRCellArrayGetStmt) node, this,
 				this.currentBlock.get(this.currentBlock.size() - 1));
 	}
 	
 	public void caseTIRCellArraySetStmt(TIRCellArraySetStmt node){
-		System.out.println("inside CellArraySet!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+		//System.out.println("inside CellArraySet!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
 		CellArrayGetSet.handleTIRCellAbstractArraySetStmt((TIRCellArraySetStmt) node, this,
 				this.currentBlock.get(this.currentBlock.size() - 1));
 		
-	   } 
+	   }
+	public void caseTIRBreakStmt(TIRBreakStmt node){
+		LoopBreak.handleTIRBreakStmt(node, this, this.currentBlock.get(this.currentBlock.size() - 1));
+	}
+	
+	public void caseTIRBreakStmt(TIRContinueStmt node){
+		LoopContinue.handleTIRContinueStmt(node, this, this.currentBlock.get(this.currentBlock.size() - 1));
+	}
 	
 }
