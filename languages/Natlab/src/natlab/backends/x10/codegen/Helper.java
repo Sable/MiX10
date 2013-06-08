@@ -90,7 +90,7 @@ public class Helper {
 
 	}
 
-	static IDInfo generateIDInfo(
+	static  IDInfo generateIDInfo(
 			ValueAnalysis<AggrValue<AdvancedMatrixValue>> analysis,
 			int graphIndex, TIRAbstractAssignStmt node, String ID) {
 
@@ -101,18 +101,18 @@ public class Helper {
 					.getAnalysis().getOutFlowSets().get(node).get(ID)
 					.getSingleton()));
 			IDInfo id_info = new IDInfo();
-			if (temp instanceof AdvancedMatrixValue) {
+			if ((Object)temp instanceof AdvancedMatrixValue) {
 
 				if (null != temp.getMatlabClass()) {
 					id_info.setType(x10Mapping.getX10TypeMapping(temp
 							.getMatlabClass().getName()));
 				}
-				if (null != ((AdvancedMatrixValue) temp).getShape()) {
-					id_info.setShape((ArrayList<DimValue>) ((AdvancedMatrixValue) temp)
+				if (null != ((AdvancedMatrixValue) ((Object)temp)).getShape()) {
+					id_info.setShape((ArrayList<DimValue>) ((AdvancedMatrixValue) ((Object)temp))
 							.getShape().getDimensions());
 				}
-				if (null != ((AdvancedMatrixValue) temp).getisComplexInfo()) {
-					id_info.setisComplex(((AdvancedMatrixValue) temp)
+				if (null != ((AdvancedMatrixValue) ((Object)temp)).getisComplexInfo()) {
+					id_info.setisComplex(((AdvancedMatrixValue) ((Object)temp))
 							.getisComplexInfo().toString());
 				}
 			}
