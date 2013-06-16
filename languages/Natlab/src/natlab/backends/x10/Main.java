@@ -22,7 +22,7 @@ public class Main {
 		// "/home/2011/vkumar5/mclab/Project/languages/Natlab/src/natlab/backends/x10/testing/unitTests/ut8"
 		// ;
          //String file="";
-		String file = "/home/2011/vkumar5/mclab_git/mclab/languages/Natlab/src/natlab/backends/x10/benchmarks/unit/forTest1";
+		String file = "/media/vineet/19F5-FD4C/Thesis/mclab_git/mclab/languages/Natlab/src/natlab/backends/x10/benchmarks/unit/simplest";
 
 
 		// String file = "/home/2011/vkumar5/hello1";

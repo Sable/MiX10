@@ -101,7 +101,7 @@ public class Helper {
 					.getAnalysis().getOutFlowSets().get(node).get(ID)
 					.getSingleton()));
 			IDInfo id_info = new IDInfo();
-			if (temp instanceof AdvancedMatrixValue) {
+			if ((Object)temp instanceof AdvancedMatrixValue) {
 
 				if (null != temp.getMatlabClass()) {
 					id_info.setType(x10Mapping.getX10TypeMapping(temp

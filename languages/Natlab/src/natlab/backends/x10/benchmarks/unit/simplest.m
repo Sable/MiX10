@@ -1,7 +1,10 @@
-function [x,y] =  simplest(a)
-x=a+3;
-y=a-3;
-b=[8,8];
-i3=rand(b);
-%[b,c]=foo(x,y);
+function [x,y] =  simplest(p)
+%x=i;
+x=3;
+p=ones(10);
+for i = (1:10)
+x=p(:,i);
+x=x+3;
+end
+y=p;
 end

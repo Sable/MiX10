@@ -1,6 +1,12 @@
-function [x,y] =  simplest(a)
-x=a+3;
-y=a-3;
+function [x,y] =  simplest(p)
+%x=i;
+x=3;
+p=ones(10);
+i=2;
+x=p(:,i);
+for i = (1:10)
 
-foo(x,y);
+%x=x+3;
+end
+y=p;
 end

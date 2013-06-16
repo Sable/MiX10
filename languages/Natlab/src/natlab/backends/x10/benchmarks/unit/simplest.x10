@@ -1,26 +1,28 @@
 class testclass{
-	static def simplest (a: Double)
+	static def simplest (p: Array[Double])
 	    {
-var mc_t0: Double = 3;
-var x: Double = Mix10.plus(a, mc_t0);
-var mc_t1: Double = 3;
-var y: Double = Mix10.minus(a, mc_t1);
-var b: Double;
-var c: Double;
-val _b_c: Array[Any];
-_b_c = foo(x, y) ;
-b = _b_c(0 as Int)as Double ;
-c = _b_c(1 as Int)as Double ;
-	    return [x,y];
+//%x=i;
+var x: Double = 3;
+var mc_t0: Double = 10;
+p = ones(mc_t0) ;
+var mc_t2: Double = 1;
+var mc_t3: Double = 10;
+var i: Double;
+val mix10_pt_p: Point;
+val mix10_ptOff_p: Array[Double];
+var mc_t1: Double;
+	    for (i = mc_t2 ;
+(i <= mc_t3);i = (i + 1))
+	        {
+	        mix10_pt_p = Point.make(0, 1-(i as Int));
+	        mix10_ptOff_p = p;
+x = new Array[Double](((p.region.min(0))..(p.region.max(0)))*(1..1), (p:Point(2))=>mix10_ptOff_p(p.operator-(mix10_pt_p)));
+ ;
+mc_t1 = 3 ;
+x = Mix10.plus(x, mc_t1) ;
 }
-
-}	static def foo (a: Double, b: Double)
-	    {
-var mc_t2: Double = 3;
-var x: Double = Mix10.plus(a, mc_t2);
-var mc_t3: Double = 3;
-var y: Double = Mix10.minus(b, mc_t3);
-	    return [x,y];
+val y: Array[Double] = new Array[Double](p);
+	    return [x as Any,y as Any];
 }
 
 }
