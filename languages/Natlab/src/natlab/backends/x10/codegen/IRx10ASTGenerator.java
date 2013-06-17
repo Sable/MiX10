@@ -106,7 +106,7 @@ public class IRx10ASTGenerator extends TIRAbstractNodeCaseHandler {
 			String builtin;
 		DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
-		doc = docBuilder.parse (new File("/media/vineet/19F5-FD4C/Thesis/mclab_git/mclab/languages/Natlab/src/natlab/backends/x10/codegen/mix10_builtins.xml"));
+		doc = docBuilder.parse (new File("languages/Natlab/src/natlab/backends/x10/codegen/mix10_builtins.xml"));
 		doc.getDocumentElement ().normalize ();
 		
 		
@@ -242,7 +242,7 @@ public class IRx10ASTGenerator extends TIRAbstractNodeCaseHandler {
 	}
 	
 	public void caseTIRCellArraySetStmt(TIRCellArraySetStmt node){
-		//System.out.println("inside CellArraySet!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+		//System.out.println("inside CellArraySet");
 		CellArrayGetSet.handleTIRCellAbstractArraySetStmt((TIRCellArraySetStmt) node, this,
 				this.currentBlock.get(this.currentBlock.size() - 1));
 		

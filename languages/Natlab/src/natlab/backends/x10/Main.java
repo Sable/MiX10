@@ -18,41 +18,38 @@ import natlab.backends.x10.codegen.*;
 public class Main {
 
 	public static void main(String[] args) {
-		// String file =
-		// "/home/2011/vkumar5/mclab/Project/languages/Natlab/src/natlab/backends/x10/testing/unitTests/ut8"
-		// ;
-         //String file="";
-		String file = "/media/vineet/19F5-FD4C/Thesis/mclab_git/mclab/languages/Natlab/src/natlab/backends/x10/benchmarks/unit/simplest";
+		// args[0]: file path
+		// args[1]: value params
+		// args[2]: output dir path
+		//String file = "/media/vineet/19F5-FD4C/Thesis/mclab_git/mclab/languages/Natlab/src/natlab/backends/x10/benchmarks/unit/simplest";
+		  String file = args[0];	
 
-
-		// String file = "/home/2011/vkumar5/hello1";
-		String fileIn = file + ".m";
-		String fileOut = file + ".x10";
-		String fileOutTame = file + "_tame.m";
+		String fileIn = file;
+		String fileOutName = file.substring(file.lastIndexOf("/")+1, file.lastIndexOf(".")) + ".x10";
+		String fileOut = args[2]+"/"+fileOutName;
+		//String fileOutTame = file + "_tame.m";
 		GenericFile gFile = GenericFile.create(fileIn);
-		/* /home/xuli/test/hello.m */
 		FileEnvironment env = new FileEnvironment(gFile); // get path
 															// environment obj
-		// String x10Code = "";
 		AdvancedTamerTool tool = new AdvancedTamerTool();
-		// System.out.println(args[0]);
+		String[] newArgs = {args[1]};
 		ValueAnalysis<AggrValue<AdvancedMatrixValue>> analysis = tool.analyze(
-				args, env);
+				newArgs, env);
 		int size = analysis.getNodeList().size();
 
-		try {
-			StringBuffer tamedCode = new StringBuffer();
-			BufferedWriter out = new BufferedWriter(new FileWriter(fileOutTame));
-			for (int i = 0; i < analysis.getNodeList().size(); i++) {
-				tamedCode.append(ValueAnalysisPrinter.prettyPrint(analysis
-						.getNodeList().get(i).getAnalysis()));
-			}
-			out.write(tamedCode.toString());
-			out.close();
-		} catch (IOException e) {
-			System.out.println("Exception ");
-
-		}
+//		try {
+//			StringBuffer tamedCode = new StringBuffer();
+//			BufferedWriter out = new BufferedWriter(new FileWriter(fileOutTame));
+//			for (int i = 0; i < analysis.getNodeList().size(); i++) {
+//				tamedCode.append(ValueAnalysisPrinter.prettyPrint(analysis
+//						.getNodeList().get(i).getAnalysis()));
+//			}
+//			out.write(tamedCode.toString());
+//			out.close();
+//		} catch (IOException e) {
+//			System.out.println("Exception ");
+//
+//		}
 
 		System.out.println("\n------------------------------------\n");
 
@@ -65,9 +62,9 @@ public class Main {
 		// System.out.println("UNCOMMENT IN MAIN");
 		Program irx10Program = new Program();
 		irx10Program.setClassBlock(IRx10ASTGenerator.x10ClassMaker(analysis,
-				size, listOfUsedBuiltins, "home/2011/vkumar5/", "testclass"));
+				size, listOfUsedBuiltins, args[2], fileOutName));
 
-		String x10Program = irx10Program.pp("", "testclass");
+		String x10Program = irx10Program.pp("", fileOutName);
 		System.out
 				.println("\n~~~~~~~~~~~~~~~~X10 code~~~~~~~~~~~~~~~~~~~~~~~\n");
 		System.out.println(x10Program);
@@ -83,7 +80,7 @@ public class Main {
 
 		}
 
-		BuiltinWriter.classWriter();
+		BuiltinWriter.classWriter(args[2]+"/");
 
 	}
 

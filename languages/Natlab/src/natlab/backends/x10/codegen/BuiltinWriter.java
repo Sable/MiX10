@@ -64,12 +64,12 @@ public class BuiltinWriter {
 		return params;
 	}
 
-	public static void classWriter() {
+	public static void classWriter(String path) {
 		try {
 
 			BufferedWriter out = new BufferedWriter(
 					new FileWriter(
-							"/home/2011/vkumar5/mclab_git/mclab/languages/Natlab/src/natlab/backends/x10/benchmarks/unit/Mix10.x10",
+							path+"Mix10.x10",
 							false));
 			out.write("public class Mix10 {\n");
 

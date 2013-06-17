@@ -1,6 +1,6 @@
-function [x,y] =  simplest(p)
+function [x,y] =  simplest(a)
 %x=i;
-x=3;
+x=a;
 p=ones(10);
 for i = (1:10)
 x=p(:,i);
