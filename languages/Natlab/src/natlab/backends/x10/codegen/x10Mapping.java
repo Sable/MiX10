@@ -32,6 +32,30 @@ public class x10Mapping {
 		x10BuiltinList.add("minus");
 		x10BuiltinList.add("gt");
 		x10BuiltinList.add("length");
+		x10BuiltinList.add("sqrt");
+		//x10BuiltinList.add("rand");
+	//	x10BuiltinList.add("horzcat");
+	//	x10BuiltinList.add("mtimes");
+	//	x10BuiltinList.add("times");
+	//	x10BuiltinList.add("rdivide");
+	//	x10BuiltinList.add("mrdivide");
+		x10BuiltinList.add("colon");
+	//	x10BuiltinList.add("sin");
+	//	x10BuiltinList.add("pi");
+	//	x10BuiltinList.add("mpower");
+	//	x10BuiltinList.add("zeros");
+		x10BuiltinList.add("ones");
+	//	x10BuiltinList.add("mean");
+		x10BuiltinList.add("fix");
+		x10BuiltinList.add("floor");
+	//	x10BuiltinList.add("round");
+//		x10BuiltinList.add("abs");
+//		x10BuiltinList.add("lt");
+//		x10BuiltinList.add("le");
+//		x10BuiltinList.add("uminus");
+//		x10BuiltinList.add("and");
+//		x10BuiltinList.add("i");
+		
 	}
 
 	private void makex10TypeMap() {
@@ -49,48 +73,7 @@ public class x10Mapping {
 		x10TypeMap.put("logical", new Type("Boolean"));
 		x10TypeMap.put(null, new Type("Double")); /*This is the default type*/
 	}
-/*
-	private void makex10BinOperatorMap() {
-		x10BinOperatorMap.put("plus", "+");
-		x10BinOperatorMap.put("minus", "-");
-		x10BinOperatorMap.put("mtimes", "*");
-		x10BinOperatorMap.put("mrdivide", "/");
-		x10BinOperatorMap.put("mldivide", "\\");// may be as a method
-		x10BinOperatorMap.put("mpower", "^");
-		x10BinOperatorMap.put("times", ".*");// may be as a method
-		x10BinOperatorMap.put("rdivide", "./");// may be as a method
-		x10BinOperatorMap.put("ldivide", ".\\");// may be as a method
-		x10BinOperatorMap.put("power", ".^");// may be as a method
-		x10BinOperatorMap.put("and", "&");
-		x10BinOperatorMap.put("or", "|");
-		x10BinOperatorMap.put("lt", "<");
-		x10BinOperatorMap.put("gt", ">");
-		x10BinOperatorMap.put("le", "<=");
-		x10BinOperatorMap.put("ge", ">=");
-		x10BinOperatorMap.put("eq", "==");
-		x10BinOperatorMap.put("ne", "!=");
-		x10BinOperatorMap.put("transpose", ".'");// may be as a method
-		x10BinOperatorMap.put("ctranspose", "'");// may be as a method
-		
-		x10BinOperatorMap.put("colon", ":");// may be as a method
 
-	}
-
-	private void makex10UnOperatorMap() {
-		x10UnOperatorMap.put("uminus", "-");
-		x10UnOperatorMap.put("uplus", "+");
-		x10BinOperatorMap.put("not", "!");
-	}
-
-	private void makex10DirectBuiltinMap() {
-		// TODO create a categorical map here
-		x10DirectBuiltinMap.put("disp", "Console.OUT.println");
-		x10DirectBuiltinMap.put("sqrt", "sqrt");
-		x10DirectBuiltinMap.put("sin", "sin");
-		x10DirectBuiltinMap.put("cos", "cos");
-
-	}
-*/
 	private void makex10BuiltinConstMap() {
 		// TODO create a categorical map here
 

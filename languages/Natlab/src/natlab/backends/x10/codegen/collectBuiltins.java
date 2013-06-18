@@ -85,8 +85,7 @@ public class collectBuiltins extends TIRAbstractNodeCaseHandler {
 	
 	@Override
 	public void caseTIRAbstractAssignStmt(TIRAbstractAssignStmt node) {
-		System.out.println("comes in here ~~");
-
+		
 		if (node instanceof TIRAbstractAssignToVarStmt) {
 			AssignsAndDecls.handleTIRAbstractAssignToVarStmtPass1(node, this);
 		}

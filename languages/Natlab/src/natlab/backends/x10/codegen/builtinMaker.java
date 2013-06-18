@@ -39,44 +39,27 @@ public class builtinMaker {
 			BuiltinWriter.mix10Append(builtin, args, natlabExp.getVarName(),getExprType(natlabExp,target), target);
 			
 		}
-		
-		
-//		try {
-//			StringBuffer mix10Builtins = new StringBuffer();
-//			BufferedWriter out = new BufferedWriter(new FileWriter("/media/vineet/19F5-FD4C/Thesis/mclab_git/mclab/languages/Natlab/src/natlab/backends/x10/benchmarks/unit/mix10.x10", false));
-//			out.close();
-//			BufferedWriter outAgain = new BufferedWriter(new FileWriter("/media/vineet/19F5-FD4C/Thesis/mclab_git/mclab/languages/Natlab/src/natlab/backends/x10/benchmarks/unit/mix10.x10", true));
-//			outAgain.write(builtin);
-//			outAgain.close();
-//		} catch (IOException e) {
-//			System.out.println("File IOException - cannot create mix10 class ");
-//
-//		}
+
 	}
 
 	private static String getBuiltinFromXml(Expr natlabExp, String builtinName, IRx10ASTGenerator target) {
 		// TODO Auto-generated method stub
 		
-		int arrayOrGml = specialize(natlabExp);
+		int realOrComplex = specialize(natlabExp);
 		String exprType = getExprType(natlabExp,target);
 		String builtin;
 		if (! builtinList.contains(builtinName+"-"+exprType)){
 		
 		
-//		try {
-			
-//		DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
-//        DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
-//		Document doc = docBuilder.parse (new File("/media/vineet/19F5-FD4C/Thesis/mclab_git/mclab/languages/Natlab/src/natlab/backends/x10/codegen/mix10_builtins.xml"));
-//		doc.getDocumentElement ().normalize ();
+
 			System.out.println(builtinName+"BNAME");
 		NodeList builtinNodeList = target.collectedBuiltins.usedBuiltins.get(builtinName);
 		if (null != builtinNodeList)
 			System.out.println(builtinName+"BNAME");
 		
-		Element builtinArrayOrGml = (Element)builtinNodeList.item(arrayOrGml);
+		Element builtinRealOrComplex = (Element)builtinNodeList.item(realOrComplex);
 		 builtin = ((Node)(
-				 ((Element)(builtinArrayOrGml.getElementsByTagName(exprType).item(0))).getChildNodes().item(0)
+				 ((Element)(builtinRealOrComplex.getElementsByTagName(exprType).item(0))).getChildNodes().item(0)
 				 )).getNodeValue().trim();
 		
 		System.out.println(builtin+"------");
@@ -84,18 +67,7 @@ public class builtinMaker {
 		return builtin;
 		
 		}
-		
-//		} catch (ParserConfigurationException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}catch (SAXException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-		
+
 		return "processed";
 	}
 	

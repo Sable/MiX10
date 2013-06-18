@@ -1,7 +1,7 @@
 <mix10>
 
 	<plus>
-		<arrays>
+		<real>
 			<type1>
 				{
 		val x: Double;
@@ -40,10 +40,10 @@
 			<type5>
 			//////
 			</type5>
-		</arrays>
-		<gml>
+		</real>
+		<complex>
 			<type1>
-				This is type 1...GML
+				This is type 1...complex
 			</type1>
 			<type2>
 				This is type 2
@@ -56,11 +56,11 @@
 			</type4>
 			<type5>
 			</type5>
-		</gml>
+		</complex>
 	</plus>
 
    	<minus>
-		<arrays>
+		<real>
 			<type1>
 				{
 		val x: Double;
@@ -98,10 +98,10 @@
 			</type4>
 			<type5>
 			</type5>
-		</arrays>
-		<gml>
+		</real>
+		<complex>
 			<type1>
-				This is type 1...GML
+				This is type 1...complex
 			</type1>
 			<type2>
 				This is type 2
@@ -114,11 +114,11 @@
 			</type4>
 			<type5>
 			</type5>
-		</gml>
+		</complex>
 	</minus>
     
 <gt>
-		<arrays>
+		<real>
 			<type1>
 				{
 		val x: Boolean;
@@ -156,10 +156,10 @@
 			</type4>
 			<type5>
 			</type5>
-		</arrays>
-		<gml>
+		</real>
+		<complex>
 			<type1>
-				This is type 1...GML
+				This is type 1...complex
 			</type1>
 			<type2>
 				This is type 2
@@ -172,12 +172,12 @@
 			</type4>
 			<type5>
 			</type5>
-		</gml>
+		</complex>
 	</gt>
     
 
 <length>
-		<arrays>
+		<real>
 			<type1>
 				{
 				return 1;
@@ -202,10 +202,10 @@
 			</type4>
 			<type5>
 			</type5>
-		</arrays>
-		<gml>
+		</real>
+		<complex>
 			<type1>
-				This is type 1...GML
+				This is type 1...complex
 			</type1>
 			<type2>
 				This is type 2
@@ -218,6 +218,292 @@
 			</type4>
 			<type5>
 			</type5>
-		</gml>
+		</complex>
 	</length>
+	<sqrt>
+		<real>
+			<type1>
+				{
+				return Math.sqrt(a);
+				}
+			</type1>
+			<type2>
+				{
+		for (p in a.region){
+			a(p) = Math.sqrt(a(p));
+		}
+		return a;
+		}
+		
+			</type2>
+			<type3>
+				{
+		//INVALID 
+	}
+			</type3>
+			<type4>
+				{
+		//INVALID 
+	}
+			</type4>
+			<type5>
+			</type5>
+		</real>
+		<complex>
+			<type1>
+				This is type 1...complex
+			</type1>
+			<type2>
+				This is type 2
+			</type2>
+			<type3>
+				This is type 3
+			</type3>
+			<type4>
+				This is type 4
+			</type4>
+			<type5>
+			</type5>
+		</complex>
+	</sqrt>
+	
+		<mean>
+		<real>
+			<type1>
+				{
+				return a;
+				}
+			</type1>
+			<type2>
+				{
+		var x:Double =0.0;
+		var i:Int =0;
+		for (p in a.region){
+			x = x + a(p);
+			i++;
+		}
+		return x/(i as Double);
+		}
+		return a;
+		}
+		
+			</type2>
+			<type3>
+				{
+		//INVALID 
+	}
+			</type3>
+			<type4>
+				{
+		//INVALID 
+	}
+			</type4>
+			<type5>
+			</type5>
+		</real>
+		<complex>
+			<type1>
+				This is type 1...complex
+			</type1>
+			<type2>
+				This is type 2
+			</type2>
+			<type3>
+				This is type 3
+			</type3>
+			<type4>
+				This is type 4
+			</type4>
+			<type5>
+			</type5>
+		</complex>
+	</mean>
+	
+	<fix>
+		<real>
+			<type1>
+				{
+				if (a &lt; 0)
+					{return Math.ceil(a);}
+				else
+					{return Math.floor(a);}
+				}
+			</type1>
+			<type2>
+				{
+		
+		for (p in a.region){
+			if (a(p) &lt; 0)
+					{a(p) = Math.ceil(a(p));}
+				else
+					{a(p) = Math.floor(a(p));}
+		}
+		
+		return a;
+		}
+		
+			</type2>
+			<type3>
+				{
+		//INVALID 
+	}
+			</type3>
+			<type4>
+				{
+		//INVALID 
+	}
+			</type4>
+			<type5>
+			</type5>
+		</real>
+		<complex>
+			<type1>
+				This is type 1...complex
+			</type1>
+			<type2>
+				This is type 2
+			</type2>
+			<type3>
+				This is type 3
+			</type3>
+			<type4>
+				This is type 4
+			</type4>
+			<type5>
+			</type5>
+		</complex>
+	</fix>
+	
+		<floor>
+		<real>
+			<type1>
+				return Math.floor(a);
+			</type1>
+			<type2>
+				{
+		
+		for (p in a.region){
+			a(p) = Math.floor(a(p));
+		}
+		
+		return a;
+		}
+		
+			</type2>
+			<type3>
+				{
+		//INVALID 
+	}
+			</type3>
+			<type4>
+				{
+		//INVALID 
+	}
+			</type4>
+			<type5>
+			</type5>
+		</real>
+		<complex>
+			<type1>
+				This is type 1...complex
+			</type1>
+			<type2>
+				This is type 2
+			</type2>
+			<type3>
+				This is type 3
+			</type3>
+			<type4>
+				This is type 4
+			</type4>
+			<type5>
+			</type5>
+		</complex>
+	</floor>
+	
+	<ones>
+		<real>
+			<type1>
+				{
+				val x: Array[Double] = new Array[Double](1..a as Int * 1..b as Int,1.0);
+		//for (p in x.region)
+		//	x(p) = 0.0;
+		return x;
+				}
+			</type1>
+			<type2>
+						
+			</type2>
+			<type3>
+				{
+		//INVALID 
+	}
+			</type3>
+			<type4>
+				{
+		//INVALID 
+	}
+			</type4>
+			<type5>
+			</type5>
+		</real>
+		<complex>
+			<type1>
+				This is type 1...complex
+			</type1>
+			<type2>
+				This is type 2
+			</type2>
+			<type3>
+				This is type 3
+			</type3>
+			<type4>
+				This is type 4
+			</type4>
+			<type5>
+			</type5>
+		</complex>
+	</ones>
+	
+	<colon>
+		<real>
+			<type1>
+				{
+				return new Array[Double](1..1*1..((b-a+1) as Int), (i:Point(2))=>((i(1)+a as Int -1) as Double));
+				}
+			</type1>
+			<type2>
+						
+			</type2>
+			<type3>
+				{
+		//INVALID 
+	}
+			</type3>
+			<type4>
+				{
+		//INVALID 
+	}
+			</type4>
+			<type5>
+			</type5>
+		</real>
+		<complex>
+			<type1>
+				This is type 1...complex
+			</type1>
+			<type2>
+				This is type 2
+			</type2>
+			<type3>
+				This is type 3
+			</type3>
+			<type4>
+				This is type 4
+			</type4>
+			<type5>
+			</type5>
+		</complex>
+	</colon>
+	
 </mix10>
