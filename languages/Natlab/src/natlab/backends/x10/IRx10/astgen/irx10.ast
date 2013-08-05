@@ -6,7 +6,7 @@ CommentStmt:Stmt ::= <Comment:String>;
 BreakStmt:Stmt;
 ContinueStmt:Stmt;
 DeclStmt:Stmt ::= [MultiDeclLHS] LHS:IDInfo [RHS:Exp] <Mutable:Boolean>;
-LiterallyPointMaker:Stmt ::= <Verbatim:String>;
+Literally:Stmt ::= <Verbatim:String>;
 PointLooper:Stmt ::= PointID:IDUse ArrayID:IDUse <DimNumber:int> [Min:Exp] [Max:Exp];
 Method ::= MethodHeader MethodBlock;
 MethodHeader ::= ReturnType:AccessVal <Name:String> Args:IDInfo*;

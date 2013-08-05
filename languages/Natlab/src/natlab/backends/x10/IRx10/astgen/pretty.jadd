@@ -439,7 +439,7 @@ String AssignStmt.pp(String indent, Boolean useNewArray) {
 		return x.toString();
 	}
 	
-	String LiterallyPointMaker.pp(String indent, Boolean useNewArray){
+	String Literally.pp(String indent, Boolean useNewArray){
 		if (false == useNewArray){
 		StringBuffer x = new StringBuffer();
 		x.append(indent+getVerbatim());

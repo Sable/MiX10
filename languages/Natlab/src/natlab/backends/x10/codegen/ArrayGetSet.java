@@ -327,7 +327,7 @@ public class ArrayGetSet {
 				}
 
 			}
-			block.addStmt(new LiterallyPointMaker("mix10_pt_"
+			block.addStmt(new Literally("mix10_pt_"
 					+ arrayAccess.getArrayID().getID() + " = Point.make("
 					+ x.toString() + ");\n"));
 			
@@ -339,7 +339,7 @@ public class ArrayGetSet {
 			pointOffsetId.setMutable(false);
 			//TODO below statement should work when not using new arrays 
 			//target.currentBlock.get(0).addStmt(pointOffsetId);
-			block.addStmt(new LiterallyPointMaker("mix10_ptOff_"
+			block.addStmt(new Literally("mix10_ptOff_"
 					+ arrayAccess.getArrayID().getID() + " = "
 					+ arrayAccess.getArrayID().getID() + ";\n"));
 			/*Refer Comment above*/
