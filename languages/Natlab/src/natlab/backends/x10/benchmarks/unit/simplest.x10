@@ -4,24 +4,19 @@ class simplest.x10{
 //%x=i;
 var x: Double = a;
 var mc_t0: Double = 10;
-val p: Array[Double](2) = new Array[Double](ones(mc_t0));
+val p: Array_2[Double] = new Array_2[Double](Mix10.ones(mc_t0));
 var mc_t2: Double = 1;
 var mc_t3: Double = 10;
 var i: Double;
-val mix10_pt_p: Point;
-val mix10_ptOff_p: Array[Double](2);
 var mc_t1: Double;
 	    for (i = mc_t2 ;
 (i <= mc_t3);i = (i + 1))
 	        {
-	        mix10_pt_p = Point.make(0, 1-(i as Int));
-	        mix10_ptOff_p = p;
-x = new Array[Double](((p.region.min(0))..(p.region.max(0)))*(1..1), (p:Point(2))=>mix10_ptOff_p(p.operator-(mix10_pt_p)));
- ;
+	        	        x = new Array_2[Double](Helper.getSubArray(0, p.numElems_1 -1, i as Long, i as Long, p)) ;
 mc_t1 = 3 ;
 x = Mix10.plus(x, mc_t1) ;
 }
-val y: Array[Double](2) = new Array[Double](p);
+val y: Array_2[Double] = new Array_2[Double](p);
 	    return [x as Any,y as Any];
 }
 

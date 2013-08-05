@@ -196,7 +196,7 @@ public class CellArrayGetSet {
 		} else {
 			DeclStmt pointDecl = new DeclStmt();
 			pointDecl.setLHS(new IDInfo(new Type("Point"), "mix10_pt_"
-					+ arrayAccess.getArrayID().getID(), null, null, null));
+					+ arrayAccess.getArrayID().getID(), null, false, null, null));
 			pointDecl.setMutable(false);
 			target.currentBlock.get(0).addStmt(pointDecl);
 			StringBuffer x = new StringBuffer();

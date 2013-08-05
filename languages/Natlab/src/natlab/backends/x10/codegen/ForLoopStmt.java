@@ -30,7 +30,7 @@ public class ForLoopStmt {
 		AssignStmt for_assign = new AssignStmt();
 
 		IDInfo LHSinfo = new IDInfo(new Type("Double"), node.getAssignStmt()
-				.getLHS().getVarName(), null, null, null);
+				.getLHS().getVarName(), null, false, null, null);
 		ShapeFactory sf = new ShapeFactory();
 		/*
 		 * TODO
@@ -103,8 +103,8 @@ public class ForLoopStmt {
 			String randomizer = UUID.randomUUID().toString();
 			DeclStmt InsertDeclStmt = new DeclStmt();
 			IDInfo temp = for_stmt.getAssignStmt().getLHS();
-			InsertDeclStmt.setLHS(new IDInfo(temp.getType(), temp.getName(),
-					null, null, null));
+			InsertDeclStmt.setLHS(new IDInfo(temp.getType(), temp.getName(), null,
+					false, null, null));
 			InsertDeclStmt.setRHS(new IDUse(for_stmt.getAssignStmt().getLHS()
 					.getName()
 					+ "_x10"+randomizer));
