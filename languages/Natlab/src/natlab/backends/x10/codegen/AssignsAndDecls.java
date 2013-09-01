@@ -300,43 +300,6 @@ public class AssignsAndDecls {
 
 	}
 
-	// This version handles assignment to multiple variables
-//	public static void handleTIRAbstractAssignToListVarStmt(
-//			TIRAbstractAssignStmt node, ast.Name name,
-//			IRx10ASTGenerator target, AssignStmt assign_stmt) {
-//		String LHS;
-//		target.symbolMapKey = name.getID();
-//		LHS = target.symbolMapKey;
-//		/**
-//		 * As of now(sep 17, 2012) just create an assignment node with
-//		 * MultiAssignLHS and a single RHS Change if we really need declaration
-//		 * for such case OR just pretty print as declaration in X10 code
-//		 */
-//
-//		
-//		 if (true == target.symbolMap.containsKey(LHS)) // variable already // defined and analyzed
-//		 {
-//		
-//		MultiAssignLHS LHSinfo = new MultiAssignLHS();
-//		assign_stmt.setMultiAssignLHS(LHSinfo);
-//
-//		assign_stmt.getMultiAssignLHS()
-//				.addIDInfo(
-//						Helper.generateIDInfo(target.analysis, target.index,
-//								node, LHS));
-//		target.symbolMap.put(LHS,Helper.generateIDInfo(target.analysis, target.index,
-//				node, name.getID()) );
-//		assign_stmt
-//				.getMultiAssignLHS()
-//				.getIDInfo(assign_stmt.getMultiAssignLHS().getNumIDInfo() - 1)
-//				.setName(
-//						((TIRAbstractAssignToListStmt) node).getTargetName()
-//								.toString());
-//
-//		 }
-//		 
-//
-//	}
 
 	public static void handleTIRAbstractAssignToVarStmtPass1(
 			TIRAbstractAssignStmt node, collectBuiltins collectBuiltins) {

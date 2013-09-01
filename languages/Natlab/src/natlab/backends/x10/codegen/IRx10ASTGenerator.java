@@ -137,13 +137,6 @@ public class IRx10ASTGenerator extends TIRAbstractNodeCaseHandler {
 				{
 					builtinList = doc.getElementsByTagName(key);
 					collected.usedBuiltins.put(key, builtinList);
-					//TODO
-					/*
-					 * Change usedBuiltins to <String, NodeList>
-					 * pass target to builtinMaker and 
-					 * edit getBuiltinFromxml to read from target 
-					 */
-				
 					
 				}
 			
@@ -151,6 +144,9 @@ public class IRx10ASTGenerator extends TIRAbstractNodeCaseHandler {
 			subAST = new IRx10ASTGenerator(analysis2, graphSize, i, listOfUsedBuiltins.get(i), fileDir,
 					classname);
 			methodList.add(subAST.method);
+			for (IDInfo value : subAST.symbolMap.values()){
+				
+			}
 			
 		}
 		ClassBlock class_block = new ClassBlock(declStmtList, methodList);

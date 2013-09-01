@@ -37,20 +37,6 @@ public class Main {
 				newArgs, env);
 		int size = analysis.getNodeList().size();
 
-//		try {
-//			StringBuffer tamedCode = new StringBuffer();
-//			BufferedWriter out = new BufferedWriter(new FileWriter(fileOutTame));
-//			for (int i = 0; i < analysis.getNodeList().size(); i++) {
-//				tamedCode.append(ValueAnalysisPrinter.prettyPrint(analysis
-//						.getNodeList().get(i).getAnalysis()));
-//			}
-//			out.write(tamedCode.toString());
-//			out.close();
-//		} catch (IOException e) {
-//			System.out.println("Exception ");
-//
-//		}
-
 		System.out.println("\n------------------------------------\n");
 
 		System.out.println("\n------------------------------------\n");

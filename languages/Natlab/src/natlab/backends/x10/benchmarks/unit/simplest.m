@@ -1,10 +1,11 @@
-function [x,y] =  simplest(a)
+function [x] =  simplest(a)
 %x=i;
-x=a;
+
+x=5;
 p=ones(10);
-for i = (1:10)
-x=p(:,i);
-x=x+3;
-end
-y=p;
+if (abs(x) == 10)
+    p = 4;
+
+    end
+  x=p;     
 end
