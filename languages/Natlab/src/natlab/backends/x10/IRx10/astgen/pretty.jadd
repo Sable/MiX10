@@ -5,7 +5,7 @@ import natlab.backends.x10.IRx10.ast.Stmt;
 import java.util.*;
 
 aspect PrettyPrinter{
-String ASTNode.pp(String indent){return indent;}
+String ASTNode.pp(String indent, Boolean useNewArray){return indent;}
 
 public String Program.pp(String indent, String className){
 	return getClassBlock().pp(indent, className);
@@ -15,18 +15,19 @@ String ClassBlock.pp(String indent,String className){
 	StringBuffer x = new StringBuffer();
 	x.append("class "+className+"{\n");
 	for(Stmt decl_stmt : getDeclStmtList()){
-		x.append(decl_stmt.pp(indent+"	"));
+		x.append(decl_stmt.pp(indent+"	", getUseNewArray()));
 	}
 	for (Method method : getMethodList()){
-		x.append(method.pp(indent+"	"));
+		x.append(method.pp(indent+"	", getUseNewArray()));
 	x.append("\n}");
 
 	}
 	return x.toString();
 }
 
-String DeclStmt.pp(String indent){
+String DeclStmt.pp(String indent, Boolean useNewArray){
 		StringBuffer x = new StringBuffer();
+		int size;
 
 		if (null != getLHS()) {
 			/*
@@ -35,15 +36,15 @@ String DeclStmt.pp(String indent){
 
 			if (null == getLHS().getShape()) {
 				/* Scalar variable */
-				if(null == getMutable() || getMutable())
+				if (null == getMutable() || getMutable())
 					x.append("var ");
-				else if (null != getMutable() && ! getMutable())
+				else if (null != getMutable() && !getMutable())
 					x.append("val ");
 				x.append(getLHS().getName() + ": "
 						+ getLHS().getType().getName());
-				if (hasRHS()){
-				x.append(" = ");
-				x.append(getRHS().pp(""));
+				if (hasRHS()) {
+					x.append(" = ");
+					x.append(getRHS().pp("", useNewArray));
 				}
 				x.append(";\n");
 
@@ -52,135 +53,188 @@ String DeclStmt.pp(String indent){
 			else if (null != getLHS().getShape()) {
 				boolean tf = true;
 				for (int i = 0; i < getLHS().getShape().size(); i++) {
-					if(null != getLHS().getShape().get(i))
-					tf &= ("1").equals(getLHS().getShape().get(i).toString());
+					if (null != getLHS().getShape().get(i))
+						tf &= ("1").equals(getLHS().getShape().get(i)
+								.toString());
 					else
-						tf=false;
+						tf = false;
 				}
 				if (tf) {
 
 					/* Scalar variable */
-					if(null == getMutable() || getMutable())
+					if (null == getMutable() || getMutable())
 						x.append("var ");
-					else if (null != getMutable() && ! getMutable())
+					else if (null != getMutable() && !getMutable())
 						x.append("val ");
 					x.append(getLHS().getName() + ": "
 							+ getLHS().getType().getName());
-					if (hasRHS()){
+					if (hasRHS()) {
 						x.append(" = ");
-						x.append(getRHS().pp(""));
-						}
-						x.append(";\n");
+						x.append(getRHS().pp("", useNewArray));
+					}
+					x.append(";\n");
 				}
 
-			 else // array
-			{
-				 if (hasRHS()|| (null != getMutable() && ! getMutable()))
-				x.append("val " + getLHS().getName()); 
-				 else
-					 x.append("var " + getLHS().getName()); 
-				x.append(": Array["+getLHS().getType().getName() + "]");
-				/*
-				 * Add rank of the array if known
-				 */
-				x.append("("+getLHS().getShape().size()+")");
-				if (hasRHS() && !(getRHS() instanceof SimpleArrayExp) ){
-					x.append(
-						" = " + "new Array["
-						+ getLHS().getType().getName() + "]" + "(");
-						//+ PPHelper.makeRange(getLHS().getShape()) + ", "
-				   
-						x.append(getRHS().pp("")+")");
-				   }
-			   else if (hasRHS()) {
-			   	x.append(" = "+getRHS().pp(""));
-			   }	   
-					x.append( ";\n");
+				else // array
+				{
+					if (hasRHS() || (null != getMutable() && !getMutable()))
+						x.append("val " + getLHS().getName());
+					else
+						x.append("var " + getLHS().getName());
+
+					if (true == useNewArray) {
+
+						size = getLHS().getShape().size();
+						if (size >= 1 && getLHS().getShape().get(0).toString().equals("1")) {
+							size = 1;
+						}
+						x.append(": Array_" + size);
+						x.append("[" + getLHS().getType().getName() + "]");
+
+						if (hasRHS() && !(getRHS() instanceof SimpleArrayExp)) {
+							x.append(" = " + "new Array_"
+									+ size + "["
+									+ getLHS().getType().getName() + "]" + "(");
+							// + PPHelper.makeRange(getLHS().getShape()) + ", "
+
+							x.append(getRHS().pp("", useNewArray) + ")");
+						} else if (hasRHS()) {
+							x.append(" = " + getRHS().pp("", useNewArray));
+						}
+
+					} else { // true != useNewArray
+						x.append(": Array[" + getLHS().getType().getName()
+								+ "]");
+						/*
+						 * Add rank of the array if known
+						 */
+						x.append("(" + getLHS().getShape().size() + ")");
+						if (hasRHS() && !(getRHS() instanceof SimpleArrayExp)) {
+							x.append(" = " + "new Array["
+									+ getLHS().getType().getName() + "]" + "(");
+							// + PPHelper.makeRange(getLHS().getShape()) + ", "
+
+							x.append(getRHS().pp("", useNewArray) + ")");
+						} else if (hasRHS()) {
+							x.append(" = " + getRHS().pp("", useNewArray));
+						}
+					}
+					x.append(";\n");
+				}
 			}
-		} //FIX THIS IN aspect
-			
 
 		} else {
-			/**
+			/*
 			 * TODO Case when assigned to a list
 			 */
 		}
 		return x.toString();
 	}
+
 	
 	
-	String RegionBuilder.pp(String indent){
+	String RegionBuilder.pp(String indent, Boolean useNewArray){
+	   
 		StringBuffer x = new StringBuffer();
+		if(true == useNewArray){
+			String type = ((AssignStmt)getParent()).getLHS().getType().getName();
+			x.append(indent+"new Array_"+getLowers().getNumChild()+"["+type+"](Helper.getSubArray("/*+getLowers().getNumChild()*/);
+			int i;
+			for(i=0 ; i< getLowers().getNumChild();i++){
+				if (0!=i){
+				  x.append(", ");
+				}  
+				if(getLowers().getChild(0).getID().equals(getUppers().getChild(0).getID()) && !getUppers().getChild(0).getID().equals("__")){
+				  x.append(getLowers().getChild(i).getID()+", "+getUppers().getChild(0).getID());
+				}
+				else{
+					if(getLowers().getChild(i).getID().equals("__"))
+						x.append("0, "	);
+					else
+						x.append(getLowers().getChild(i).getID()+" as Long, ");
+					if(getUppers().getChild(i).getID().equals("__"))
+						x.append(getArrayID().getID()+".numElems_"+Integer.toString(i+1)+" -1"	);
+					else
+						x.append(""+getUppers().getChild(i).getID()+" as Long");
+				}
+				
+			
+			}
+			
+			x.append(", "+getArrayID().getID()+"))");
 		
-		String type = ((AssignStmt)getParent()).getLHS().getType().getName();
-		x.append(indent+"new Array["+type+"](");
-		if(getLowers().getChild(0).getID().equals(getUppers().getChild(0).getID()) && !getUppers().getChild(0).getID().equals("__")){
-			x.append("(1..1)");
 		}
-		else{
-		if(getLowers().getChild(0).getID().equals("__"))
-			x.append(
-			"(("+getArrayID().getID()+".region.min("+Integer.toString(0)+")).."	);
-		else
-			x.append("("+getLowers().getChild(0).getID()+" as Int..");
-		if(getUppers().getChild(0).getID().equals("__"))
-			x.append(
-			"("+getArrayID().getID()+".region.max("+Integer.toString(0)+")))"	);
-		else
-			x.append(""+getUppers().getChild(0).getID()+" as Int)");
-        }
-		int i;
-		for(i=1 ; i< getLowers().getNumChild();i++){
-			x.append("*");
-			if(getLowers().getChild(i).getID().equals(getUppers().getChild(i).getID()) && !getUppers().getChild(i).getID().equals("__")){
+		else{ //use region arrays
+			String type = ((AssignStmt)getParent()).getLHS().getType().getName();
+			x.append(indent+"new Array["+type+"](");
+			if(getLowers().getChild(0).getID().equals(getUppers().getChild(0).getID()) && !getUppers().getChild(0).getID().equals("__")){
 				x.append("(1..1)");
 			}
 			else{
-			
-			if(getLowers().getChild(i).getID().equals("__"))
+			if(getLowers().getChild(0).getID().equals("__"))
 				x.append(
-				"(("+getArrayID().getID()+".region.min("+Integer.toString(i)+")).."	);
+				"(("+getArrayID().getID()+".region.min("+Integer.toString(0)+")).."	);
 			else
-				x.append("("+getLowers().getChild(i).getID()+" as Int..");
-			if(getUppers().getChild(i).getID().equals("__"))
+				x.append("("+getLowers().getChild(0).getID()+" as Int..");
+			if(getUppers().getChild(0).getID().equals("__"))
 				x.append(
-				"("+getArrayID().getID()+".region.max("+Integer.toString(i)+")))"	);
+				"("+getArrayID().getID()+".region.max("+Integer.toString(0)+")))"	);
 			else
-				x.append(""+getUppers().getChild(i).getID()+" as Int)");
+				x.append(""+getUppers().getChild(0).getID()+" as Int)");
+	        }
+			int i;
+			for(i=1 ; i< getLowers().getNumChild();i++){
+				x.append("*");
+				if(getLowers().getChild(i).getID().equals(getUppers().getChild(i).getID()) && !getUppers().getChild(i).getID().equals("__")){
+					x.append("(1..1)");
+				}
+				else{
+				
+				if(getLowers().getChild(i).getID().equals("__"))
+					x.append(
+					"(("+getArrayID().getID()+".region.min("+Integer.toString(i)+")).."	);
+				else
+					x.append("("+getLowers().getChild(i).getID()+" as Int..");
+				if(getUppers().getChild(i).getID().equals("__"))
+					x.append(
+					"("+getArrayID().getID()+".region.max("+Integer.toString(i)+")))"	);
+				else
+					x.append(""+getUppers().getChild(i).getID()+" as Int)");
+				}
+				
 			}
-			
-		}
-		x.append(", (p:Point("+Integer.toString(i)+"))=>"+"mix10_ptOff_"+getArrayID().getID()+"(p.operator-("+"mix10_pt_"+getArrayID().getID()+")));\n");
+			x.append(", (p:Point("+Integer.toString(i)+"))=>"+"mix10_ptOff_"+getArrayID().getID()+"(p.operator-("+"mix10_pt_"+getArrayID().getID()+")));\n");
+		}	
 		return x.toString();
 	}
 	
 	
 	
 	
-String ArraySetStmt.pp(String indent){
+String ArraySetStmt.pp(String indent, Boolean useNewArray){
 		StringBuffer x = new StringBuffer();
 		
 						
 			x.append(getLHS().getName()+"(");
-			x.append(getIndicesList().getChild(0).pp("")+" as Int");
+			x.append(getIndicesList().getChild(0).pp("", useNewArray)+" as Int -1");
 		  	  for(int i=1; i<getIndicesList().getNumChild() ; i++)
 		  	  {
-		  		  x.append(", "+getIndicesList().getChild(i).pp("")+" as Int");
+		  		  x.append(", "+getIndicesList().getChild(i).pp("", useNewArray)+" as Int -1");
 		  	  }
 		  	  x.append(")");
 			x.append(" = ");
-			x.append(getRHS().pp("")+" ;\n");
+			x.append(getRHS().pp("", useNewArray)+" ;\n");
 		return x.toString();
 	}
   
   
-  String SimpleArrayExp.pp(String indent){
+  String SimpleArrayExp.pp(String indent, Boolean useNewArray){
   	StringBuffer x = new StringBuffer();
   	x.append("[");
-  	x.append(getValuesList().getChild(0).pp("")+" as "+getType().getName());
+  	x.append(getValuesList().getChild(0).pp("", useNewArray)+" as "+getType().getName());
   	for (int i=1; i<getValuesList().getNumChild(); i++)
   	{
-  		x.append(" ,"+getValuesList().getChild(i).pp("")+" as "+getType().getName());
+  		x.append(" ,"+getValuesList().getChild(i).pp("", useNewArray)+" as "+getType().getName());
   	}
   	x.append("]"); //as "+getType().getName() );
     return x.toString();
@@ -190,22 +244,22 @@ String ArraySetStmt.pp(String indent){
   
   
 
-  String ArrayAccess.pp(String indent)
+  String ArrayAccess.pp(String indent, Boolean useNewArray)
   {
   	  StringBuffer x = new StringBuffer();
   	  x.append(indent);
   	  x.append(getArrayID().getID()+"(");
-  	  x.append(getIndicesList().getChild(0).pp("")+" as Int");
+  	  x.append(getIndicesList().getChild(0).pp("", useNewArray)+" as Int -1");
   	  for(int i=1; i<getIndicesList().getNumChild() ; i++)
   	  {
-  		  x.append(", "+getIndicesList().getChild(i).pp("")+"as Int");
+  		  x.append(", "+getIndicesList().getChild(i).pp("", useNewArray)+"as Int -1");
   	  }
   	  x.append(")");
   	  return x.toString();
   }
 
 
-
+//
 static String PPHelper.makeRange(ArrayList Shape){
 	StringBuffer s = new StringBuffer();
 	s.append("(1.."+Shape.get(0)+")");
@@ -216,15 +270,15 @@ static String PPHelper.makeRange(ArrayList Shape){
 	return s.toString();
 }
 
-String Method.pp(String indent)
+String Method.pp(String indent, Boolean useNewArray)
 {
 	  StringBuffer x = new StringBuffer();
-	  x.append(indent+ getMethodHeader().pp("")+"\n"+getMethodBlock().pp(indent+"    "));
+	  x.append(indent+ getMethodHeader().pp("", useNewArray)+"\n"+getMethodBlock().pp(indent+"    ", useNewArray));
 	  
 	  return x.toString();
 }
 
-String MethodHeader.pp(String indent)
+String MethodHeader.pp(String indent, Boolean useNewArray)
 {
 	StringBuffer x = new StringBuffer();
 	
@@ -233,14 +287,33 @@ String MethodHeader.pp(String indent)
 	return x.toString();
 }
 
+
+
+static int PPHelper.getSize(ArrayList shape){
+	  int size;
+	  size = shape.size();
+		if (size >= 1 && shape.get(0).toString().equals("1")) {
+			size = 1;
+		}
+		return size;
+  }
+
 static String PPHelper.makeArgs(List<IDInfo> argsList) 
 {
 	StringBuffer s = new StringBuffer();
+	int size;
 	if (argsList.getNumChild()>0){
+		
 		if (!isScalar(argsList.getChild(0))){
+		
+			
 			if(null != argsList.getChild(0).getShape()){
-			s.append(argsList.getChild(0).getName()+": Array["+argsList.getChild(0).getType().getName()+"]"+
-					"("+argsList.getChild(0).getShape().size()+")");
+			if (null == argsList.getChild(0).getdidShapeChange() || false == argsList.getChild(0).getdidShapeChange()){
+			s.append(argsList.getChild(0).getName()+": Array_"+ getSize(argsList.getChild(0).getShape())+"["+argsList.getChild(0).getType().getName()+"]");
+			}
+				else{
+				s.append(", "+argsList.getChild(0).getName()+": Array["+argsList.getChild(0).getType().getName()+"]");
+			}	
 			}
 			else{
 				s.append(", "+argsList.getChild(0).getName()+": Array["+argsList.getChild(0).getType().getName()+"]");
@@ -252,9 +325,14 @@ static String PPHelper.makeArgs(List<IDInfo> argsList)
 	{	
 		if (!isScalar(argsList.getChild(i))){
 			if(null != argsList.getChild(i).getShape()){
-				s.append(argsList.getChild(i).getName()+": Array["+argsList.getChild(i).getType().getName()+"]"+
-						"("+argsList.getChild(i).getShape().size()+")");
+			if (false == argsList.getChild(i).getdidShapeChange()){
+				s.append(argsList.getChild(i).getName()+": Array_"+getSize(argsList.getChild(i).getShape())+"["+argsList.getChild(i).getType().getName()+"]"
+						);
 				}
+				else{
+				s.append(", "+argsList.getChild(i).getName()+": Array["+argsList.getChild(i).getType().getName()+"]");
+			}	
+			}
 				else{
 			s.append(", "+argsList.getChild(i).getName()+": Array["+argsList.getChild(i).getType().getName()+"]");
 				}
@@ -278,20 +356,20 @@ static boolean PPHelper.isScalar(IDInfo id) {
 	return true;
 }
 
-String StmtBlock.pp(String indent)
+String StmtBlock.pp(String indent, Boolean useNewArray)
 {
   	StringBuffer x = new StringBuffer();
   	x.append(indent+"{\n");
   	for (Stmt stmt : getStmtList())
   	{
-  		x.append(stmt.pp(indent));
+  		x.append(stmt.pp(indent, useNewArray));
   	}
   	x.append("}\n");
   	return x.toString();
   }
 
 
-String AssignStmt.pp(String indent) {
+String AssignStmt.pp(String indent, Boolean useNewArray) {
 		StringBuffer x = new StringBuffer();
 		if (null != getLHS()) {
 			/**
@@ -302,7 +380,7 @@ String AssignStmt.pp(String indent) {
 				/* Scalar variable */
 				x.append(getLHS().getName());
 				x.append(" = ");
-				x.append(getRHS().pp("") + ";\n");
+				x.append(getRHS().pp("", useNewArray) + ";\n");
 
 			}
 
@@ -320,7 +398,7 @@ String AssignStmt.pp(String indent) {
 					/* Scalar variable */
 					x.append(getLHS().getName());
 					x.append(" = ");
-					x.append(getRHS().pp(""));
+					x.append(getRHS().pp("", useNewArray));
 					if(null != getTypeCast() && true==getTypeCast())
 						x.append("as "+getLHS().getType().getName());
 					x.append(" ;\n");
@@ -335,20 +413,27 @@ String AssignStmt.pp(String indent) {
 					 */
 					x.append(getLHS().getName());
 					x.append(" = ");
-					x.append(getRHS().pp(""));
+					x.append(getRHS().pp("", useNewArray));
+					if (false == useNewArray){
 					if(null != getTypeCast() && true==getTypeCast())
 						x.append("as Array["+getLHS().getType().getName()+"]");
+					}
+					else{
+						if(null != getTypeCast() && true==getTypeCast()){
+						x.append("as Array_"+getLHS().getShape().size()+"["+getLHS().getType().getName()+"]");
+						}
+					}		
 					x.append(" ;\n");
 					//
 					// x.append("val "+getLHS().getName()+" = "+
 					// "new Array["+getLHS().getType().getName()+"]"+
 					// "("+PPHelper.makeRange(getLHS().getShape())+
-					// ", "+getRHS().pp("")+");\n");
+					// ", "+getRHS().pp("", useNewArray)+");\n");
 				}
 			}
 		} else {
 
-			System.out.println("list assign:" + getRHS().pp(indent));
+			System.out.println("list assign:" + getRHS().pp(indent, useNewArray));
 			/**
 			 * TODO Case when assigned to a list
 			 */
@@ -356,197 +441,201 @@ String AssignStmt.pp(String indent) {
 					|| 0 == getMultiAssignLHS().getIDInfoList().getNumChild()) { // ||
 																					// getMultiAssignLHS().getNumChild()
 																					// ==0
-				x.append(getRHS().pp(indent) + " ;\n");
+				x.append(getRHS().pp(indent, useNewArray) + " ;\n");
 			} else {
 				x.append("val "
 						+ "generate_a_name"
 						+ " = "
-						+ "new Array[Any]"
+						+ "new Array_1[Any]" //multiAssign is a vector
 						+ "(0.."
 						+ (getMultiAssignLHS().getIDInfoList().getNumChild() - 1)
-						+ ", " + getRHS().pp("") + ");\n");
+						+ ", " + getRHS().pp("", useNewArray) + ");\n");
 			}
 
 		}
 		return x.toString();
 	}
 	
-	String Literally.pp(String indent){
+	String Literally.pp(String indent, Boolean useNewArray){
+		if (false == useNewArray){
 		StringBuffer x = new StringBuffer();
 		x.append(indent+getVerbatim());
 		return x.toString();
+		}
+		else
+		return indent;
   }
 	
-String IDUse.pp(String indent){
+String IDUse.pp(String indent, Boolean useNewArray){
 	StringBuffer x = new StringBuffer();
 	x.append(indent+getID());
 	return x.toString();
 }
 
-String PreIncExp.pp(String indent)
+String PreIncExp.pp(String indent, Boolean useNewArray)
 {
-	return (indent+"(++"+getOperand().pp("")+")");
+	return (indent+"(++"+getOperand().pp("", useNewArray)+")");
 }
 
-String PreDecExp.pp(String indent)
+String PreDecExp.pp(String indent, Boolean useNewArray)
 {
-	return (indent+"(--"+getOperand().pp("")+")");
+	return (indent+"(--"+getOperand().pp("", useNewArray)+")");
 	
 }
 
-String MinusExp.pp(String indent)
+String MinusExp.pp(String indent, Boolean useNewArray)
 {
-	return (indent+"(-"+getOperand().pp("")+")");
+	return (indent+"(-"+getOperand().pp("", useNewArray)+")");
 }
 
-String PlusExp.pp(String indent)
+String PlusExp.pp(String indent, Boolean useNewArray)
 {
-	return (indent+"(+"+getOperand().pp("")+")");
+	return (indent+"(+"+getOperand().pp("", useNewArray)+")");
 }
 	
-String NegExp.pp(String indent)
+String NegExp.pp(String indent, Boolean useNewArray)
 {
-	return (indent+"(!"+getOperand().pp("")+")");
+	return (indent+"(!"+getOperand().pp("", useNewArray)+")");
 }
 
-String Literal.pp(String indent)
+String Literal.pp(String indent, Boolean useNewArray)
 {
 	return (indent+getLiteral());
 }
 
-String MulExp.pp(String indent)
+String MulExp.pp(String indent, Boolean useNewArray)
 {
-	return(indent+"("+getLeftOp().pp("")+" * "+getRightOp().pp("")+")");
+	return(indent+"("+getLeftOp().pp("", useNewArray)+" * "+getRightOp().pp("", useNewArray)+")");
 }
 
-String DivExp.pp(String indent)
+String DivExp.pp(String indent, Boolean useNewArray)
 {
-	return(indent+"("+getLeftOp().pp("")+" / "+getRightOp().pp("")+")");
+	return(indent+"("+getLeftOp().pp("", useNewArray)+" / "+getRightOp().pp("", useNewArray)+")");
 }
 
-String ModExp.pp(String indent)
+String ModExp.pp(String indent, Boolean useNewArray)
 {
-	return(indent+"("+getLeftOp().pp("")+" % "+getRightOp().pp("")+")");
+	return(indent+"("+getLeftOp().pp("", useNewArray)+" % "+getRightOp().pp("", useNewArray)+")");
 }
 
-String AddExp.pp(String indent)
+String AddExp.pp(String indent, Boolean useNewArray)
 {
-	return(indent+"("+getLeftOp().pp("")+" + "+getRightOp().pp("")+")");
+	return(indent+"("+getLeftOp().pp("", useNewArray)+" + "+getRightOp().pp("", useNewArray)+")");
 }
 
-String SubExp.pp(String indent)
+String SubExp.pp(String indent, Boolean useNewArray)
 {
-	return(indent+"("+getLeftOp().pp("")+" - "+getRightOp().pp("")+")");
+	return(indent+"("+getLeftOp().pp("", useNewArray)+" - "+getRightOp().pp("", useNewArray)+")");
 }
 
-String IncExp.pp(String indent)
+String IncExp.pp(String indent, Boolean useNewArray)
 {
-	return(indent+"("+getLeftOp().pp("")+" + "+getRightOp().pp("")+")");
+	return(indent+"("+getLeftOp().pp("", useNewArray)+" + "+getRightOp().pp("", useNewArray)+")");
 }
 
-String DecExp.pp(String indent)
+String DecExp.pp(String indent, Boolean useNewArray)
 {
-	return(indent+"("+getLeftOp().pp("")+" - "+getRightOp().pp("")+")");
+	return(indent+"("+getLeftOp().pp("", useNewArray)+" - "+getRightOp().pp("", useNewArray)+")");
 }
 
-String LTExp.pp(String indent)
+String LTExp.pp(String indent, Boolean useNewArray)
 {
-	return(indent+"("+getLeftOp().pp("")+" < "+getRightOp().pp("")+")");
+	return(indent+"("+getLeftOp().pp("", useNewArray)+" < "+getRightOp().pp("", useNewArray)+")");
 }
 
-String LEExp.pp(String indent)
+String LEExp.pp(String indent, Boolean useNewArray)
 {
-	return(indent+"("+getLeftOp().pp("")+" <= "+getRightOp().pp("")+")");
+	return(indent+"("+getLeftOp().pp("", useNewArray)+" <= "+getRightOp().pp("", useNewArray)+")");
 }
 
-String GEExp.pp(String indent)
+String GEExp.pp(String indent, Boolean useNewArray)
 {
-	return(indent+"("+getLeftOp().pp("")+" >= "+getRightOp().pp("")+")");
+	return(indent+"("+getLeftOp().pp("", useNewArray)+" >= "+getRightOp().pp("", useNewArray)+")");
 }
 
-String EQExp.pp(String indent)
+String EQExp.pp(String indent, Boolean useNewArray)
 {
-	return(indent+"("+getLeftOp().pp("")+" == "+getRightOp().pp("")+")");
+	return(indent+"("+getLeftOp().pp("", useNewArray)+" == "+getRightOp().pp("", useNewArray)+")");
 }
 
-String NEExp.pp(String indent)
+String NEExp.pp(String indent, Boolean useNewArray)
 {
-	return(indent+"("+getLeftOp().pp("")+" != "+getRightOp().pp("")+")");
+	return(indent+"("+getLeftOp().pp("", useNewArray)+" != "+getRightOp().pp("", useNewArray)+")");
 }
 
-String AndExp.pp(String indent)
+String AndExp.pp(String indent, Boolean useNewArray)
 {
-	return(indent+"("+getLeftOp().pp("")+" && "+getRightOp().pp("")+")");
+	return(indent+"("+getLeftOp().pp("", useNewArray)+" && "+getRightOp().pp("", useNewArray)+")");
 }
 
-String OrExp.pp(String indent)
+String OrExp.pp(String indent, Boolean useNewArray)
 {
-	return(indent+"("+getLeftOp().pp("")+" || "+getRightOp().pp("")+")");
+	return(indent+"("+getLeftOp().pp("", useNewArray)+" || "+getRightOp().pp("", useNewArray)+")");
 }
 
-String ForStmt.pp (String indent){
+String ForStmt.pp (String indent, Boolean useNewArray){
 	  StringBuffer x= new StringBuffer();
 	  x.append(indent);
-	  x.append("for ("+this.getAssignStmt().pp("")+getCondition().pp("")+";"+getStepper().getLeftOp().pp("")+" = "+getStepper().pp("")+")\n"+getLoopBody().pp(indent+"    "));
+	  x.append("for ("+this.getAssignStmt().pp("", useNewArray)+getCondition().pp("", useNewArray)+";"+getStepper().getLeftOp().pp("", useNewArray)+" = "+getStepper().pp("", useNewArray)+")\n"+getLoopBody().pp(indent+"    ", useNewArray));
 	  return x.toString();
 }
 
-String WhileStmt.pp(String indent)
+String WhileStmt.pp(String indent, Boolean useNewArray)
 {
 	  StringBuffer x = new StringBuffer();
 	  x.append(indent);
-	  x.append("while ("+getCondition().pp("")+")\n"+getLoopBody().pp(indent+"   "));
+	  x.append("while ("+getCondition().pp("", useNewArray)+")\n"+getLoopBody().pp(indent+"   ", useNewArray));
 	  return x.toString();
 }
 
-String IfElseStmt.pp(String indent)
+String IfElseStmt.pp(String indent, Boolean useNewArray)
 {   
 	
 	StringBuffer x = new StringBuffer();
 	x.append(indent);
 	//  x.append("inside if else ");
-	x.append("if ("+getIfElseIfList().getChild(0).getCondition().pp("")+")\n");
-	x.append(getIfElseIfList().getChild(0).getIfBody().pp(indent+"    "));
+	x.append("if ("+getIfElseIfList().getChild(0).getCondition().pp("", useNewArray)+")\n");
+	x.append(getIfElseIfList().getChild(0).getIfBody().pp(indent+"    ", useNewArray));
 	for (int i=1; i<getIfElseIfList().getNumChild() ; i++){
-		x.append("else if ("+getIfElseIfList().getChild(i).getCondition().pp("")+")\n");
-	  	x.append(getIfElseIfList().getChild(i).getIfBody().pp(indent+"    "));
+		x.append("else if ("+getIfElseIfList().getChild(i).getCondition().pp("", useNewArray)+")\n");
+	  	x.append(getIfElseIfList().getChild(i).getIfBody().pp(indent+"    ", useNewArray));
 	}
 	if(null != getElseBody()){
-		x.append("else \n"+getElseBody().pp(indent+"    "));
+		x.append("else \n"+getElseBody().pp(indent+"    ", useNewArray));
 	}
 	return x.toString();
 }
 
-String BuiltinMethodCall.pp(String indent)
+String BuiltinMethodCall.pp(String indent, Boolean useNewArray)
 {
 	  StringBuffer x = new StringBuffer();
 	  x.append(indent);
 	  x.append(getBuiltinMethodName().getName()+"(");
-	  x.append(getArgumentList().getChild(0).pp(""));
+	  x.append(getArgumentList().getChild(0).pp("", useNewArray));
 	  for(int i=1; i<getArgumentList().getNumChild() ; i++)
 	  {
-		  x.append(", "+getArgumentList().getChild(i).pp(""));
+		  x.append(", "+getArgumentList().getChild(i).pp("", useNewArray));
 	  }
 	  x.append(")");
 	  return x.toString();
 }
 
-String UserDefMethodCall.pp(String indent)
+String UserDefMethodCall.pp(String indent, Boolean useNewArray)
 {
 	  StringBuffer x = new StringBuffer();
 	  x.append(indent);
 	  x.append(getUserDefMethodName().getName()+"(");
 	  if(getArgumentList().getNumChild()>0){
-	  x.append(getArgumentList().getChild(0).pp(""));
+	  x.append(getArgumentList().getChild(0).pp("", useNewArray));
 	  for(int i=1; i<getArgumentList().getNumChild() ; i++)
 	  {
-		  x.append(", "+getArgumentList().getChild(i).pp(""));
+		  x.append(", "+getArgumentList().getChild(i).pp("", useNewArray));
 	  }
 	  }
 	  x.append(")");
 	  return x.toString();
 }
-String CommentStmt.pp(String indent)
+String CommentStmt.pp(String indent, Boolean useNewArray)
 {
 	StringBuffer x = new StringBuffer();
 	String trimmedComment = getComment().trim();
@@ -559,16 +648,16 @@ String CommentStmt.pp(String indent)
 	return x.toString();
 }
 
-String ReturnStmt.pp(String indent) {
+String ReturnStmt.pp(String indent, Boolean useNewArray) {
 	  if (1 == getNumReturnVal()){
-		  return (indent+"return "+getReturnVal(0).pp("")+";\n");
+		  return (indent+"return "+getReturnVal(0).pp("", useNewArray)+";\n");
 		  		  
 	  }
 	  String listOfVals;
 	  if (1< getNumReturnVal()){
-		  listOfVals = getReturnVal(0).pp("")+" as Any";
+		  listOfVals = getReturnVal(0).pp("", useNewArray)+" as Any";
 		  for (int i=1;i<getNumReturnVal();i++){
-			  listOfVals = listOfVals + ","+getReturnVal(i).pp("")+" as Any";
+			  listOfVals = listOfVals + ","+getReturnVal(i).pp("", useNewArray)+" as Any";
 		  }
 		  
 		   return (indent+"return ["+listOfVals+"];\n");
@@ -580,11 +669,11 @@ String ReturnStmt.pp(String indent) {
 		  return ""; 
   }
   
-String BreakStmt.pp(String indent){
+String BreakStmt.pp(String indent, Boolean useNewArray){
   return(indent+"break;\n"); 
 }
 
-String ContinueStmt.pp(String indent){
+String ContinueStmt.pp(String indent, Boolean useNewArray){
   return(indent+"continue;\n"); 
 }
 

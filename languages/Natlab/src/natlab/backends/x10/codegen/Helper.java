@@ -111,6 +111,18 @@ public class Helper {
 					id_info.setShape((ArrayList<DimValue>) ((AdvancedMatrixValue) ((Object)temp))
 							.getShape().getDimensions());
 				}
+				
+				if (null != ((AdvancedMatrixValue) ((Object)temp)).getShape()) {
+					
+					if (null == id_info.getdidShapeChange()){
+						id_info.setdidShapeChange(false);
+					}
+					else if (((ArrayList<DimValue>) ((AdvancedMatrixValue) ((Object)temp)).getShape().getDimensions()).size()
+							!= id_info.getShape().size()){
+						id_info.setdidShapeChange(true);
+					}
+					
+				}
 				if (null != ((AdvancedMatrixValue) ((Object)temp)).getisComplexInfo()) {
 					id_info.setisComplex(((AdvancedMatrixValue) ((Object)temp))
 							.getisComplexInfo().toString());

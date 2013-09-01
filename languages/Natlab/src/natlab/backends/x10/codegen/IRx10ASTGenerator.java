@@ -101,6 +101,7 @@ public class IRx10ASTGenerator extends TIRAbstractNodeCaseHandler {
 		List<Method> methodList = new List<Method>();
 		IRx10ASTGenerator subAST;
 		Document doc = null;
+		Boolean useNewArray = true;
 		
 		try {
 			String builtin;
@@ -148,8 +149,14 @@ public class IRx10ASTGenerator extends TIRAbstractNodeCaseHandler {
 				
 			}
 			
+			for (IDInfo value : subAST.symbolMap.values()){
+				if (null != value.getdidShapeChange() && true == value.getdidShapeChange()){
+					useNewArray = false;
+				}
+			}
+			
 		}
-		ClassBlock class_block = new ClassBlock(declStmtList, methodList);
+		ClassBlock class_block = new ClassBlock(declStmtList, methodList, useNewArray);
 		return class_block;
 
 	}

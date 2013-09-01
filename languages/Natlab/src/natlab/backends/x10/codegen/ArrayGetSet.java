@@ -34,7 +34,7 @@ public class ArrayGetSet {
 			block.addStmt(array_decl);
 
 		}
-		/**
+		/*
 		 * The array has been declared before. This is just an assignment to its
 		 * index. If not declared before first declare the array and then set
 		 * the index
@@ -154,7 +154,7 @@ public class ArrayGetSet {
 				target.symbolMap.put(target.symbolMapKey,
 						list_single_assign_stmt.getLHS());
 
-				System.out.println("#####!" + target.symbolMapKey);
+				System.out.println("#####!@@@" + target.symbolMapKey);
 
 				block.addStmt(list_single_assign_stmt);
 
@@ -180,7 +180,7 @@ public class ArrayGetSet {
 					}
 				}
 
-				System.out.println("#####!" + target.symbolMapKey);
+				System.out.println("#####!!!!!" + target.symbolMapKey);
 
 				// block.addStmt(decl_stmt);
 
@@ -296,11 +296,19 @@ public class ArrayGetSet {
 				((AssignStmt) decl_or_assgn).setRHS(arrayAccess);
 			}
 		} else {
+			
+			/*
+			 * Below block creates the point and the offset
+			 * to be used.
+			 */
+			/*Refer comment above*/
 			DeclStmt pointDecl = new DeclStmt();
+			
 			pointDecl.setLHS(new IDInfo(new Type("Point"), "mix10_pt_"
-					+ arrayAccess.getArrayID().getID(), null, null, null));
+					+ arrayAccess.getArrayID().getID(), null, null, null, null));
 			pointDecl.setMutable(false);
-			target.currentBlock.get(0).addStmt(pointDecl);
+			//TODO below statement should work when not using new arrays 
+			//target.currentBlock.get(0).addStmt(pointDecl);
 			
 			StringBuffer x = new StringBuffer();
 			if (/* region.getLower(0).equals(region.getUpper(0)) && */!region
@@ -326,13 +334,15 @@ public class ArrayGetSet {
 			DeclStmt pointOffsetId = new DeclStmt();
 			pointOffsetId.setLHS( new IDInfo(target.symbolMap.get(node.getRHS().getVarName()).getType(),
 					"mix10_ptOff_"+ arrayAccess.getArrayID().getID(),
-					target.symbolMap.get(node.getRHS().getVarName()).getShape(),null,null	));
+					target.symbolMap.get(node.getRHS().getVarName()).getShape(),
+					target.symbolMap.get(node.getRHS().getVarName()).getdidShapeChange(), null,null	));
 			pointOffsetId.setMutable(false);
-			target.currentBlock.get(0).addStmt(pointOffsetId);
+			//TODO below statement should work when not using new arrays 
+			//target.currentBlock.get(0).addStmt(pointOffsetId);
 			block.addStmt(new Literally("mix10_ptOff_"
 					+ arrayAccess.getArrayID().getID() + " = "
 					+ arrayAccess.getArrayID().getID() + ";\n"));
-			
+			/*Refer Comment above*/
 			
 			if (isDecl) {
 

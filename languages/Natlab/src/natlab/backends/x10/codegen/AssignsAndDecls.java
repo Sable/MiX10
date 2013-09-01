@@ -123,16 +123,6 @@ public class AssignsAndDecls {
 	public static void setRHSValue(boolean isDecl, Stmt decl_or_assgn,
 			TIRAbstractAssignStmt node, boolean isScalar, IRx10ASTGenerator target) {
 		
-		
-//		if (node.getRHS().getVarName().equals("cellhorzcat")){
-//			if (isDecl) {
-//				
-//				((DeclStmt) decl_or_assgn).setRHS(CellArrayGetSet.createCellArray(node.getRHS(),target));
-//			} else {
-//				((AssignStmt) decl_or_assgn).setRHS(CellArrayGetSet.createCellArray(node.getRHS(),target));
-//			}
-//		}
-		
 		if (isDecl) {
 		
 			((DeclStmt) decl_or_assgn).setRHS(Expressions.makeIRx10Exp(node
