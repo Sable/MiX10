@@ -9,8 +9,9 @@ if (abs(x) == 10)
     end
   x=p;     
   
-  p = 5;
-  y=7;
-  x=p;
+  p = 'hi';
+  y=p;
+  p=3;
+  y=p;
   
 end
