@@ -5,8 +5,11 @@ x=5;
 p=ones(10);
 if (abs(x) == 10)
     p = 4;
- else
-    p='hello'
+
     end
   x=p;     
+  
+  p = 5;
+  x=p;
+  
 end

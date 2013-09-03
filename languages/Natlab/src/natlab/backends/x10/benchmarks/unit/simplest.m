@@ -8,4 +8,9 @@ if (abs(x) == 10)
 
     end
   x=p;     
+  
+  p = 5;
+  y=7;
+  x=p;
+  
 end
