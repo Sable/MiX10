@@ -92,6 +92,17 @@ IfBody:StmtBlock;
 ElseBody:StmtBlock;
 abstract Exp;
 
+AtStmt:Stmt ::= Place:Exp AtBlock;
+AtBlock:StmtBlock;
+AsyncStmt:Stmt ::= AsyncBlock;
+AsyncBlock:StmtBlock;
+FinishStmt:Stmt ::= FinishBlock;
+FinishBlock:StmtBlock;
+AtomicStmt:Stmt ::= AtomicBlock;
+AtomicBlock:StmtBlock;
+WhenStmt:Stmt ::= Condition:Exp WhenBlock;
+WhenBlock:StmtBlock;
+
 abstract AccessVal:Exp;
 abstract MethodCall:Exp;
 BuiltinMethodCall:MethodCall ::= BuiltinMethodName:MethodId Argument:Exp*;
