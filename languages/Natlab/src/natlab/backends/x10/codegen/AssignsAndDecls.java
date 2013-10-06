@@ -25,6 +25,9 @@ public class AssignsAndDecls {
 			StmtBlock block) {
 		boolean isDecl;
 		String LHS;
+		
+		boolean isReductionStmt = Helper.isReductionStmt(node, target,
+			block);
 		target.symbolMapKey = ((TIRAbstractAssignToVarStmt) node)
 				.getTargetName().getID();
 		LHS = target.symbolMapKey;
@@ -32,7 +35,9 @@ public class AssignsAndDecls {
 		 * If checks whether it is already defined, in which case it's
 		 * assignment otherwise it's a declaration
 		 */
-		if (true == target.symbolMap.containsKey(target.symbolMapKey)) {
+		if (true == target.symbolMap.containsKey(target.symbolMapKey) 
+				&& (target.parforSwitch==false 
+						||  isReductionStmt==true)) {
 			isDecl = false;
 			AssignStmt assign_stmt = new AssignStmt();
 			// IDInfo LHSinfo = new IDInfo();
@@ -53,12 +58,16 @@ public class AssignsAndDecls {
 			}
 			
 			//tf=true => scalar
+			if (target.parforSwitch==false 
+					||  isReductionStmt==true)
 			target.symbolMap.put(target.symbolMapKey, assign_stmt.getLHS());
 			setRHSValue(isDecl, assign_stmt, node, tf, target);
 			
 			
 			
 			block.addStmt(assign_stmt);
+			if (target.parforSwitch==false 
+					||  isReductionStmt==true)
 			target.symbolMap.put(target.symbolMapKey, assign_stmt.getLHS());
 			// TODO : Handle expressions of various types
 			// Set parent's value in various expressions
@@ -89,7 +98,8 @@ public class AssignsAndDecls {
 //			//block.addStmt(pseudoAssign);
 //			
 //	        
-			if (target.currentBlock.size()>1 ){
+			if (target.currentBlock.size()>1 && (target.parforSwitch==false 
+					||  isReductionStmt==true)){
 				target.symbolMap.put(target.symbolMapKey, decl_stmt.getLHS());
 				DeclStmt pseudoDecl = new DeclStmt();
 				pseudoDecl.setLHS(decl_stmt.getLHS());
@@ -101,6 +111,8 @@ public class AssignsAndDecls {
 				pseudoAssign.setLHS(decl_stmt.getLHS());
 				pseudoAssign.setRHS(decl_stmt.getRHS());
 				block.addStmt(pseudoAssign);
+				if (target.parforSwitch==false 
+						||  isReductionStmt==true)
 				target.symbolMap.put(target.symbolMapKey, decl_stmt.getLHS());
 				
 				//System.out.println(block.getParent().getParent().toString()+"^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
@@ -109,9 +121,11 @@ public class AssignsAndDecls {
 			}
 //			
 			else {
+				
 				target.symbolMap.put(target.symbolMapKey, decl_stmt.getLHS());
 				block.addStmt(decl_stmt);
-				
+				if (target.parforSwitch==false 
+						||  isReductionStmt==true)
 				target.symbolMap.put(target.symbolMapKey, decl_stmt.getLHS());
 			}
 			
@@ -142,7 +156,8 @@ public class AssignsAndDecls {
 	public static void handleTIRAbstractAssignToListStmt(
 			TIRAbstractAssignStmt node, IRx10ASTGenerator target,
 			StmtBlock block) {
-
+		boolean isReductionStmt = Helper.isReductionStmt(node, target,
+				block);
 			
 		if (1 == ((TIRAbstractAssignToListStmt) node).getTargets().asNameList()
 				.size()) {
@@ -153,7 +168,9 @@ public class AssignsAndDecls {
 			LHS = target.symbolMapKey;
 
 			
-			if (true == target.symbolMap.containsKey(target.symbolMapKey)) {
+			if (true == target.symbolMap.containsKey(target.symbolMapKey)
+					&& (IRx10ASTGenerator.parforSwitch == false
+					|| isReductionStmt==true)) {
 				
 				
 				isDecl = false;
@@ -173,6 +190,8 @@ public class AssignsAndDecls {
 				
 				
 				block.addStmt(list_single_assign_stmt);
+				if (target.parforSwitch==false 
+						||  isReductionStmt==true)
 				target.symbolMap.put(target.symbolMapKey, list_single_assign_stmt.getLHS());
 
 			} else {
@@ -189,7 +208,8 @@ public class AssignsAndDecls {
 				System.out.println("#####!"+target.symbolMapKey);
 				
 				//block.addStmt(decl_stmt);
-				
+				if (target.parforSwitch==false 
+						||  isReductionStmt==true)
 				target.symbolMap.put(target.symbolMapKey, decl_stmt.getLHS());
 				DeclStmt pseudoDecl = new DeclStmt();
 				pseudoDecl.setLHS(decl_stmt.getLHS());
@@ -200,10 +220,13 @@ public class AssignsAndDecls {
 //				//block.addStmt(pseudoAssign);
 //				
 //		        
-				if (target.currentBlock.size()>1 ){
+				if (target.currentBlock.size()>1 && (target.parforSwitch==false 
+						||  isReductionStmt==true)){
 					target.currentBlock.get(0).addStmt(pseudoDecl);
 					
 					block.addStmt(pseudoAssign);
+					if (target.parforSwitch==false 
+							||  isReductionStmt==true)
 					target.symbolMap.put(target.symbolMapKey, decl_stmt.getLHS());
 					//target.currentBlock.get(target.currentBlock.size()-1).addStmt(decl_stmt);
 					
@@ -212,6 +235,8 @@ public class AssignsAndDecls {
 //				
 				else {
 					block.addStmt(decl_stmt);
+					if (target.parforSwitch==false 
+							||  isReductionStmt==true)
 					target.symbolMap.put(target.symbolMapKey, decl_stmt.getLHS());
 					
 				}
@@ -221,6 +246,8 @@ public class AssignsAndDecls {
 
 		}
 
+		
+		//TODO: Fix this to be handled in parfor 
 		else { //this branch handles the case with multiple targets on LHS
 			String multiVarName="";
 			AssignStmt list_assign_stmt = new AssignStmt();

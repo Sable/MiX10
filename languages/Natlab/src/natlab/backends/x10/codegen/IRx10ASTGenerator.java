@@ -70,13 +70,14 @@ public class IRx10ASTGenerator extends TIRAbstractNodeCaseHandler {
 	private String fileDir;
 	Method method;
 	ArrayList<StmtBlock> currentBlock = new ArrayList<StmtBlock>();
-
+    public static Boolean parforSwitch;
 	private IRx10ASTGenerator(
 			ValueAnalysis<AggrValue<AdvancedMatrixValue>> analysis2, int size,
 			int index, collectBuiltins collectBuiltins, String fileDir, String classname) {
 		this.x10Map = new x10Mapping();
 		this.analysis = analysis2;
 		this.collectedBuiltins = collectBuiltins;
+		parforSwitch = false;
 		
 		
 		System.out.println(collectBuiltins.usedBuiltins.toString()+" -- builtin list");

@@ -576,7 +576,14 @@ String OrExp.pp(String indent, Boolean useNewArray)
 String ForStmt.pp (String indent, Boolean useNewArray){
 	  StringBuffer x= new StringBuffer();
 	  x.append(indent);
+	  if (this.getisParfor() == true){
+	  x.append("finish for ("+this.getAssignStmt().getLHS().getName()
+	  +" in ("+this.getLower().pp("", useNewArray)+" as Long)..("+getUpper().pp("", useNewArray)+" as Long))\n"+"async "+getLoopBody().pp(indent+"    ", useNewArray));
+	  
+	  }
+	  else
 	  x.append("for ("+this.getAssignStmt().pp("", useNewArray)+getCondition().pp("", useNewArray)+";"+getStepper().getLeftOp().pp("", useNewArray)+" = "+getStepper().pp("", useNewArray)+")\n"+getLoopBody().pp(indent+"    ", useNewArray));
+	  
 	  return x.toString();
 }
 
@@ -677,5 +684,33 @@ String ContinueStmt.pp(String indent, Boolean useNewArray){
   return(indent+"continue;\n"); 
 }
 
+String BlockEnd.pp(String indent, Boolean useNewArray){
+StringBuffer x = new StringBuffer();
+	  x.append(indent+getVerbatim());
+	  return x.toString();
+	  
+}
+
+
+String AsyncStmt.pp(String indent, Boolean useNewArray){
+	StringBuffer x = new StringBuffer();
+	  x.append(indent);
+	  x.append("async{\n");//+getAsyncBlock().pp(indent+"   ", useNewArray));
+	  return x.toString();
+}
+
+String FinishStmt.pp(String indent, Boolean useNewArray){
+	StringBuffer x = new StringBuffer();
+	  x.append(indent);
+	  x.append("finish{\n");
+	  return x.toString();
+}
+
+String AtomicStmt.pp(String indent, Boolean useNewArray){
+	StringBuffer x = new StringBuffer();
+	  x.append(indent);
+	  x.append("atomic{\n");
+	  return x.toString();
+}
 }	
 	

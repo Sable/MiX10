@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import natlab.tame.valueanalysis.components.shape.*;
 import natlab.backends.x10.IRx10.ast.IDInfo;
+import natlab.backends.x10.IRx10.ast.StmtBlock;
 import natlab.backends.x10.IRx10.ast.Type;
 import natlab.tame.classes.reference.ClassReference;
 import natlab.tame.tir.TIRAbstractAssignStmt;
@@ -253,6 +254,13 @@ public class Helper {
 			}
 		}
 		return true;
+	}
+
+	public static boolean isReductionStmt(TIRAbstractAssignStmt node,
+			IRx10ASTGenerator target, StmtBlock block) {
+		// TODO Auto-generated method stub
+		//TODO - important
+		return false;
 	}
 
 }

@@ -27,6 +27,13 @@ public class ForLoopStmt {
 			IRx10ASTGenerator target, StmtBlock block) {
 
 		ForStmt for_stmt = new ForStmt();
+		if (target.parforSwitch == true){
+			for_stmt.setisParfor(true);
+			//target.parforSwitch = false;
+		}
+		else{
+			for_stmt.setisParfor(false);
+		}
 		AssignStmt for_assign = new AssignStmt();
 
 		IDInfo LHSinfo = new IDInfo(new Type("Double"), node.getAssignStmt()
@@ -51,9 +58,12 @@ public class ForLoopStmt {
 		for_assign.getLHS().setName(node.getAssignStmt().getLHS().getVarName());
 		IDUse lower = new IDUse(((RangeExpr) (node.getAssignStmt().getRHS()))
 				.getLower().getVarName());
+		for_stmt.setLower(lower);
 		IDUse upper = new IDUse(((RangeExpr) (node.getAssignStmt().getRHS()))
 				.getUpper().getVarName());
+		for_stmt.setUpper(upper);
 		IDUse increment = new IDUse("1");
+		for_stmt.setIncr(increment);
 		/*
 		 * uncomment below If after fixing the following TODO getIncr throws
 		 * errors sometimes. Look into it and fix it ....till then using "1"
@@ -77,14 +87,20 @@ public class ForLoopStmt {
 		LoopBody loop_body_block = for_stmt.getLoopBody();
 		target.currentBlock.add(loop_body_block);
 		buildStmtsSubAST(node.getStmts(), target);
+		
+		
+		
 		target.currentBlock.remove(loop_body_block);
 
-		block.addStmt(fixLoopVar(for_stmt, block));
-
+		block.addStmt(fixLoopVar(for_stmt, block, target));
+		if (target.parforSwitch == true){
+			//for_stmt.setisParfor(true);
+			target.parforSwitch = false;
+		}
 		// System.out.println(loop_body_block.getStmts().getNumChild());
 	}
 
-	private static ForStmt fixLoopVar(ForStmt for_stmt, StmtBlock block) {
+	private static ForStmt fixLoopVar(ForStmt for_stmt, StmtBlock block, IRx10ASTGenerator target) {
 
 		boolean FixIt = false;
 		for (Stmt stmt : for_stmt.getLoopBody().getStmtList()) {
@@ -97,6 +113,7 @@ public class ForLoopStmt {
 				}
 			}
 		}
+		
 		if (FixIt) {
 			// rename loop variable
 			// assign old loop var to new one

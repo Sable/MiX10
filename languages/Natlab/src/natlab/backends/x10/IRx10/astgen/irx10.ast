@@ -7,6 +7,7 @@ BreakStmt:Stmt;
 ContinueStmt:Stmt;
 DeclStmt:Stmt ::= [MultiDeclLHS] LHS:IDInfo [RHS:Exp] <Mutable:Boolean>;
 Literally:Stmt ::= <Verbatim:String>;
+BlockEnd:Literally;
 PointLooper:Stmt ::= PointID:IDUse ArrayID:IDUse <DimNumber:int> [Min:Exp] [Max:Exp];
 Method ::= MethodHeader MethodBlock;
 MethodHeader ::= ReturnType:AccessVal <Name:String> Args:IDInfo*;
@@ -81,8 +82,8 @@ Modifier ::= <ID:String>;
   
 Identifier:AccessVal ::= <Name:String>;
 
-ForStmt:Stmt ::= AssignStmt Condition:Exp Stepper:AdditiveExp LoopBody;
-
+ForStmt:Stmt ::= <isParfor:Boolean> AssignStmt Condition:Exp Stepper:AdditiveExp LoopBody Lower:IDUse Upper:IDUse Incr:IDUse;
+//TODO: Add an iterator for stmt. Move Upper, Lower, Incr to it
 WhileStmt:Stmt ::= Condition:Exp LoopBody;
 StmtBlock:Stmt ::= Stmt*;
 LoopBody:StmtBlock;
