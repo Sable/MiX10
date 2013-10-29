@@ -371,6 +371,8 @@ String StmtBlock.pp(String indent, Boolean useNewArray)
 
 String AssignStmt.pp(String indent, Boolean useNewArray) {
 		StringBuffer x = new StringBuffer();
+		if (true == getAtomic())
+			x.append(indent+"atomic ");
 		if (null != getLHS()) {
 			/**
 			 * It is not a list assignment
