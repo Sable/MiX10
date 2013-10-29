@@ -59,6 +59,8 @@ public class Comments {
 				
 			case 5:
 				target.parforSwitch=true;
+				break;
+				
 			case 0:
 				
 				block.addStmt(new BlockEnd("\n}\n"));

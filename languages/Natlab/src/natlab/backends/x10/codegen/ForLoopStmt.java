@@ -89,16 +89,16 @@ public class ForLoopStmt {
 		buildStmtsSubAST(node.getStmts(), target);
 		
 		
-		
-		target.currentBlock.remove(loop_body_block);
-
 		block.addStmt(fixLoopVar(for_stmt, block, target));
-		if (target.parforSwitch == true){
+			if (target.parforSwitch == true){
 			//for_stmt.setisParfor(true);
 			target.parforSwitch = false;
-		}
+			}
+		target.currentBlock.remove(loop_body_block);
+
+}
 		// System.out.println(loop_body_block.getStmts().getNumChild());
-	}
+	
 
 	private static ForStmt fixLoopVar(ForStmt for_stmt, StmtBlock block, IRx10ASTGenerator target) {
 
@@ -137,28 +137,7 @@ public class ForLoopStmt {
 					.setID(for_stmt.getAssignStmt().getLHS().getName());
 		}
 		int i = 0;
-//		for (Stmt stmt : for_stmt.getLoopBody().getStmtList()) {
-//			// if a statement is Decl statement, add a declaration node to the
-//			// block
-//			// and change to assignment node inside for stmt
-//			if (stmt instanceof DeclStmt) {
-//				if (((DeclStmt) stmt).hasRHS()) {
-//					AssignStmt InsertAssignStmt = new AssignStmt();
-//					IDInfo temp = ((DeclStmt) stmt).getLHS();
-//					InsertAssignStmt.setLHS(temp);
-//
-//					InsertAssignStmt.setRHS(((DeclStmt) stmt).getRHS());
-//					for_stmt.getLoopBody().getStmtList().insertChild(InsertAssignStmt, i);
-//				}
-//				block.addStmt(stmt);
-//				((DeclStmt) stmt).setChild(new Opt(), 2);
-//				for_stmt.getLoopBody().getStmtList().removeChild(i+1);
-//			}
-//			i++;
-//		}
-
 		return for_stmt;
-		// TODO Auto-generated method stub
 
 	}
 
