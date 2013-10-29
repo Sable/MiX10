@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import natlab.options.Options;
 import natlab.tame.valueanalysis.*;
 import natlab.tame.valueanalysis.advancedMatrix.AdvancedMatrixValue;
 import natlab.tame.valueanalysis.aggrvalue.*;
@@ -15,7 +16,7 @@ import natlab.backends.x10.IRx10.ast.DeclStmt;
 import natlab.backends.x10.IRx10.ast.Program;
 import natlab.backends.x10.codegen.*;
 
-public class Main {
+public class Mix10 {
 
 	public static void main(String[] args) {
 		// args[0]: file path
@@ -68,6 +69,11 @@ public class Main {
 
 		BuiltinWriter.classWriter(args[2]+"/");
 
+	}
+
+	public static void compile(Options options) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
