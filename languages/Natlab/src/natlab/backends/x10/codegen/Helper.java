@@ -228,6 +228,9 @@ public class Helper {
 					.getNodeList().get(graphIndex).getAnalysis()
 					.getOutFlowSets().get(node).get(ID).getSingleton()));
 
+			System.err.println(temp.toString()+ ID);
+			
+			
 			IDInfo id_info = new IDInfo();
 			id_info.setType(x10Mapping.getX10TypeMapping(temp.getMatlabClass()
 					.getName()));

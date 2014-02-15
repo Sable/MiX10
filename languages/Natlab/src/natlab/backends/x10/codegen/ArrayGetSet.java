@@ -1,5 +1,7 @@
 package natlab.backends.x10.codegen;
 
+import java.util.ArrayList;
+
 import ast.ParameterizedExpr;
 import natlab.backends.x10.IRx10.ast.*;
 import natlab.tame.tir.TIRAbstractAssignStmt;
@@ -7,16 +9,21 @@ import natlab.tame.tir.TIRAbstractAssignToListStmt;
 import natlab.tame.tir.TIRAbstractAssignToVarStmt;
 import natlab.tame.tir.TIRArrayGetStmt;
 import natlab.tame.tir.TIRArraySetStmt;
+import natlab.tame.valueanalysis.components.shape.DimValue;
+
 
 public class ArrayGetSet {
+	
+	private static boolean Debug = true;
 
 	public static void handleTIRAbstractArraySetStmt(TIRArraySetStmt node,
 			IRx10ASTGenerator target, StmtBlock block) {
-
-		System.out.println(node.getIndizes().getChild(0));
-		System.out.println(node.getLHS().getPrettyPrinted()
-				+ "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
-		// System.out.println(node.getTargetName().getID());
+		if (Debug) {
+			System.out.println(node.getIndizes().getChild(0));
+			System.out.println(node.getLHS().getPrettyPrinted()
+					+ "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
+			// System.out.println(node.getTargetName().getID());
+		}
 
 		String LHS;
 		target.symbolMapKey = node.getArrayName().getID();
@@ -39,93 +46,115 @@ public class ArrayGetSet {
 		 * index. If not declared before first declare the array and then set
 		 * the index
 		 */
-		ArraySetStmt array_set = new ArraySetStmt();
-		array_set.setLHS(Helper.generateIDInfo(target.analysis, target.index,
-				node, LHS));
-		array_set.getLHS().setName(LHS.toString());
+		
 		boolean hasColon = false;
 		for (int i = 0; i < node.getIndizes().getNumChild(); i++) {
-			array_set.setIndices(Expressions.makeIRx10Exp(node.getIndizes()
-					.getChild(i), false, target), i);
-			if (((IDUse) (array_set.getIndices(i))).getID().equals("__")) {
+//			array_set.setIndices(Expressions.makeIRx10Exp(node.getIndizes()
+//					.getChild(i), false, target), i);
+			if (((IDUse) (Expressions.makeIRx10Exp(node.getIndizes()
+					.getChild(i), false, target))).getID().equals("__")) {
 				hasColon = true;
 			}
 		}
-
-		target.symbolMap.put(target.symbolMapKey, array_set.getLHS());
-
-		// array_set.getLHS()
-		// .setValue(
-		// new ArrayAccess(new IDUse(LHS), Expressions.getArgs(node.getLHS(),
-		// target))
-		// );
+		
+		
 
 		boolean tf = true;
-		if (null != array_set.getLHS().getShape())
-			for (int i = 0; i < array_set.getLHS().getShape().size(); i++) {
-				if (null != array_set.getLHS().getShape().get(i))
-					tf &= ("1").equals(array_set.getLHS().getShape().get(i)
+		IDInfo LhsInfo = new IDInfo();
+		LhsInfo = Helper.generateIDInfo(target.analysis, target.index, node, LHS);
+		
+		if (null != LhsInfo.getShape())
+			for (int i = 0; i < LhsInfo.getShape().size(); i++) {
+				if (null != LhsInfo.getShape().get(i))
+					tf &= ("1").equals(LhsInfo.getShape().get(i)
 							.toString());
 			}
-		array_set.setRHS(Expressions.makeIRx10Exp(node.getRHS(), tf, target));
-
-		// System.out.println(((IDUse)
-		// ((ArrayAccess)array_set.getLHS().getValue()).getIndices(0)).getID()+"%%");
-		// TODO - Below is a dirty hack to
-		// manage colon expression in array set statement
-		// need to make it proper
-
-		if (!hasColon)
+		/*
+		 * If all indices are scalar
+		 */
+		if (!hasColon && tf){
+			ArraySetStmt array_set = new ArraySetStmt();
+			array_set.setLHS(Helper.generateIDInfo(target.analysis, target.index,
+					node, LHS));
+			array_set.getLHS().setName(LHS.toString());
+			
+			
+			for (int i = 0; i < node.getIndizes().getNumChild(); i++) {
+				array_set.setIndices(Expressions.makeIRx10Exp(node.getIndizes()
+						.getChild(i), false, target), i);
+				
+			}
+			target.symbolMap.put(target.symbolMapKey, array_set.getLHS());
+			
+			array_set.setRHS(Expressions.makeIRx10Exp(node.getRHS(), tf, target));
 			block.addStmt(array_set);
+			
+			
+		}
+		/*
+		 * if there is colon operator in LHS
+		 */
 		else {
-			Literally pointLoop = new Literally();
-			pointLoop.setVerbatim("for (p in "
-					+ ((IDUse) array_set.getRHS()).getID() + ".region)\n");
-			StringBuffer x = new StringBuffer();
-			StringBuffer pt = new StringBuffer();
-			String rhsID = ((IDUse) array_set.getRHS()).getID();
-
-			if (((IDUse) array_set.getIndices(0)).getID().equals("__")) {
-				pt.append("(" + rhsID + ".region.min(" + Integer.toString(0)
-						+ ")-1) as Int");
-			} else {
-				Exp i = array_set.getIndices(0);
-				if (target.symbolMap.containsKey(((IDUse) i).getID())
-						&& !Helper.isScalar(target.symbolMap.get(
-								(((IDUse) i).getID())).getShape())) {
-					pt.append("(" + ((IDUse) i).getID() + "("
-							+ ((IDUse) i).getID() + ".region.min(0)"
-							+ ") -1) as Int");
-				} else {
-					pt.append("(" + ((IDUse) i).getID() + "-1) as Int");
-				}
-			}
-
-			for (int j = 1; j < array_set.getIndicesList().getNumChild(); j++) {
-				
-				System.out.println("CCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCCC");
-				
-				if (((IDUse) array_set.getIndices(j)).getID().equals("__")) {
-					pt.append(", (" + rhsID + ".region.min("
-							+ Integer.toString(j) + ")-1) as Int");
-				} else {
-					Exp i = array_set.getIndices(j);
-					if (target.symbolMap.containsKey(((IDUse) i).getID())
-							&& !Helper.isScalar(target.symbolMap.get(
-									(((IDUse) i).getID())).getShape())) {
-						pt.append(", (" + ((IDUse) i).getID() + "("
-								+ ((IDUse) i).getID() + ".region.min(0)"
-								+ ") -1) as Int");
-					} else {
-						pt.append(", (" + ((IDUse) i).getID() + "-1) as Int");
+			SubArraySetStmt subArraySet = new SubArraySetStmt();
+			subArraySet.setLHS(Helper.generateIDInfo(target.analysis, target.index,
+					node, LHS));
+			subArraySet.getLHS().setName(LHS.toString());
+			
+			subArraySet.setLowerList(new List<Exp>());
+			subArraySet.setUpperList(new List<Exp>());
+			
+			if (null != subArraySet.getLHS().getShape())
+				for (int i=0; i<node.getIndizes().getNumChild(); i++){
+					if (((IDUse) (Expressions.makeIRx10Exp(node.getIndizes()
+							.getChild(i), false, target))).getID().equals("__")) {
+						/*
+						 * Case when index is a ':'
+						 * Note that this fails if number of indices is < 
+						 * number of dimensions.
+						 */
+						LiterallyExp low = new LiterallyExp("1");
+						LiterallyExp high = new LiterallyExp();
+						if (1<node.getIndizes().getNumChild())
+							high.setVerbatim(LHS.toString()+".numElems_"+Integer.toString(i+1));
+						else
+							high.setVerbatim(LHS.toString()+".size"+Integer.toString(i+1));
+						subArraySet.getLowerList().add(low);
+						subArraySet.getUpperList().add(high);
+						
 					}
+					
+					else {
+						/*
+						 * case when index is an ID
+						 * It can be a scalar or a vector
+						 * If it is a sclar :
+						 * 		low = high 
+						 * else
+						 * 		low = 1st value of vector
+						 * 	&   upper = last value
+						 */
+						String indexId = ((IDUse) (Expressions.makeIRx10Exp(node.getIndizes()
+								.getChild(i), false, target))).getID();
+						if (Helper.isScalar(target.symbolMap.get(indexId).getShape())){
+							IDUse low = new IDUse(indexId);
+							IDUse high = new IDUse(indexId);
+							subArraySet.getLowerList().add(low);
+							subArraySet.getUpperList().add(high);
+						}
+						else{
+							LiterallyExp low = new LiterallyExp(indexId+"(0)") ;
+							LiterallyExp high = new LiterallyExp(indexId+"("+indexId+".size -1)");
+							subArraySet.getLowerList().add(low);
+							subArraySet.getUpperList().add(high);
+						}
+						
+						
+					}
+					
 				}
-			}
-
-			x.append(array_set.getLHS().getName() + "(p.operator+(Point.make("
-					+ pt.toString() + ")))= ");
-			x.append(((IDUse) array_set.getRHS()).getID() + "(p);\n");
-			block.addStmt(new Literally(x.toString()));
+			target.symbolMap.put(target.symbolMapKey, subArraySet.getLHS());
+			subArraySet.setRHS(Expressions.makeIRx10Exp(node.getRHS(), tf, target));
+			block.addStmt(subArraySet);
 		}
 
 
@@ -239,119 +268,213 @@ public class ArrayGetSet {
 			TIRArrayGetStmt node, boolean isScalar, IRx10ASTGenerator target,
 			StmtBlock block) {
 
-		ArrayAccess arrayAccess = new ArrayAccess();
-		arrayAccess.setArrayID(new IDUse(node.getRHS().getVarName()));
-		arrayAccess.setIndicesList(Expressions.getArgs(node.getRHS(), target));
-
-		RegionBuilder region = new RegionBuilder();
-		region.setArrayID(arrayAccess.getArrayID());
-		Exp i;
-		boolean useregion = false;
-		for (int j = 0; j < arrayAccess.getIndicesList().getNumChild(); j++) {
-			i = arrayAccess.getIndicesList().getChild(j);
-			/*
-			 * Below is a very ugly hack to incorporate x:y type colon
-			 * expressions in array access. TODO : Fix it
-			 */
-			if (target.symbolMap.containsKey(((IDUse) i).getID())
-					&& !Helper.isScalar(target.symbolMap.get(
-							(((IDUse) i).getID())).getShape())) {
-
-				region.addLower(new IDUse(/*((IDUse) i).getID() +*/ "("
-
-						+ ((IDUse) i).getID() + ".region.min(0)" + ")")); // MAKE
-																			// SURE
-																			// colon
-																			// op
-																			// returns
-																			// array
-																			// with
-																			// indexing
-																			// starting
-																			// at
-																			// 1
-
-				region.addUpper(new IDUse(/*((IDUse) i).getID() +*/ "(" +
-
-				// (target.symbolMap.get((((IDUse)i).getID())).getShape()).get(1)
-						((IDUse) i).getID() + ".region.max(0)" + ")"));
-				useregion = true;
+		
+		
+		String arrayName = node.getRHS().getVarName();
+		List<Exp> indices = Expressions.getArgs(node.getRHS(), target);
+		
+		boolean hascolon =false;
+		boolean allScalar=true;
+		
+		for (Exp e : indices){
+			if (e instanceof IDUse && ((IDUse)e).getID().equals("__")){
+				/*
+				 * it has colon expression
+				 */
+				hascolon = true;
 			}
-
-			else {
-				region.addLower((IDUse) i);
-				region.addUpper((IDUse) i);
-			}
-			if (i instanceof IDUse && ((IDUse) i).getID().equals("__")) {
-				useregion = true;
+			if (e instanceof IDUse && !hascolon && null != target.symbolMap.get( ((IDUse)(e)).getID() ).getShape()){
+				
+				if (target.symbolMap.get( ((IDUse)(e)).getID() ).getShape().get(0).getClass().toString().equals("class natlab.tame.valueanalysis.components.shape.DimValue"))
+				{
+					System.err.println(node.getNodeString() + target.symbolMap.get( ((IDUse)(e)).getID() ).getShape().toString());
+					for ( DimValue s : (ArrayList<DimValue>)(target.symbolMap.get( ((IDUse)(e)).getID() ).getShape())) {
+						if(null !=s)
+						allScalar &= "1".equals(s.toString());
+					}
+				}
+				else
+					for ( Integer s : (ArrayList<Integer>)(target.symbolMap.get( ((IDUse)(e)).getID() ).getShape())) {
+						allScalar &= "1".equals(s.toString());
+					}
 			}
 		}
-
-		if (!useregion) {
-
+		
+		if(!hascolon && allScalar){
+			/*
+			 * all indices are scalar values
+			 */
+			ArrayAccess arrayAccess = new ArrayAccess();
+			arrayAccess.setArrayID(new IDUse(arrayName));
+			arrayAccess.setIndicesList(Expressions.getArgs(node.getRHS(), target));
 			if (isDecl) {
-
 				((DeclStmt) decl_or_assgn).setRHS(arrayAccess);
 			} else {
 				((AssignStmt) decl_or_assgn).setRHS(arrayAccess);
 			}
-		} else {
-			
-			/*
-			 * Below block creates the point and the offset
-			 * to be used.
-			 */
-			/*Refer comment above*/
-			DeclStmt pointDecl = new DeclStmt();
-			
-			pointDecl.setLHS(new IDInfo(new Type("Point"), "mix10_pt_"
-					+ arrayAccess.getArrayID().getID(), null, null, null, null));
-			pointDecl.setMutable(false);
-			//TODO below statement should work when not using new arrays 
-			//target.currentBlock.get(0).addStmt(pointDecl);
-			
-			StringBuffer x = new StringBuffer();
-			if (/* region.getLower(0).equals(region.getUpper(0)) && */!region
-					.getLower(0).getID().equals("__")) {
-				x.append("1-(" + region.getLower(0).getID() + " as Int)");
-			} else {
-				x.append("0");
-			}
-
-			for (int u = 1; u < region.getLowerList().getNumChild(); u++) {
-				if (/* region.getLower(u).equals(region.getUpper(u)) && */!region
-						.getLower(u).getID().equals("__")) {
-					x.append(", 1-(" + region.getLower(u).getID() + " as Int)");
-				} else {
-					x.append(", 0");
-				}
-
-			}
-			block.addStmt(new Literally("mix10_pt_"
-					+ arrayAccess.getArrayID().getID() + " = Point.make("
-					+ x.toString() + ");\n"));
-			
-			DeclStmt pointOffsetId = new DeclStmt();
-			pointOffsetId.setLHS( new IDInfo(target.symbolMap.get(node.getRHS().getVarName()).getType(),
-					"mix10_ptOff_"+ arrayAccess.getArrayID().getID(),
-					target.symbolMap.get(node.getRHS().getVarName()).getShape(),
-					target.symbolMap.get(node.getRHS().getVarName()).getdidShapeChange(), null,null	));
-			pointOffsetId.setMutable(false);
-			//TODO below statement should work when not using new arrays 
-			//target.currentBlock.get(0).addStmt(pointOffsetId);
-			block.addStmt(new Literally("mix10_ptOff_"
-					+ arrayAccess.getArrayID().getID() + " = "
-					+ arrayAccess.getArrayID().getID() + ";\n"));
-			/*Refer Comment above*/
-			
-			if (isDecl) {
-
-				((DeclStmt) decl_or_assgn).setRHS(region);
-			} else {
-				((AssignStmt) decl_or_assgn).setRHS(region);
-			}
-
 		}
+		
+		else{
+			/*
+			 * one or more indices is colon or a vector
+			 */
+			SubArrayGetExp subArray = new SubArrayGetExp();
+			subArray.setArrayID(new IDUse(arrayName));
+			subArray.setLowerList(new List<Exp>());
+			subArray.setUpperList(new List<Exp>());
+			int i=0;
+			for (Exp e: indices){
+				i++;
+				if (e instanceof IDUse && ((IDUse)e).getID().equals("__")){
+					/*
+					 * colon operator
+					 */
+					LiterallyExp low = new LiterallyExp("1");
+					LiterallyExp high = new LiterallyExp();
+					if (1<indices.getNumChild())
+						high.setVerbatim(arrayName+".numElems_"+Integer.toString(i));
+					else
+						high.setVerbatim(arrayName+".size"+Integer.toString(i));
+					subArray.getLowerList().add(low);
+					subArray.getUpperList().add(high);
+				}
+				else if (!Helper.isScalar(target.symbolMap.get( ((IDUse)(e)).getID() ).getShape())){
+					/*
+					 * vector shape
+					 */
+					String indexId = ((IDUse)(e)).getID();
+					LiterallyExp low = new LiterallyExp(indexId+"(0)") ;
+					LiterallyExp high = new LiterallyExp(indexId+"("+indexId+".size -1)");
+					subArray.getLowerList().add(low);
+					subArray.getUpperList().add(high);
+				}
+				else {
+					/*
+					 * scalar index
+					 */
+					String indexId = ((IDUse)(e)).getID();
+					IDUse low = new IDUse(indexId);
+					IDUse high = new IDUse(indexId);
+					subArray.getLowerList().add(low);
+					subArray.getUpperList().add(high);
+				}
+			}
+			if (isDecl) {
+				((DeclStmt) decl_or_assgn).setRHS(subArray);
+			} else {
+				((AssignStmt) decl_or_assgn).setRHS(subArray);
+			}
+		}
+		
+//		RegionBuilder region = new RegionBuilder();
+//		region.setArrayID(arrayAccess.getArrayID());
+//		Exp i;
+//		boolean useregion = false;
+//		for (int j = 0; j < arrayAccess.getIndicesList().getNumChild(); j++) {
+//			i = arrayAccess.getIndicesList().getChild(j);
+//			/*
+//			 * Below is a very ugly hack to incorporate x:y type colon
+//			 * expressions in array access. TODO : Fix it
+//			 */
+//			if (target.symbolMap.containsKey(((IDUse) i).getID())
+//					&& !Helper.isScalar(target.symbolMap.get(
+//							(((IDUse) i).getID())).getShape())) {
+//
+//				region.addLower(new IDUse(/*((IDUse) i).getID() +*/ "("
+//
+//						+ ((IDUse) i).getID() + ".region.min(0)" + ")")); // MAKE
+//																			// SURE
+//																			// colon
+//																			// op
+//																			// returns
+//																			// array
+//																			// with
+//																			// indexing
+//																			// starting
+//																			// at
+//																			// 1
+//
+//				region.addUpper(new IDUse(/*((IDUse) i).getID() +*/ "(" +
+//
+//				// (target.symbolMap.get((((IDUse)i).getID())).getShape()).get(1)
+//						((IDUse) i).getID() + ".region.max(0)" + ")"));
+//				useregion = true;
+//			}
+//
+//			else {
+//				region.addLower((IDUse) i);
+//				region.addUpper((IDUse) i);
+//			}
+//			if (i instanceof IDUse && ((IDUse) i).getID().equals("__")) {
+//				useregion = true;
+//			}
+//		}
+//
+//		if (!useregion) {
+//
+//			if (isDecl) {
+//
+//				((DeclStmt) decl_or_assgn).setRHS(arrayAccess);
+//			} else {
+//				((AssignStmt) decl_or_assgn).setRHS(arrayAccess);
+//			}
+//		} else {
+//			
+//			/*
+//			 * Below block creates the point and the offset
+//			 * to be used.
+//			 */
+//			/*Refer comment above*/
+//			DeclStmt pointDecl = new DeclStmt();
+//			
+//			pointDecl.setLHS(new IDInfo(new Type("Point"), "mix10_pt_"
+//					+ arrayAccess.getArrayID().getID(), null, null, null, null));
+//			pointDecl.setMutable(false);
+//			//TODO below statement should work when not using new arrays 
+//			//target.currentBlock.get(0).addStmt(pointDecl);
+//			
+//			StringBuffer x = new StringBuffer();
+//			if (/* region.getLower(0).equals(region.getUpper(0)) && */!region
+//					.getLower(0).getID().equals("__")) {
+//				x.append("1-(" + region.getLower(0).getID() + " as Int)");
+//			} else {
+//				x.append("0");
+//			}
+//
+//			for (int u = 1; u < region.getLowerList().getNumChild(); u++) {
+//				if (/* region.getLower(u).equals(region.getUpper(u)) && */!region
+//						.getLower(u).getID().equals("__")) {
+//					x.append(", 1-(" + region.getLower(u).getID() + " as Int)");
+//				} else {
+//					x.append(", 0");
+//				}
+//
+//			}
+//			block.addStmt(new Literally("mix10_pt_"
+//					+ arrayAccess.getArrayID().getID() + " = Point.make("
+//					+ x.toString() + ");\n"));
+//			
+//			DeclStmt pointOffsetId = new DeclStmt();
+//			pointOffsetId.setLHS( new IDInfo(target.symbolMap.get(node.getRHS().getVarName()).getType(),
+//					"mix10_ptOff_"+ arrayAccess.getArrayID().getID(),
+//					target.symbolMap.get(node.getRHS().getVarName()).getShape(),
+//					target.symbolMap.get(node.getRHS().getVarName()).getdidShapeChange(), null,null	));
+//			pointOffsetId.setMutable(false);
+//			//TODO below statement should work when not using new arrays 
+//			//target.currentBlock.get(0).addStmt(pointOffsetId);
+//			block.addStmt(new Literally("mix10_ptOff_"
+//					+ arrayAccess.getArrayID().getID() + " = "
+//					+ arrayAccess.getArrayID().getID() + ";\n"));
+//			/*Refer Comment above*/
+//			
+//			if (isDecl) {
+//
+//				((DeclStmt) decl_or_assgn).setRHS(region);
+//			} else {
+//				((AssignStmt) decl_or_assgn).setRHS(region);
+//			}
+//
+//		}
 
 	}
 

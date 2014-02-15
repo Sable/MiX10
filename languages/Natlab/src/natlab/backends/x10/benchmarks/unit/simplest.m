@@ -1,23 +1,13 @@
-function [x] =  simplest(a)
+function [p] =  simplest(a)
 %x=i;
 
 x=5;
+x = horzcat(5,x);
 p=ones(10);
+y=ones(1,10);
+p(2,2:4) = x;
+y = p(2,1:10); 
 
-
-  y=p;
-
- % p=3:7;
-  %!finish
-  %!async
-  y=p;
- %!end  
- %!end 
- 
- %!parfor
- for(i=1:10)
-    x=3;
-    p(2)= x+3;
-    end
- 
+for i = 1:10
+	p(1,i) = p(1,i)+1;
 end

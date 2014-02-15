@@ -163,8 +163,9 @@ public class Expressions {
 			
 			
 			//if (!((ParameterizedExpr) NatlabExp).isVariable){//TODO check if isVariable works
-			if (x10Mapping.isBuiltin(NatlabExp.getVarName())){
-				
+			if (x10Mapping.isBuiltin(NatlabExp.getVarName()))
+			{
+			
 			BuiltinMethodCall libCall = new BuiltinMethodCall();
 			libCall.setBuiltinMethodName(new MethodId("Mix10."+NatlabExp.getVarName()));
 			libCall.setArgumentList(Args);

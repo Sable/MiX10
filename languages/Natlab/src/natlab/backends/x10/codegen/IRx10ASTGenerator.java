@@ -138,6 +138,9 @@ public class IRx10ASTGenerator extends TIRAbstractNodeCaseHandler {
 				for (String key : collected.usedBuiltins.keySet())
 				{
 					builtinList = doc.getElementsByTagName(key);
+					
+					//System.out.println(key+"##########################"+builtinList.toString());
+					
 					collected.usedBuiltins.put(key, builtinList);
 					
 				}

@@ -5,12 +5,8 @@ public static def ones(a:Double){
 		//	x(p) = 0.0;
 		return x;
 				}
-public static def plus(a:Array[Double], b:Double){
-		val x = new Array[Double](a.region);
-		for (p in a.region){
-			x(p) = a(p)+ b;
-		}
-		return x;
-	}
+public static def colon(a:Double, b:Double){
+				return new Array[Double](1..1*1..((b-a+1) as Int), (i:Point(2))=>((i(1)+a as Int -1) as Double));
+				}
 
 }

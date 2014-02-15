@@ -38,6 +38,10 @@ public class ForLoopStmt {
 
 		IDInfo LHSinfo = new IDInfo(new Type("Double"), node.getAssignStmt()
 				.getLHS().getVarName(), null, false, null, null);
+		
+		LHSinfo = (Helper.generateIDInfo(target.analysis,
+				target.index, node, node.getAssignStmt()
+				.getLHS().getVarName()));
 		ShapeFactory sf = new ShapeFactory();
 		/*
 		 * TODO
@@ -62,7 +66,15 @@ public class ForLoopStmt {
 		IDUse upper = new IDUse(((RangeExpr) (node.getAssignStmt().getRHS()))
 				.getUpper().getVarName());
 		for_stmt.setUpper(upper);
-		IDUse increment = new IDUse("1");
+		
+		IDUse increment;
+		if(((RangeExpr) (node.getAssignStmt().getRHS())).hasIncr())
+		{
+			increment = new IDUse(((RangeExpr) (node.getAssignStmt().getRHS())).getIncr().getVarName());
+		}
+		else{
+			increment = new IDUse("1");
+		}
 		for_stmt.setIncr(increment);
 		/*
 		 * uncomment below If after fixing the following TODO getIncr throws
@@ -81,6 +93,9 @@ public class ForLoopStmt {
 		target.symbolMap.put(LHSinfo.getName(), LHSinfo);
 		for_stmt.setCondition(new LEExp(
 				new IDUse(for_assign.getLHS().getName()), upper));
+		/*
+		 * TODO : Handle case when lower > upper !!
+		 */
 		for_stmt.setStepper(new IncExp(
 				new IDUse(for_assign.getLHS().getName()), increment));
 		for_stmt.setLoopBody(new LoopBody(new List<Stmt>()));

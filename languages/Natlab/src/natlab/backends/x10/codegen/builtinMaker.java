@@ -33,7 +33,7 @@ public class builtinMaker {
 		 * and creates a x10 method ("literally" node in the mix10 class
 		 */
 		
-		
+		System.out.println(builtinName+"YOYOYOYOYOYO");
 		builtin = getBuiltinFromXml(natlabExp, builtinName,target);
 		if (!builtin.equals("processed")){
 			BuiltinWriter.mix10Append(builtin, args, natlabExp.getVarName(),getExprType(natlabExp,target), target);
@@ -47,21 +47,23 @@ public class builtinMaker {
 		
 		int realOrComplex = specialize(natlabExp);
 		String exprType = getExprType(natlabExp,target);
-		String builtin;
+		
+		String builtin="";
 		if (! builtinList.contains(builtinName+"-"+exprType)){
 		
 		
 
 			System.out.println(builtinName+"BNAME");
 		NodeList builtinNodeList = target.collectedBuiltins.usedBuiltins.get(builtinName);
-		if (null != builtinNodeList)
-			System.out.println(builtinName+"BNAME");
+		System.out.println (target.collectedBuiltins.usedBuiltins.toString());
+		if (null != builtinNodeList){
+			System.out.println(builtinName+"BNAME1");
 		
 		Element builtinRealOrComplex = (Element)builtinNodeList.item(realOrComplex);
 		 builtin = ((Node)(
 				 ((Element)(builtinRealOrComplex.getElementsByTagName(exprType).item(0))).getChildNodes().item(0)
 				 )).getNodeValue().trim();
-		
+		}
 		System.out.println(builtin+"------");
 		builtinList.add(builtinName+"-"+exprType);
 		return builtin;

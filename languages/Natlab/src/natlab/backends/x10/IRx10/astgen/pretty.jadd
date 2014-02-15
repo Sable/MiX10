@@ -52,7 +52,7 @@ String DeclStmt.pp(String indent, Boolean useNewArray){
 
 			else if (null != getLHS().getShape()) {
 				boolean tf = true;
-				for (int i = 0; i < getLHS().getShape().size(); i++) {
+				for (int i = 0; i < (getLHS().getShape().size()); i++) {
 					if (null != getLHS().getShape().get(i))
 						tf &= ("1").equals(getLHS().getShape().get(i)
 								.toString());
@@ -84,7 +84,7 @@ String DeclStmt.pp(String indent, Boolean useNewArray){
 
 					if (true == useNewArray) {
 
-						size = getLHS().getShape().size();
+						size = (getLHS().getShape().size());
 						if (size >= 1 && getLHS().getShape().get(0).toString().equals("1")) {
 							size = 1;
 						}
@@ -108,7 +108,7 @@ String DeclStmt.pp(String indent, Boolean useNewArray){
 						/*
 						 * Add rank of the array if known
 						 */
-						x.append("(" + getLHS().getShape().size() + ")");
+						x.append("(" + (getLHS().getShape().size()) + ")");
 						if (hasRHS() && !(getRHS() instanceof SimpleArrayExp)) {
 							x.append(" = " + "new Array["
 									+ getLHS().getType().getName() + "]" + "(");
@@ -175,12 +175,12 @@ String DeclStmt.pp(String indent, Boolean useNewArray){
 				x.append(
 				"(("+getArrayID().getID()+".region.min("+Integer.toString(0)+")).."	);
 			else
-				x.append("("+getLowers().getChild(0).getID()+" as Int..");
+				x.append("("+getLowers().getChild(0).getID()+" as Long..");
 			if(getUppers().getChild(0).getID().equals("__"))
 				x.append(
 				"("+getArrayID().getID()+".region.max("+Integer.toString(0)+")))"	);
 			else
-				x.append(""+getUppers().getChild(0).getID()+" as Int)");
+				x.append(""+getUppers().getChild(0).getID()+" as Long)");
 	        }
 			int i;
 			for(i=1 ; i< getLowers().getNumChild();i++){
@@ -194,12 +194,12 @@ String DeclStmt.pp(String indent, Boolean useNewArray){
 					x.append(
 					"(("+getArrayID().getID()+".region.min("+Integer.toString(i)+")).."	);
 				else
-					x.append("("+getLowers().getChild(i).getID()+" as Int..");
+					x.append("("+getLowers().getChild(i).getID()+" as Long..");
 				if(getUppers().getChild(i).getID().equals("__"))
 					x.append(
 					"("+getArrayID().getID()+".region.max("+Integer.toString(i)+")))"	);
 				else
-					x.append(""+getUppers().getChild(i).getID()+" as Int)");
+					x.append(""+getUppers().getChild(i).getID()+" as Long)");
 				}
 				
 			}
@@ -216,10 +216,10 @@ String ArraySetStmt.pp(String indent, Boolean useNewArray){
 		
 						
 			x.append(getLHS().getName()+"(");
-			x.append(getIndicesList().getChild(0).pp("", useNewArray)+" as Int -1");
+			x.append(getIndicesList().getChild(0).pp("", useNewArray)+" as Long -1");
 		  	  for(int i=1; i<getIndicesList().getNumChild() ; i++)
 		  	  {
-		  		  x.append(", "+getIndicesList().getChild(i).pp("", useNewArray)+" as Int -1");
+		  		  x.append(", "+getIndicesList().getChild(i).pp("", useNewArray)+" as Long -1");
 		  	  }
 		  	  x.append(")");
 			x.append(" = ");
@@ -227,6 +227,44 @@ String ArraySetStmt.pp(String indent, Boolean useNewArray){
 		return x.toString();
 	}
   
+  String SubArraySetStmt.pp(String indent, Boolean useNewArray){
+		StringBuffer x = new StringBuffer();
+		
+			if (useNewArray){	
+				
+			x.append(getLHS().getName()+" = Helper.setSubArray(");
+			x.append(getLHS().getName());
+			
+		  	  for(int i=0; i<getLowerList().getNumChild() ; i++)
+		  	  {
+		  		  x.append(", "+getLowerList().getChild(i).pp("", useNewArray));
+		  		  x.append(", "+getUpperList().getChild(i).pp("", useNewArray));
+		  	  }
+		  	  
+		  	 x.append(", "+getRHS().pp("", useNewArray)+");\n");
+			
+		}	
+		return x.toString();
+	}
+	
+	String SubArrayGetExp.pp(String indent, Boolean useNewArray){
+		StringBuffer x = new StringBuffer();
+		
+			if (useNewArray){	
+				
+			x.append("Helper.getSubArray(");
+			
+		  	  for(int i=0; i<getLowerList().getNumChild() ; i++)
+		  	  {
+		  		  x.append(getLowerList().getChild(i).pp("", useNewArray));
+		  		  x.append(", "+getUpperList().getChild(i).pp("", useNewArray)+", ");
+		  	  }
+		  	  
+		  	 x.append(getArrayID().pp("", useNewArray)+");\n");
+			
+		}	
+		return x.toString();
+	}
   
   String SimpleArrayExp.pp(String indent, Boolean useNewArray){
   	StringBuffer x = new StringBuffer();
@@ -249,10 +287,10 @@ String ArraySetStmt.pp(String indent, Boolean useNewArray){
   	  StringBuffer x = new StringBuffer();
   	  x.append(indent);
   	  x.append(getArrayID().getID()+"(");
-  	  x.append(getIndicesList().getChild(0).pp("", useNewArray)+" as Int -1");
+  	  x.append(getIndicesList().getChild(0).pp("", useNewArray)+" as Long -1");
   	  for(int i=1; i<getIndicesList().getNumChild() ; i++)
   	  {
-  		  x.append(", "+getIndicesList().getChild(i).pp("", useNewArray)+"as Int -1");
+  		  x.append(", "+getIndicesList().getChild(i).pp("", useNewArray)+" as Long -1");
   	  }
   	  x.append(")");
   	  return x.toString();
@@ -290,8 +328,14 @@ String MethodHeader.pp(String indent, Boolean useNewArray)
 
 
 static int PPHelper.getSize(ArrayList shape){
-	  int size;
+	  int size =0;
 	  size = shape.size();
+	  int less=0;
+	  for (int i =0; i<size; i++){
+	   	if(null == shape.get(i))
+	   		less++;
+	  }
+	  size = size-less;
 		if (size >= 1 && shape.get(0).toString().equals("1")) {
 			size = 1;
 		}
@@ -312,11 +356,11 @@ static String PPHelper.makeArgs(List<IDInfo> argsList)
 			s.append(argsList.getChild(0).getName()+": Array_"+ getSize(argsList.getChild(0).getShape())+"["+argsList.getChild(0).getType().getName()+"]");
 			}
 				else{
-				s.append(", "+argsList.getChild(0).getName()+": Array["+argsList.getChild(0).getType().getName()+"]");
+				s.append(argsList.getChild(0).getName()+": Array["+argsList.getChild(0).getType().getName()+"]");
 			}	
 			}
 			else{
-				s.append(", "+argsList.getChild(0).getName()+": Array["+argsList.getChild(0).getType().getName()+"]");
+				s.append(argsList.getChild(0).getName()+": Array["+argsList.getChild(0).getType().getName()+"]");
 			}
 		}
 		else
@@ -325,8 +369,8 @@ static String PPHelper.makeArgs(List<IDInfo> argsList)
 	{	
 		if (!isScalar(argsList.getChild(i))){
 			if(null != argsList.getChild(i).getShape()){
-			if (false == argsList.getChild(i).getdidShapeChange()){
-				s.append(argsList.getChild(i).getName()+": Array_"+getSize(argsList.getChild(i).getShape())+"["+argsList.getChild(i).getType().getName()+"]"
+			if (null == argsList.getChild(0).getdidShapeChange() || false == argsList.getChild(i).getdidShapeChange()){
+				s.append(", "+argsList.getChild(i).getName()+": Array_"+getSize(argsList.getChild(i).getShape())+"["+argsList.getChild(i).getType().getName()+"]"
 						);
 				}
 				else{
@@ -371,7 +415,7 @@ String StmtBlock.pp(String indent, Boolean useNewArray)
 
 String AssignStmt.pp(String indent, Boolean useNewArray) {
 		StringBuffer x = new StringBuffer();
-		if (true == getAtomic())
+		if (null != getAtomic() && true == getAtomic())
 			x.append(indent+"atomic ");
 		if (null != getLHS()) {
 			/**
@@ -460,6 +504,16 @@ String AssignStmt.pp(String indent, Boolean useNewArray) {
 	
 	String Literally.pp(String indent, Boolean useNewArray){
 		if (false == useNewArray){
+		StringBuffer x = new StringBuffer();
+		x.append(indent+getVerbatim());
+		return x.toString();
+		}
+		else
+		return indent;
+  }
+	
+	String LiterallyExp.pp(String indent, Boolean useNewArray){
+		if (true == useNewArray){
 		StringBuffer x = new StringBuffer();
 		x.append(indent+getVerbatim());
 		return x.toString();
