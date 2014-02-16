@@ -59,7 +59,7 @@ public class x10Mapping {
 	}
 
 	private void makex10TypeMap() {
-		x10TypeMap.put("char", new Type("String"));
+		x10TypeMap.put("char", new Type("Char"));
 		x10TypeMap.put("double", new Type("Double"));
 		x10TypeMap.put("single", new Type("Float"));
 		x10TypeMap.put("int8", new Type("Byte"));

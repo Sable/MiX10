@@ -280,7 +280,13 @@ String ArraySetStmt.pp(String indent, Boolean useNewArray){
     		
   
   
-  
+  String StringLiteral.pp(String indent, Boolean useNewArray)
+  {
+    StringBuffer x = new StringBuffer();
+  	  x.append(indent);
+  	  x.append("Array_1.makeView("+getLiteral()+".chars())");
+  	  return x.toString();
+  }
 
   String ArrayAccess.pp(String indent, Boolean useNewArray)
   {

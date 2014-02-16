@@ -98,7 +98,8 @@ public class Expressions {
 			return new FPLiteral(NatlabExp.getNodeString());
 		}
 		if (NatlabExp instanceof StringLiteralExpr) {
-			return new StringLiteral(NatlabExp.getNodeString());
+			String x10String = Helper.MakeX10String(NatlabExp.getNodeString());
+			return new StringLiteral(x10String);
 		} else if (NatlabExp instanceof LiteralExpr) {
 			return new Literal(NatlabExp.getNodeString());
 		}

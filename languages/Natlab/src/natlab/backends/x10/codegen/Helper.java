@@ -2,6 +2,7 @@ package natlab.backends.x10.codegen;
 
 import java.util.ArrayList;
 import java.util.Collection;
+
 import natlab.tame.valueanalysis.components.shape.*;
 import natlab.backends.x10.IRx10.ast.IDInfo;
 import natlab.backends.x10.IRx10.ast.StmtBlock;
@@ -264,6 +265,23 @@ public class Helper {
 		// TODO Auto-generated method stub
 		//TODO - important
 		return false;
+	}
+
+	public static String MakeX10String(String nodeString) {
+		String x10String = new String(nodeString);
+		x10String.trim();
+		System.err.println(x10String.startsWith("\'"));
+		//nodeString.c
+		String temp = "\'";
+		if (x10String.startsWith("\'") && x10String.endsWith("\'")){
+			
+			x10String = x10String.substring(1, x10String.length() -1);
+			
+		}
+		x10String = x10String.replace("\"", "\\\"");
+		x10String = x10String.replace("\'\'", "\\\'");
+		x10String = "\""+x10String+"\"";
+		return x10String;
 	}
 
 }

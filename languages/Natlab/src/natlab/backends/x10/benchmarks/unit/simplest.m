@@ -1,6 +1,6 @@
 function [p] =  simplest(a)
 %x=i;
-
+cc='h`ello''s"world"';
 x=5;
 x = horzcat(5,x);
 p=ones(10);
