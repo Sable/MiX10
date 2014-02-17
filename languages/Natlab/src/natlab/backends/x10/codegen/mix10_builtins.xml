@@ -1,5 +1,39 @@
 <mix10>
-
+	<horzcat>
+		<real>
+			<type1>
+				
+			</type1>
+			<type2>
+				
+			</type2>
+			<type3>
+				
+			</type3>
+			<type4>
+				
+			</type4>
+			<type5>
+			//////
+			</type5>
+		</real>
+		<complex>
+			<type1>
+				This is type 1...complex
+			</type1>
+			<type2>
+				This is type 2
+			</type2>
+			<type3>
+				This is type 3
+			</type3>
+			<type4>
+				This is type 4
+			</type4>
+			<type5>
+			</type5>
+		</complex>
+	</horzcat>
 	<plus>
 		<real>
 			<type1>

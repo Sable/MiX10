@@ -85,6 +85,10 @@ String DeclStmt.pp(String indent, Boolean useNewArray){
 					if (true == useNewArray) {
 
 						size = (getLHS().getShape().size());
+						
+						while(getLHS().getShape().get(size-1) == null){
+							size--;
+						}
 						if (size >= 1 && getLHS().getShape().get(0).toString().equals("1")) {
 							size = 1;
 						}
@@ -298,6 +302,10 @@ String ArraySetStmt.pp(String indent, Boolean useNewArray){
   	  {
   		  x.append(", "+getIndicesList().getChild(i).pp("", useNewArray)+" as Long -1");
   	  }
+  	  
+  	  if(getIsColVector() && getIndicesList().getNumChild() == 1){
+  	   x.append(", 1");
+  	   }
   	  x.append(")");
   	  return x.toString();
   }

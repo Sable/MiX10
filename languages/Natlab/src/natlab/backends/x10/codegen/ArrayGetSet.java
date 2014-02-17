@@ -306,6 +306,17 @@ public class ArrayGetSet {
 			 */
 			ArrayAccess arrayAccess = new ArrayAccess();
 			arrayAccess.setArrayID(new IDUse(arrayName));
+			arrayAccess.setIsColVector(false);
+			/*
+			 * assumes that shape is correct.
+			 */
+			int sz = target.symbolMap.get(arrayName).getShape().size();
+			while(target.symbolMap.get(arrayName).getShape().get(sz-1) == null){
+				sz--;
+			}
+			if(sz == 2 && "1".equals(target.symbolMap.get(arrayName).getShape().get(1).toString())){
+				arrayAccess.setIsColVector(true);
+			}
 			arrayAccess.setIndicesList(Expressions.getArgs(node.getRHS(), target));
 			if (isDecl) {
 				((DeclStmt) decl_or_assgn).setRHS(arrayAccess);

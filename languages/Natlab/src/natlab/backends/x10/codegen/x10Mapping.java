@@ -34,7 +34,7 @@ public class x10Mapping {
 		x10BuiltinList.add("length");
 		x10BuiltinList.add("sqrt");
 		//x10BuiltinList.add("rand");
-	//	x10BuiltinList.add("horzcat");
+		x10BuiltinList.add("horzcat");
 	//	x10BuiltinList.add("mtimes");
 	//	x10BuiltinList.add("times");
 	//	x10BuiltinList.add("rdivide");
