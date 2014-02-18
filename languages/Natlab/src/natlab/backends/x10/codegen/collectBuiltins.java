@@ -13,7 +13,7 @@ import natlab.tame.tir.TIRAbstractAssignToVarStmt;
 import natlab.tame.tir.TIRFunction;
 import natlab.tame.tir.TIRNode;
 import natlab.tame.valueanalysis.ValueAnalysis;
-import natlab.tame.valueanalysis.advancedMatrix.AdvancedMatrixValue;
+import natlab.tame.valueanalysis.basicmatrix.BasicMatrixValue;
 import natlab.tame.valueanalysis.aggrvalue.AggrValue;
 import natlab.tame.tir.*;
 import natlab.tame.tir.analysis.TIRAbstractNodeCaseHandler;
@@ -32,7 +32,7 @@ public class collectBuiltins extends TIRAbstractNodeCaseHandler {
 	HashMap<String, NodeList> usedBuiltins = new HashMap<String,NodeList>();
 	
 	private collectBuiltins(
-			ValueAnalysis<AggrValue<AdvancedMatrixValue>> analysis, int size,
+			ValueAnalysis<AggrValue<BasicMatrixValue>> analysis, int size,
 			int index) {
 		//this.usedBuiltins = null;
 		this.usedBuiltins.clear();
@@ -42,7 +42,7 @@ public class collectBuiltins extends TIRAbstractNodeCaseHandler {
 	}
 
 	public static ArrayList<collectBuiltins> collect(
-			ValueAnalysis<AggrValue<AdvancedMatrixValue>> analysis, int size) {
+			ValueAnalysis<AggrValue<BasicMatrixValue>> analysis, int size) {
 		ArrayList<collectBuiltins> builtinMapList = new ArrayList<collectBuiltins>();
 		for (int i = 0; i < size; i++) {
 			//System.out.println("comes in here ~~");

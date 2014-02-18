@@ -42,7 +42,7 @@ import natlab.tame.tir.TIRFunction;
 import natlab.tame.tir.TIRNode;
 import natlab.tame.tir.analysis.TIRAbstractNodeCaseHandler;
 import natlab.tame.valueanalysis.ValueAnalysis;
-import natlab.tame.valueanalysis.advancedMatrix.AdvancedMatrixValue;
+import natlab.tame.valueanalysis.basicmatrix.BasicMatrixValue;
 import natlab.tame.valueanalysis.aggrvalue.AggrValue;
 import ast.ASTNode;
 import ast.Name;
@@ -59,7 +59,7 @@ import natlab.tame.valueanalysis.aggrvalue.AggrValue;
 
 @SuppressWarnings("unused")
 public class IRx10ASTGenerator extends TIRAbstractNodeCaseHandler {
-	ValueAnalysis<AggrValue<AdvancedMatrixValue>> analysis;
+	ValueAnalysis<AggrValue<BasicMatrixValue>> analysis;
 	x10Mapping x10Map;
 //	HashMap<String, Collection<ClassReference>> symbolMap = new HashMap<String, Collection<ClassReference>>();
 	HashMap<String, IDInfo> symbolMap = new HashMap<String, IDInfo>();
@@ -72,7 +72,7 @@ public class IRx10ASTGenerator extends TIRAbstractNodeCaseHandler {
 	ArrayList<StmtBlock> currentBlock = new ArrayList<StmtBlock>();
     public static Boolean parforSwitch;
 	private IRx10ASTGenerator(
-			ValueAnalysis<AggrValue<AdvancedMatrixValue>> analysis2, int size,
+			ValueAnalysis<AggrValue<BasicMatrixValue>> analysis2, int size,
 			int index, collectBuiltins collectBuiltins, String fileDir, String classname) {
 		this.x10Map = new x10Mapping();
 		this.analysis = analysis2;
@@ -96,7 +96,7 @@ public class IRx10ASTGenerator extends TIRAbstractNodeCaseHandler {
 	}
 
 	public static ClassBlock x10ClassMaker(
-			ValueAnalysis<AggrValue<AdvancedMatrixValue>> analysis2,
+			ValueAnalysis<AggrValue<BasicMatrixValue>> analysis2,
 			int graphSize, ArrayList<collectBuiltins> listOfUsedBuiltins, String fileDir, String classname) {
 		List<Stmt> declStmtList = new List<Stmt>();
 		List<Method> methodList = new List<Method>();

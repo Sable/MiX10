@@ -6,9 +6,10 @@ import java.util.HashMap;
 
 import natlab.options.Options;
 import natlab.tame.valueanalysis.*;
-import natlab.tame.valueanalysis.advancedMatrix.AdvancedMatrixValue;
+import natlab.tame.valueanalysis.basicmatrix.BasicMatrixValue;
 import natlab.tame.valueanalysis.aggrvalue.*;
-import natlab.tame.AdvancedTamerTool;
+import natlab.tame.BasicTamerTool;
+import natlab.tame.BasicTamerTool;
 import natlab.toolkits.filehandling.GenericFile;
 import natlab.toolkits.path.FileEnvironment;
 import natlab.backends.x10.IRx10.ast.AssignStmt;
@@ -32,9 +33,9 @@ public class Mix10 {
 		GenericFile gFile = GenericFile.create(fileIn);
 		FileEnvironment env = new FileEnvironment(gFile); // get path
 															// environment obj
-		AdvancedTamerTool tool = new AdvancedTamerTool();
+		BasicTamerTool tool = new BasicTamerTool();
 		String[] newArgs = {args[1]};
-		ValueAnalysis<AggrValue<AdvancedMatrixValue>> analysis = tool.analyze(
+		ValueAnalysis<AggrValue<BasicMatrixValue>> analysis = tool.analyze(
 				newArgs, env);
 		int size = analysis.getNodeList().size();
 
