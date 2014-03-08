@@ -128,6 +128,11 @@ public class Helper {
 				if (null != ((BasicMatrixValue) ((Object)temp)).getisComplexInfo()) {
 					id_info.setisComplex(((BasicMatrixValue) ((Object)temp))
 							.getisComplexInfo().toString());
+//					if(!"REAL".equals(((BasicMatrixValue) temp).getisComplexInfo().toString())){
+//					System.err.println(node.getNodeString());
+//					System.exit(0);
+//					}
+					
 				}
 			}
 //			if (null != ((BasicMatrixValue) temp).getShape()){
@@ -238,6 +243,10 @@ public class Helper {
 			id_info.setShape((ArrayList<DimValue>) temp.getShape()
 					.getDimensions());
 			id_info.setisComplex(temp.getisComplexInfo().toString());
+//			if("REAL".equals(temp.getisComplexInfo().toString())){
+//			System.err.println(temp.getisComplexInfo().toString());
+//			System.exit(0);
+//			}
 
 			return id_info;
 		}
