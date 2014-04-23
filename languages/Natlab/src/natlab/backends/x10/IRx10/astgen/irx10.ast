@@ -35,7 +35,7 @@ SimpleArrayExp:Exp ::= Values:Exp* Point* Type;
 Point:Exp ::= CoOrd:IntLiteral* ;
 
 
-ArrayAccess:AccessVal ::= ArrayID:IDUse Indices:Exp* <IsColVector:Boolean>; //specific for TameIR
+ArrayAccess:AccessVal ::= ArrayID:IDUse Indices:Exp* <IsColVector:Boolean>;
 ArraySetStmt:Stmt ::= LHS:IDInfo Indices:Exp* RHS:Exp;
 SubArraySetStmt:Stmt ::= LHS:IDInfo Lower:Exp* Upper:Exp* RHS:Exp;
 SubArrayGetExp:Exp ::= Lower:Exp* Upper:Exp* ArrayID:IDUse;

@@ -190,6 +190,9 @@ public class AssignsAndDecls {
 				else{
 					list_single_assign_stmt.setAtomic(false);
 				}
+				
+				target.symbolMap.put(target.symbolMapKey,
+						list_single_assign_stmt.getLHS());
 
 			} else {
 				isDecl = true;
@@ -248,6 +251,8 @@ public class AssignsAndDecls {
 					if (target.parforSwitch == false || isReductionStmt == true)
 						target.symbolMap.put(target.symbolMapKey,
 								decl_stmt.getLHS());
+					target.symbolMap.put(target.symbolMapKey,
+							decl_stmt.getLHS());
 
 				}
 
@@ -263,9 +268,11 @@ public class AssignsAndDecls {
 			list_assign_stmt.setMultiAssignLHS(LHSinfo);
 			for (ast.Name name : ((TIRAbstractAssignToListStmt) node)
 					.getTargets().asNameList()) {
-
-				System.out.println(name.getID()
-						+ "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+//				if(name.getID().equals("mc_t31")){
+//				System.err.println(name.getID()
+//						+ "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
+//				System.exit(0);
+//				}
 				list_assign_stmt.getMultiAssignLHS().addIDInfo(
 						Helper.generateIDInfo(target.analysis, target.index,
 								node, name.getID()));

@@ -195,9 +195,8 @@ public class Helper {
 		if (analysis.getNodeList().get(graphIndex).getAnalysis()
 				.getOutFlowSets().get(node).isViable()) {
 
-			BasicMatrixValue temp = ((BasicMatrixValue) (analysis
-					.getNodeList().get(graphIndex).getAnalysis().getArgs()
-					.get(i)));
+			BasicMatrixValue temp = ((BasicMatrixValue) (analysis.getNodeList()
+					.get(graphIndex).getAnalysis().getArgs().get(i)));
 			// .getOutFlowSets().get(node).get(ID).getSingleton()));
 
 			IDInfo id_info = new IDInfo();

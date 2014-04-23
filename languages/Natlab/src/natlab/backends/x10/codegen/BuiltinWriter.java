@@ -15,6 +15,7 @@ public class BuiltinWriter {
 			String methodName, String exprType, IRx10ASTGenerator target) {
 
 		mix10.append("public static def " + methodName + "(");
+		
 		int i;
 		for (i = 0; i < args.getNumChild() - 1; i++) {
 			/*System.out.println(target.symbolMap.get(args.getChild(i))
@@ -23,17 +24,25 @@ public class BuiltinWriter {
 			/*
 			 * char(i+97) creates parameter names starting from a..z
 			 */
+			/*
+			 * TODO:
+			 * target.symbolMap.get(((IDUse) args.getChild(i)).getID() can be null 
+			 * if it is inside parfor. check and fix in AssignAndDecls.
+			 */
 			mix10.append(((char)(i+97))
-					+ ":"
-					+ paramType(target.symbolMap.get(((IDUse) args.getChild(i)).getID())
+					+ ":");
+			if (target.symbolMap.get(((IDUse) args.getChild(i)).getID()) != null){
+				mix10.append(paramType(target.symbolMap.get(((IDUse) args.getChild(i)).getID())
 							.getType().getName(), exprType, i) + ", ");
+			}
            
 		}
 		mix10.append(((char)(i+97))
-				+ ":"
-				+ paramType(target.symbolMap.get(((IDUse) args.getChild(i)).getID()).getType()
+				+ ":");
+		if (target.symbolMap.get(((IDUse) args.getChild(i)).getID()) != null){
+				mix10.append(paramType(target.symbolMap.get(((IDUse) args.getChild(i)).getID()).getType()
 						.getName(), exprType, i));
-
+		}
 		mix10.append(")" + method + "\n");
 
 	}
