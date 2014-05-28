@@ -1,23 +1,15 @@
 package natlab.backends.x10.codegen;
 
-import java.io.BufferedWriter;
-import java.io.File;
-import org.w3c.dom.*;
-
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.ParserConfigurationException;
-
-import org.xml.sax.SAXException;
-import org.xml.sax.SAXParseException; 
-import java.io.FileWriter;
-import java.io.IOException;
 import java.util.ArrayList;
 
 import natlab.backends.x10.IRx10.ast.Exp;
 import natlab.backends.x10.IRx10.ast.IDUse;
 import natlab.backends.x10.IRx10.ast.List;
-import natlab.tame.valueanalysis.ValueAnalysisPrinter;
+
+import org.w3c.dom.Element;
+import org.w3c.dom.Node;
+import org.w3c.dom.NodeList;
+
 import ast.Expr;
 
 public class builtinMaker {

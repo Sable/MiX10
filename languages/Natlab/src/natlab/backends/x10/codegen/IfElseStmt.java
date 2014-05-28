@@ -2,12 +2,9 @@ package natlab.backends.x10.codegen;
 
 import natlab.backends.x10.IRx10.ast.ElseBody;
 import natlab.backends.x10.IRx10.ast.IfBody;
-import natlab.backends.x10.IRx10.ast.List;
-import natlab.backends.x10.IRx10.ast.LoopBody;
-import natlab.backends.x10.IRx10.ast.StmtBlock;
 import natlab.backends.x10.IRx10.ast.IfElseIf;
-import java.util.ArrayList;
-
+import natlab.backends.x10.IRx10.ast.List;
+import natlab.backends.x10.IRx10.ast.StmtBlock;
 import natlab.tame.tir.TIRIfStmt;
 import natlab.tame.tir.TIRNode;
 

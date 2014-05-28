@@ -2,7 +2,6 @@ package natlab.backends.x10.codegen;
 
 import java.util.ArrayList;
 
-import ast.Name;
 //import natlab.backends.x10.IRx10.ast.Args;
 import natlab.backends.x10.IRx10.ast.IDInfo;
 import natlab.backends.x10.IRx10.ast.IDUse;
@@ -12,9 +11,9 @@ import natlab.backends.x10.IRx10.ast.MethodHeader;
 import natlab.backends.x10.IRx10.ast.ReturnStmt;
 import natlab.backends.x10.IRx10.ast.Stmt;
 import natlab.backends.x10.IRx10.ast.Type;
-import natlab.tame.tir.TIRAbstractAssignStmt;
 import natlab.tame.tir.TIRFunction;
 import natlab.tame.tir.TIRNode;
+import ast.Name;
 
 public class Function {
 

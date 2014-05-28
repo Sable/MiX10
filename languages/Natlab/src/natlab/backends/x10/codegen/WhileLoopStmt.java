@@ -1,8 +1,12 @@
 package natlab.backends.x10.codegen;
 
+import natlab.backends.x10.IRx10.ast.List;
+import natlab.backends.x10.IRx10.ast.LoopBody;
+import natlab.backends.x10.IRx10.ast.Stmt;
+import natlab.backends.x10.IRx10.ast.StmtBlock;
+import natlab.backends.x10.IRx10.ast.WhileStmt;
 import natlab.tame.tir.TIRNode;
 import natlab.tame.tir.TIRWhileStmt;
-import natlab.backends.x10.IRx10.ast.*;
 public class WhileLoopStmt {
 	
 	public static void handleTIRWhileStmt(TIRWhileStmt node, IRx10ASTGenerator target, StmtBlock block) {

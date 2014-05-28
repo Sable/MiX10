@@ -3,7 +3,6 @@ package natlab.backends.x10.codegen;
 import java.util.ArrayList;
 import java.util.Collection;
 
-import natlab.tame.valueanalysis.components.shape.*;
 import natlab.backends.x10.IRx10.ast.IDInfo;
 import natlab.backends.x10.IRx10.ast.StmtBlock;
 import natlab.backends.x10.IRx10.ast.Type;
@@ -12,11 +11,10 @@ import natlab.tame.tir.TIRAbstractAssignStmt;
 import natlab.tame.tir.TIRForStmt;
 import natlab.tame.tir.TIRFunction;
 import natlab.tame.valueanalysis.ValueAnalysis;
-import natlab.tame.valueanalysis.components.shape.*;
-import natlab.tame.valueanalysis.basicmatrix.BasicMatrixValue;
 import natlab.tame.valueanalysis.aggrvalue.AggrValue;
 import natlab.tame.valueanalysis.aggrvalue.CellValue;
-import natlab.tame.valueanalysis.aggrvalue.CompositeValue;
+import natlab.tame.valueanalysis.basicmatrix.BasicMatrixValue;
+import natlab.tame.valueanalysis.components.shape.DimValue;
 
 public class Helper {
 	/********************** HELPER METHODS ***********************************/

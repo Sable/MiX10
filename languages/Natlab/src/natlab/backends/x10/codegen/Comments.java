@@ -1,18 +1,13 @@
 package natlab.backends.x10.codegen;
 
-import natlab.backends.x10.IRx10.ast.AsyncBlock;
 import natlab.backends.x10.IRx10.ast.AsyncStmt;
 import natlab.backends.x10.IRx10.ast.AtomicStmt;
 import natlab.backends.x10.IRx10.ast.BlockEnd;
 import natlab.backends.x10.IRx10.ast.CommentStmt;
 import natlab.backends.x10.IRx10.ast.FinishStmt;
-import natlab.backends.x10.IRx10.ast.List;
-import natlab.backends.x10.IRx10.ast.Literally;
-import natlab.backends.x10.IRx10.ast.Stmt;
 import natlab.backends.x10.IRx10.ast.StmtBlock;
 import natlab.backends.x10.IRx10.ast.WhenStmt;
 import natlab.tame.tir.TIRCommentStmt;
-import natlab.tame.tir.TIRForStmt;
 
 public class Comments {
 

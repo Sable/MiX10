@@ -1,16 +1,21 @@
 package natlab.backends.x10;
 
-import java.io.*;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
+
+import natlab.backends.x10.IRx10.ast.Program;
+import natlab.backends.x10.codegen.BuiltinWriter;
+import natlab.backends.x10.codegen.IRx10ASTGenerator;
+import natlab.backends.x10.codegen.collectBuiltins;
 import natlab.options.Options;
-import natlab.tame.valueanalysis.*;
-import natlab.tame.valueanalysis.basicmatrix.BasicMatrixValue;
-import natlab.tame.valueanalysis.aggrvalue.*;
 import natlab.tame.BasicTamerTool;
+import natlab.tame.valueanalysis.ValueAnalysis;
+import natlab.tame.valueanalysis.aggrvalue.AggrValue;
+import natlab.tame.valueanalysis.basicmatrix.BasicMatrixValue;
 import natlab.toolkits.filehandling.GenericFile;
 import natlab.toolkits.path.FileEnvironment;
-import natlab.backends.x10.IRx10.ast.Program;
-import natlab.backends.x10.codegen.*;
 
 public class Mix10 {
 

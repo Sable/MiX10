@@ -2,7 +2,21 @@ package natlab.backends.x10.codegen;
 
 import java.util.ArrayList;
 
-import natlab.backends.x10.IRx10.ast.*;
+import natlab.backends.x10.IRx10.ast.ArrayAccess;
+import natlab.backends.x10.IRx10.ast.ArraySetStmt;
+import natlab.backends.x10.IRx10.ast.AssignStmt;
+import natlab.backends.x10.IRx10.ast.DeclStmt;
+import natlab.backends.x10.IRx10.ast.EmptyExp;
+import natlab.backends.x10.IRx10.ast.Exp;
+import natlab.backends.x10.IRx10.ast.IDInfo;
+import natlab.backends.x10.IRx10.ast.IDUse;
+import natlab.backends.x10.IRx10.ast.List;
+import natlab.backends.x10.IRx10.ast.LiterallyExp;
+import natlab.backends.x10.IRx10.ast.MultiAssignLHS;
+import natlab.backends.x10.IRx10.ast.Stmt;
+import natlab.backends.x10.IRx10.ast.StmtBlock;
+import natlab.backends.x10.IRx10.ast.SubArrayGetExp;
+import natlab.backends.x10.IRx10.ast.SubArraySetStmt;
 import natlab.tame.tir.TIRAbstractAssignStmt;
 import natlab.tame.tir.TIRAbstractAssignToListStmt;
 import natlab.tame.tir.TIRArrayGetStmt;
