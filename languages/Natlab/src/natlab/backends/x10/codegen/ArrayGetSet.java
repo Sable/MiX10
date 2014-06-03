@@ -2,7 +2,21 @@ package natlab.backends.x10.codegen;
 
 import java.util.ArrayList;
 
-import natlab.backends.x10.IRx10.ast.*;
+import natlab.backends.x10.IRx10.ast.ArrayAccess;
+import natlab.backends.x10.IRx10.ast.ArraySetStmt;
+import natlab.backends.x10.IRx10.ast.AssignStmt;
+import natlab.backends.x10.IRx10.ast.DeclStmt;
+import natlab.backends.x10.IRx10.ast.EmptyExp;
+import natlab.backends.x10.IRx10.ast.Exp;
+import natlab.backends.x10.IRx10.ast.IDInfo;
+import natlab.backends.x10.IRx10.ast.IDUse;
+import natlab.backends.x10.IRx10.ast.List;
+import natlab.backends.x10.IRx10.ast.LiterallyExp;
+import natlab.backends.x10.IRx10.ast.MultiAssignLHS;
+import natlab.backends.x10.IRx10.ast.Stmt;
+import natlab.backends.x10.IRx10.ast.StmtBlock;
+import natlab.backends.x10.IRx10.ast.SubArrayGetExp;
+import natlab.backends.x10.IRx10.ast.SubArraySetStmt;
 import natlab.tame.tir.TIRAbstractAssignStmt;
 import natlab.tame.tir.TIRAbstractAssignToListStmt;
 import natlab.tame.tir.TIRArrayGetStmt;
@@ -10,7 +24,6 @@ import natlab.tame.tir.TIRArraySetStmt;
 import natlab.tame.valueanalysis.components.shape.DimValue;
 
 public class ArrayGetSet {
-
   private static boolean Debug = true;
 
   public static void handleTIRAbstractArraySetStmt(TIRArraySetStmt node,
@@ -20,11 +33,9 @@ public class ArrayGetSet {
       System.out.println(node.getLHS().getPrettyPrinted()
           + "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
     }
-
     String LHS;
     target.symbolMapKey = node.getArrayName().getID();
     LHS = target.symbolMapKey;
-
     if (true != target.symbolMap.containsKey(target.symbolMapKey)) {
       DeclStmt arrayDecl = new DeclStmt();
       new IDInfo();
@@ -34,14 +45,12 @@ public class ArrayGetSet {
       arrayDecl.setRHS(new EmptyExp());
       target.symbolMap.put(target.symbolMapKey, arrayDecl.getLHS());
       block.addStmt(arrayDecl);
-
     }
     /*
      * The array has been declared before. This is just an assignment to its
      * index. If not declared before first declare the array and then set the
      * index
      */
-
     boolean hasColon = false;
     for (int i = 0; i < node.getIndizes().getNumChild(); i++) {
       // array_set.setIndices(Expressions.makeIRx10Exp(node.getIndizes()
@@ -51,11 +60,9 @@ public class ArrayGetSet {
         hasColon = true;
       }
     }
-
     boolean tf = true;
     IDInfo LhsInfo = new IDInfo();
     LhsInfo = Helper.generateIDInfo(target.analysis, target.index, node, LHS);
-
     if (null != LhsInfo.getShape())
       for (int i = 0; i < LhsInfo.getShape().size(); i++) {
         if (null != LhsInfo.getShape().get(i))
@@ -69,7 +76,6 @@ public class ArrayGetSet {
       array_set.setLHS(Helper.generateIDInfo(target.analysis, target.index,
           node, LHS));
       array_set.getLHS().setName(LHS.toString());
-
       for (int i = 0; i < node.getIndizes().getNumChild(); i++) {
         array_set.setIndices(Expressions.makeIRx10Exp(node.getIndizes()
             .getChild(i), false, target), i);
@@ -92,7 +98,7 @@ public class ArrayGetSet {
         for (int i = 0; i < node.getIndizes().getNumChild(); i++) {
           if (((IDUse) (Expressions.makeIRx10Exp(
               node.getIndizes().getChild(i), false, target))).getID().equals(
-                  "__")) {
+              "__")) {
             /*
              * Case when index is a ':' Note that this fails if number of
              * indices is < number of dimensions.
@@ -107,10 +113,7 @@ public class ArrayGetSet {
                   + Integer.toString(i + 1));
             subArraySet.getLowerList().add(low);
             subArraySet.getUpperList().add(high);
-
-          }
-
-          else {
+          } else {
             /*
              * case when index is an ID It can be a scalar or a vector If it is
              * a sclar : low = high else low = 1st value of vector & upper =
@@ -119,7 +122,6 @@ public class ArrayGetSet {
             String indexId = ((IDUse) (Expressions.makeIRx10Exp(node
                 .getIndizes().getChild(i), false, target))).getID();
             System.err.println(target.symbolMap.get(indexId));
-
             if (Helper.isScalar(target.symbolMap.get(indexId).getShape())) {
               IDUse low = new IDUse(indexId);
               IDUse high = new IDUse(indexId);
@@ -132,15 +134,12 @@ public class ArrayGetSet {
               subArraySet.getLowerList().add(low);
               subArraySet.getUpperList().add(high);
             }
-
           }
-
         }
       target.symbolMap.put(target.symbolMapKey, subArraySet.getLHS());
       subArraySet.setRHS(Expressions.makeIRx10Exp(node.getRHS(), tf, target));
       block.addStmt(subArraySet);
     }
-
   }
 
   public static void handleTIRAbstractArrayGetStmt(TIRArrayGetStmt node,
@@ -150,56 +149,44 @@ public class ArrayGetSet {
       boolean isDecl;
       target.symbolMapKey = (node).getTargetName().getID();
       LHS = target.symbolMapKey;
-
       if (true == target.symbolMap.containsKey(target.symbolMapKey)) {
-
         isDecl = false;
         AssignStmt list_single_assign_stmt = new AssignStmt();
         list_single_assign_stmt.setLHS(Helper.generateIDInfo(target.analysis,
             target.index, node, LHS));
         list_single_assign_stmt.getLHS().setName(
             ((TIRAbstractAssignToListStmt) node).getTargets().getChild(0)
-            .getVarName());
-
+                .getVarName());
         setRHSValue(false, list_single_assign_stmt, node, false, target, block);
         target.symbolMap.put(target.symbolMapKey,
             list_single_assign_stmt.getLHS());
-
         System.out.println("#####!@@@" + target.symbolMapKey);
-
         block.addStmt(list_single_assign_stmt);
-
       } else {
         isDecl = true;
         DeclStmt decl_stmt = new DeclStmt();
         new IDInfo();
         decl_stmt.setLHS(Helper.generateIDInfo(target.analysis, target.index,
             node, LHS));
-
         decl_stmt.getLHS().setName(
             (node).getTargets().getChild(0).getVarName());
         /*
          * if it has a colon operator, add a null to the shape - this is a hack
          * to tell the compiler that it is an array
          */
-
         for (Exp i : Expressions.getArgs(node.getRHS(), target)) {
           if (i instanceof IDUse && ((IDUse) i).getID().equals("__")) {
             System.out.println("its a colon...............................");
             decl_stmt.getLHS().getShape().add(null);
           }
         }
-
         System.out.println("#####!!!!!" + target.symbolMapKey);
-
         // block.addStmt(decl_stmt);
-
         DeclStmt pseudoDecl = new DeclStmt();
         pseudoDecl.setLHS(decl_stmt.getLHS());
         //
         AssignStmt pseudoAssign = new AssignStmt();
         pseudoAssign.setLHS(decl_stmt.getLHS());
-
         // if (target.currentBlock.size() > 1) {
         target.currentBlock.get(0).addStmt(pseudoDecl);
         setRHSValue(isDecl, decl_stmt, node, false, target, block);
@@ -209,8 +196,7 @@ public class ArrayGetSet {
         System.out.println(block.getParent().toString()
             + "^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^");
       }
-    }
-    else {
+    } else {
       AssignStmt list_assign_stmt = new AssignStmt();
       MultiAssignLHS LHSinfo = new MultiAssignLHS();
       list_assign_stmt.setMultiAssignLHS(LHSinfo);
@@ -226,26 +212,22 @@ public class ArrayGetSet {
                 name.getID()));
       }
       System.out
-      .println("^*^"
-          + list_assign_stmt.getMultiAssignLHS().getIDInfoList()
-          .getNumChild());
+          .println("^*^"
+              + list_assign_stmt.getMultiAssignLHS().getIDInfoList()
+                  .getNumChild());
       list_assign_stmt.setLHS(null);
       setRHSValue(false, list_assign_stmt, node, false, target, block);
       block.addStmt(list_assign_stmt);
     }
-
   }
 
   public static void setRHSValue(boolean isDecl, Stmt decl_or_assgn,
       TIRArrayGetStmt node, boolean isScalar, IRx10ASTGenerator target,
       StmtBlock block) {
-
     String arrayName = node.getRHS().getVarName();
     List<Exp> indices = Expressions.getArgs(node.getRHS(), target);
-
     boolean hascolon = false;
     boolean allScalar = true;
-
     for (Exp e : indices) {
       if (e instanceof IDUse && ((IDUse) e).getID().equals("__")) {
         /*
@@ -255,7 +237,6 @@ public class ArrayGetSet {
       }
       if (e instanceof IDUse && !hascolon
           && null != target.symbolMap.get(((IDUse) (e)).getID()).getShape()) {
-
         if (target.symbolMap
             .get(((IDUse) (e)).getID())
             .getShape()
@@ -266,7 +247,7 @@ public class ArrayGetSet {
                 "class natlab.tame.valueanalysis.components.shape.DimValue")) {
           System.err.println(node.getNodeString()
               + target.symbolMap.get(((IDUse) (e)).getID()).getShape()
-              .toString());
+                  .toString());
           for (DimValue s : (ArrayList<DimValue>) (target.symbolMap
               .get(((IDUse) (e)).getID()).getShape())) {
             if (null != s)
@@ -279,7 +260,6 @@ public class ArrayGetSet {
           }
       }
     }
-
     if (!hascolon && allScalar) {
       /*
        * all indices are scalar values
@@ -305,9 +285,7 @@ public class ArrayGetSet {
       } else {
         ((AssignStmt) decl_or_assgn).setRHS(arrayAccess);
       }
-    }
-
-    else {
+    } else {
       /*
        * one or more indices is colon or a vector
        */
@@ -367,14 +345,11 @@ public class ArrayGetSet {
     String LHS;
     target.symbolMapKey = name.getID();
     LHS = target.symbolMapKey;
-
     if (true == target.symbolMap.containsKey(LHS)) // variable already //
-      // defined and analyzed
+    // defined and analyzed
     {
-
       MultiAssignLHS LHSinfo = new MultiAssignLHS();
       assign_stmt.setMultiAssignLHS(LHSinfo);
-
       assign_stmt.getMultiAssignLHS().addIDInfo(
           Helper.generateIDInfo(target.analysis, target.index, node, LHS));
       target.symbolMap.put(
@@ -382,13 +357,10 @@ public class ArrayGetSet {
           Helper.generateIDInfo(target.analysis, target.index, node,
               name.getID()));
       assign_stmt
-      .getMultiAssignLHS()
-      .getIDInfo(assign_stmt.getMultiAssignLHS().getNumIDInfo() - 1)
-      .setName(
-          ((TIRAbstractAssignToListStmt) node).getTargetName().toString());
-
+          .getMultiAssignLHS()
+          .getIDInfo(assign_stmt.getMultiAssignLHS().getNumIDInfo() - 1)
+          .setName(
+              ((TIRAbstractAssignToListStmt) node).getTargetName().toString());
     }
-
   }
-
 }

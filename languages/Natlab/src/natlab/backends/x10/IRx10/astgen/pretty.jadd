@@ -19,9 +19,8 @@ String ClassBlock.pp(String indent,String className){
 	}
 	for (Method method : getMethodList()){
 		x.append(method.pp(indent+"	", getUseNewArray()));
-	x.append("\n}");
-
 	}
+	x.append("\n}");
 	return x.toString();
 }
 
