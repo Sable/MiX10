@@ -1,31 +1,24 @@
 package natlab.backends.x10.codegen;
 
 import java.util.ArrayList;
-
 import java.util.HashMap;
-
-import ast.ASTNode;
 
 import natlab.tame.tir.TIRAbstractAssignFromVarStmt;
 import natlab.tame.tir.TIRAbstractAssignStmt;
 import natlab.tame.tir.TIRAbstractAssignToListStmt;
 import natlab.tame.tir.TIRAbstractAssignToVarStmt;
+import natlab.tame.tir.TIRForStmt;
 import natlab.tame.tir.TIRFunction;
 import natlab.tame.tir.TIRNode;
-import natlab.tame.valueanalysis.ValueAnalysis;
-import natlab.tame.valueanalysis.basicmatrix.BasicMatrixValue;
-import natlab.tame.valueanalysis.aggrvalue.AggrValue;
-import natlab.tame.tir.*;
+import natlab.tame.tir.TIRWhileStmt;
 import natlab.tame.tir.analysis.TIRAbstractNodeCaseHandler;
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
+import natlab.tame.valueanalysis.ValueAnalysis;
+import natlab.tame.valueanalysis.aggrvalue.AggrValue;
+import natlab.tame.valueanalysis.basicmatrix.BasicMatrixValue;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
+
+import ast.ASTNode;
 
 public class collectBuiltins extends TIRAbstractNodeCaseHandler {
 	

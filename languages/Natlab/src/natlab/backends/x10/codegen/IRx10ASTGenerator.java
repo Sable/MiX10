@@ -3,58 +3,45 @@ package natlab.backends.x10.codegen;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map.Entry;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
-import org.w3c.dom.Node;
-import org.w3c.dom.NodeList;
-import org.xml.sax.SAXException;
-
-import natlab.backends.x10.IRx10.ast.AssignStmt;
 import natlab.backends.x10.IRx10.ast.ClassBlock;
-import natlab.backends.x10.IRx10.ast.DeclStmt;
 import natlab.backends.x10.IRx10.ast.IDInfo;
 import natlab.backends.x10.IRx10.ast.List;
 import natlab.backends.x10.IRx10.ast.Method;
-import natlab.backends.x10.IRx10.ast.MethodBlock;
-import natlab.backends.x10.IRx10.ast.MethodHeader;
-import natlab.backends.x10.IRx10.ast.Program;
+import natlab.backends.x10.IRx10.ast.Stmt;
 //import natlab.backends.x10.IRx10.ast.Args;
 import natlab.backends.x10.IRx10.ast.StmtBlock;
-import natlab.backends.x10.IRx10.ast.Type;
-import natlab.backends.x10.IRx10.ast.Stmt;
-import natlab.backends.x10.IRx10.ast.WhileStmt;
-import natlab.tame.classes.reference.ClassReference;
+import natlab.tame.tir.TIRAbstractAssignFromVarStmt;
 import natlab.tame.tir.TIRAbstractAssignStmt;
 import natlab.tame.tir.TIRAbstractAssignToListStmt;
 import natlab.tame.tir.TIRAbstractAssignToVarStmt;
 import natlab.tame.tir.TIRArrayGetStmt;
 import natlab.tame.tir.TIRArraySetStmt;
+import natlab.tame.tir.TIRBreakStmt;
+import natlab.tame.tir.TIRCellArrayGetStmt;
+import natlab.tame.tir.TIRCellArraySetStmt;
+import natlab.tame.tir.TIRCommentStmt;
+import natlab.tame.tir.TIRContinueStmt;
+import natlab.tame.tir.TIRForStmt;
 import natlab.tame.tir.TIRFunction;
+import natlab.tame.tir.TIRIfStmt;
 import natlab.tame.tir.TIRNode;
+import natlab.tame.tir.TIRWhileStmt;
 import natlab.tame.tir.analysis.TIRAbstractNodeCaseHandler;
 import natlab.tame.valueanalysis.ValueAnalysis;
-import natlab.tame.valueanalysis.basicmatrix.BasicMatrixValue;
 import natlab.tame.valueanalysis.aggrvalue.AggrValue;
+import natlab.tame.valueanalysis.basicmatrix.BasicMatrixValue;
+
+import org.w3c.dom.Document;
+import org.w3c.dom.NodeList;
+import org.xml.sax.SAXException;
+
 import ast.ASTNode;
-import ast.Name;
-
-import natlab.tame.classes.reference.ClassReference;
-import natlab.tame.tir.*;
-
-import natlab.tame.tir.analysis.TIRAbstractNodeCaseHandler;
-import natlab.tame.valueanalysis.ValueAnalysis;
-import natlab.tame.valueanalysis.ValueAnalysisPrinter;
-import natlab.tame.valueanalysis.basicmatrix.BasicMatrixValue;
-import natlab.tame.valueanalysis.aggrvalue.AggrValue;
 
 
 @SuppressWarnings("unused")

@@ -1,34 +1,21 @@
 package natlab.backends.x10.codegen;
 
-import ast.*;
-import ast.ASTNode;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.ListIterator;
 
 import natlab.tame.classes.reference.ClassReference;
-import natlab.tame.interproceduralAnalysis.InterproceduralAnalysisNode;
 import natlab.tame.tir.TIRAbstractAssignStmt;
 import natlab.tame.tir.TIRAbstractAssignToListStmt;
 import natlab.tame.tir.TIRAbstractAssignToVarStmt;
-import natlab.tame.tir.TIRArraySetStmt;
-import natlab.tame.tir.TIRCellArraySetStmt;
-import natlab.tame.tir.TIRDotSetStmt;
 import natlab.tame.tir.TIRFunction;
 import natlab.tame.tir.TIRNode;
 import natlab.tame.tir.analysis.TIRAbstractNodeCaseHandler;
-import natlab.tame.valueanalysis.IntraproceduralValueAnalysis;
 import natlab.tame.valueanalysis.ValueAnalysis;
-import natlab.tame.valueanalysis.ValueAnalysis;
-import natlab.tame.valueanalysis.ValueAnalysisPrinter;
 import natlab.tame.valueanalysis.advancedMatrix.AdvancedMatrixValue;
 import natlab.tame.valueanalysis.aggrvalue.AggrValue;
-import natlab.tame.valueanalysis.value.Args;
-import natlab.tame.valueanalysis.value.Res;
-import natlab.backends.x10.codegen.x10Mapping;
-import natlab.backends.x10.IRx10.ast.*;
+import ast.ASTNode;
+import ast.Name;
 
 public class x10CodeGenerator extends TIRAbstractNodeCaseHandler {
 	ValueAnalysis<AggrValue<AdvancedMatrixValue>> analysis;

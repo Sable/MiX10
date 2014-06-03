@@ -1,8 +1,5 @@
 package natlab.backends.x10.codegen;
 
-import ast.CellIndexExpr;
-import ast.Expr;
-import ast.ParameterizedExpr;
 import natlab.backends.x10.IRx10.ast.ArrayAccess;
 import natlab.backends.x10.IRx10.ast.ArraySetStmt;
 import natlab.backends.x10.IRx10.ast.AssignStmt;
@@ -20,9 +17,11 @@ import natlab.backends.x10.IRx10.ast.Stmt;
 import natlab.backends.x10.IRx10.ast.StmtBlock;
 import natlab.backends.x10.IRx10.ast.Type;
 import natlab.tame.tir.TIRAbstractAssignToListStmt;
-import natlab.tame.tir.TIRArrayGetStmt;
 import natlab.tame.tir.TIRCellArrayGetStmt;
 import natlab.tame.tir.TIRCellArraySetStmt;
+import ast.CellIndexExpr;
+import ast.Expr;
+import ast.ParameterizedExpr;
 
 public class CellArrayGetSet {
 

@@ -1,9 +1,24 @@
 package natlab.backends.x10.codegen;
 
-import natlab.backends.x10.IRx10.ast.*;
+import natlab.backends.x10.IRx10.ast.BuiltinMethodCall;
+import natlab.backends.x10.IRx10.ast.EmptyExp;
+import natlab.backends.x10.IRx10.ast.Exp;
+import natlab.backends.x10.IRx10.ast.FPLiteral;
+import natlab.backends.x10.IRx10.ast.IDUse;
+import natlab.backends.x10.IRx10.ast.IntLiteral;
 import natlab.backends.x10.IRx10.ast.List;
-import natlab.tame.tir.TIRAbstractAssignStmt;
-import ast.*;
+import natlab.backends.x10.IRx10.ast.Literal;
+import natlab.backends.x10.IRx10.ast.MethodId;
+import natlab.backends.x10.IRx10.ast.StringLiteral;
+import natlab.backends.x10.IRx10.ast.UserDefMethodCall;
+import ast.ColonExpr;
+import ast.Expr;
+import ast.FPLiteralExpr;
+import ast.IntLiteralExpr;
+import ast.LiteralExpr;
+import ast.NameExpr;
+import ast.ParameterizedExpr;
+import ast.StringLiteralExpr;
 
 public class Expressions {
 
