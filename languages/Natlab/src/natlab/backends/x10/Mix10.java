@@ -18,6 +18,9 @@ import natlab.toolkits.filehandling.GenericFile;
 import natlab.toolkits.path.FileEnvironment;
 
 public class Mix10 {
+	/**
+	 * @param args
+	 */
 	public static void main(String[] args) {
 		// args[0]: file path
 		// args[1]: value params
@@ -31,7 +34,7 @@ public class Mix10 {
 		// String fileOutTame = file + "_tame.m";
 		GenericFile gFile = GenericFile.create(fileIn);
 		FileEnvironment env = new FileEnvironment(gFile); // get path
-		String[] newArgs = { args[1] };
+		String[] newArgs = {args[1]};
 		ValueAnalysis<AggrValue<BasicMatrixValue>> analysis = BasicTamerTool
 				.analyze(newArgs, env);
 		int size = analysis.getNodeList().size();
