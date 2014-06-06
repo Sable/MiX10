@@ -63,6 +63,12 @@ public class Mix10 {
 	}
 
 	public static void compile(Options options) {
-		// TODO Auto-generated method stub
+		String[] args = new String[3];
+		args[0] = options.main();
+		args[1] = options.arg_info();
+		args[2] = options.od();
+		
+		System.out.println(args[0]+" "+args[1]+" "+args[2]);
+		main(args);
 	}
 }

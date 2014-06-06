@@ -95,7 +95,7 @@ public class IRx10ASTGenerator extends TIRAbstractNodeCaseHandler {
 			String builtin;
 		DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
-		doc = docBuilder.parse (new File("languages/Natlab/src/natlab/backends/x10/codegen/mix10_builtins.xml"));
+		doc = docBuilder.parse (new File("src/natlab/backends/x10/codegen/mix10_builtins.xml"));
 		doc.getDocumentElement ().normalize ();
 		
 		
