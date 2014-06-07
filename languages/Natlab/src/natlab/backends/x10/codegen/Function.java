@@ -46,21 +46,12 @@ public class Function {
 		target.method.setMethodHeader(method_header);
 		target.method.setMethodBlock(method_block);
 		target.currentBlock.add(target.method.getMethodBlock());
-		/* TODO
-		 * Below statement handles the case when there is only one return value.
-		 * extend it to support multiple returns
-		 * Add a return type stmt with a list of return values
-		 */
 		System.out.println(node.getNodeString());
 		if (null != node.getOutputParams() && node.getOutputParams().getNumChild()>0){
 		Type returnType = Helper.getReturnType(target.analysis, target.index, node, node.getOutputParam(0).getID());
 		target.method.getMethodHeader().setReturnType(returnType);
 		}
-		
-		//DEBUG
-		//System.out.println(returnType.getName());
 		buildStmtsSubAST(node.getStmts(), target);
-		//make return statement
 		
 			ReturnStmt returnStmt = new ReturnStmt();
 			for (int i=0; i<node.getNumOutputParam();i++){

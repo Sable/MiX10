@@ -1,6 +1,7 @@
 package natlab.backends.x10.codegen;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -95,7 +96,12 @@ public class IRx10ASTGenerator extends TIRAbstractNodeCaseHandler {
 			String builtin;
 		DocumentBuilderFactory docBuilderFactory = DocumentBuilderFactory.newInstance();
         DocumentBuilder docBuilder = docBuilderFactory.newDocumentBuilder();
-		doc = docBuilder.parse (new File("src/natlab/backends/x10/codegen/mix10_builtins.xml"));
+        
+        File file = getBuiltinXmlFile();
+		doc = docBuilder.parse (file);
+        
+        	
+        
 		doc.getDocumentElement ().normalize ();
 		
 		
@@ -150,6 +156,17 @@ public class IRx10ASTGenerator extends TIRAbstractNodeCaseHandler {
 		ClassBlock class_block = new ClassBlock(declStmtList, methodList, useNewArray);
 		return class_block;
 
+	}
+
+	private static File getBuiltinXmlFile() throws FileNotFoundException {
+		File file;
+
+		file = new File("src/natlab/backends/x10/codegen/mix10_builtins.xml");
+		if (!file.exists()) {
+			file = new File(
+					"languages/Natlab/src/natlab/backends/x10/codegen/mix10_builtins.xml");
+		}
+		return file;
 	}
 
 	@Override

@@ -23,13 +23,15 @@ import ast.StringLiteralExpr;
 public class Expressions {
 
 	static Exp getOperand1(ast.Expr OpExp, IRx10ASTGenerator target) {
-		return makeIRx10Exp((Expr) (OpExp.getChild(1).getNumChild() >= 1 ? OpExp
-				.getChild(1).getChild(0) : null), false, target);
+		return makeIRx10Exp(
+				(Expr) (OpExp.getChild(1).getNumChild() >= 1 ? OpExp
+						.getChild(1).getChild(0) : null), false, target);
 	}
 
 	static Exp getOperand2(ast.Expr OpExp, IRx10ASTGenerator target) {
-		return makeIRx10Exp((Expr) (OpExp.getChild(1).getNumChild() >= 2 ? OpExp
-				.getChild(1).getChild(1) : null), false, target);
+		return makeIRx10Exp(
+				(Expr) (OpExp.getChild(1).getNumChild() >= 2 ? OpExp
+						.getChild(1).getChild(1) : null), false, target);
 	}
 
 	static int getRHSType(ast.ParameterizedExpr nodeExp) {
@@ -39,7 +41,7 @@ public class Expressions {
 			return 0;
 		}
 		RHSName = nodeExp.getVarName();
-		
+
 		if (true == x10Mapping.isBinOperator(RHSName)) {
 			return 1; // "binop";
 		} else if (true == x10Mapping.isUnOperator(RHSName)) {
@@ -48,8 +50,8 @@ public class Expressions {
 
 		else if (true == x10Mapping.isX10DirectBuiltin(RHSName)) {
 			return 3; // "builtin";
-//		} else if (true == x10Mapping.isMethod(RHSName)) {
-//			return 4; // "method";
+			// } else if (true == x10Mapping.isMethod(RHSName)) {
+			// return 4; // "method";
 		} else if (true == x10Mapping.isBuiltinConst(RHSName)) {
 			return 5; // "builtin";
 		} else {
@@ -71,8 +73,8 @@ public class Expressions {
 			RHS = x10Mapping.getX10DirectBuiltinMapping(RHSName);
 		} else if (true == x10Mapping.isBuiltinConst(RHSName)) {
 			RHS = x10Mapping.getX10BuiltinConstMapping(RHSName);
-//		} else if (true == x10Mapping.isMethod(RHSName)) {
-//			RHS = x10Mapping.getX10MethodMapping(RHSName);
+			// } else if (true == x10Mapping.isMethod(RHSName)) {
+			// RHS = x10Mapping.getX10MethodMapping(RHSName);
 		} else {
 			RHS = "//cannot process it yet";
 		}
@@ -80,31 +82,29 @@ public class Expressions {
 	}
 
 	static List<Exp> getArgs(ast.Expr NatlabExp, IRx10ASTGenerator target) {
-		//We use IDUse assuming it is used only with TameIR.
+		// We use IDUse assuming it is used only with TameIR.
 		List<Exp> Args = new List<Exp>();
 		int numArgs = NatlabExp.getChild(1).getNumChild();
 		for (int i = 0; i < numArgs; i++) {
-			System.out.println("!!!"+i);
-			Args.add((IDUse) makeIRx10Exp((ast.Expr) NatlabExp.getChild(1).getChild(i), false, target));//TODO 11 dec Test it
-			
+			System.out.println("!!!" + i);
+			Args.add((IDUse) makeIRx10Exp((ast.Expr) NatlabExp.getChild(1)
+					.getChild(i), false, target));// TODO 11 dec Test it
+
 		}
 		return Args;
 	}
 
-	static Exp makeIRx10Exp(ast.Expr NatlabExp, boolean isScalar, IRx10ASTGenerator target) {
+	static Exp makeIRx10Exp(ast.Expr NatlabExp, boolean isScalar,
+			IRx10ASTGenerator target) {
 		// Handle Binary Expressions
-
-		
 
 		if (null == NatlabExp) {
 			return new EmptyExp();
 		}
-		
-		
-		if (NatlabExp instanceof ColonExpr){
+
+		if (NatlabExp instanceof ColonExpr) {
 			return new IDUse("__");
 		}
-		
 
 		if (NatlabExp instanceof IntLiteralExpr) {
 			return new IntLiteral(NatlabExp.getNodeString());
@@ -119,20 +119,24 @@ public class Expressions {
 			return new Literal(NatlabExp.getNodeString());
 		}
 		if (NatlabExp instanceof NameExpr) {
-			
+
 			/*
-			 * Return just IDUse instead of IDInfo. This is just a use of variable
+			 * Return just IDUse instead of IDInfo. This is just a use of
+			 * variable
 			 */
-//			
-//			if (target.symbolMap.containsKey(((NameExpr) NatlabExp).getName().getID()))
-//			{
-//				IDInfo nameIdInfo = new IDInfo();
-//				nameIdInfo = target.symbolMap.get(((NameExpr) NatlabExp).getName().getID());
-//				System.out.println(nameIdInfo.getName()+"$$$$");
-//				return nameIdInfo;
-//			}
-//			else return new IDInfo(null,((NameExpr) NatlabExp).getName().getID(),null,null,null );
-//			
+			//
+			// if (target.symbolMap.containsKey(((NameExpr)
+			// NatlabExp).getName().getID()))
+			// {
+			// IDInfo nameIdInfo = new IDInfo();
+			// nameIdInfo = target.symbolMap.get(((NameExpr)
+			// NatlabExp).getName().getID());
+			// System.out.println(nameIdInfo.getName()+"$$$$");
+			// return nameIdInfo;
+			// }
+			// else return new IDInfo(null,((NameExpr)
+			// NatlabExp).getName().getID(),null,null,null );
+			//
 			return new IDUse(((NameExpr) NatlabExp).getName().getID());
 
 		}
@@ -158,8 +162,8 @@ public class Expressions {
 			int RHStype;
 			String RHS;
 			Exp Operand1 = null, Operand2 = null;
-			//RHStype = getRHSType((ParameterizedExpr) NatlabExp);
-			//RHS = getRHSExp(NatlabExp);
+			// RHStype = getRHSType((ParameterizedExpr) NatlabExp);
+			// RHS = getRHSExp(NatlabExp);
 
 			// if (NatlabExp instanceof UnaryExpr)
 			// {
@@ -174,105 +178,109 @@ public class Expressions {
 
 			List<Exp> Args = new List<Exp>();
 			Args = getArgs(NatlabExp, target);
-			
-			//System.out.println(((IDUse)Args.getChild(0)).getID());
-			
-			
-			//if (!((ParameterizedExpr) NatlabExp).isVariable){//TODO check if isVariable works
-			if (x10Mapping.isBuiltin(NatlabExp.getVarName()))
-			{
-			
-			BuiltinMethodCall libCall = new BuiltinMethodCall();
-			libCall.setBuiltinMethodName(new MethodId("Mix10."+NatlabExp.getVarName()));
-			libCall.setArgumentList(Args);
-			//builtinMaker makeBuiltinClass = new builtinMaker();
-			builtinMaker.makeBuiltin(NatlabExp, NatlabExp.getVarName(), target, Args);
-			return libCall;
-			}
-			
-			
-			else if (NatlabExp.getVarName().equals("cellhorzcat")){
-				return CellArrayGetSet.createCellArray(NatlabExp, target);
-				
-			}
-			
-			else{
-				UserDefMethodCall libCall = new UserDefMethodCall();
-				libCall.setUserDefMethodName(new MethodId(NatlabExp.getVarName()));
+
+			// System.out.println(((IDUse)Args.getChild(0)).getID());
+
+			// if (!((ParameterizedExpr) NatlabExp).isVariable){//TODO check if
+			// isVariable works
+			if (x10Mapping.isBuiltin(NatlabExp.getVarName())) {
+
+				BuiltinMethodCall libCall = new BuiltinMethodCall();
+				libCall.setBuiltinMethodName(new MethodId("Mix10."
+						+ NatlabExp.getVarName()));
 				libCall.setArgumentList(Args);
-	//			System.out.println(((IDUse)libCall.getArgumentList().getChild(0)).getID()+"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+				// builtinMaker makeBuiltinClass = new builtinMaker();
+				builtinMaker.makeBuiltin(NatlabExp, NatlabExp.getVarName(),
+						target, Args);
 				return libCall;
 			}
-			//}
-			
-			
 
-//			switch (RHStype) {
-//			case 1: // Binary expression
-//			{
-//				Operand1 = getOperand1(NatlabExp);
-//				Operand2 = getOperand2(NatlabExp);
-//				if (RHS.equals("+"))
-//					return new AddExp(Operand1, Operand2);
-//				if (RHS.equals("&"))
-//					return new AndExp(Operand1, Operand2);
-//				if (RHS.equals("|"))
-//					return new OrExp(Operand1, Operand2);
-//				if (RHS.equals("<"))
-//					return new LTExp(Operand1, Operand2);
-//				if (RHS.equals(">"))
-//					return new GTExp(Operand1, Operand2);
-//				if (RHS.equals("<="))
-//					return new LEExp(Operand1, Operand2);
-//				if (RHS.equals(">="))
-//					return new GEExp(Operand1, Operand2);
-//				if (RHS.equals("!="))
-//					return new NEExp(Operand1, Operand2);
-//				if (RHS.equals("-"))
-//					return new SubExp(Operand1, Operand2);
-//			}
-//			case 2: // Unary expressions
-//			{ Operand1 = getOperand1(NatlabExp);
-//			    	
-//				if (RHS.equals("+"))
-//					return new PlusExp(Operand1);
-//				if (RHS.equals("-")){
-//					 //System.out.println("^^"+NatlabExp.getPrettyPrinted()+"^^"+NatlabExp.getChild(1).getChild(0).getPrettyPrinted()+"^^^^^^^^^^^^^^^^^^^");////////////
-//					return new MinusExp(Operand1);
-//			}
-//				if (RHS.equals("!"))
-//					return new NegExp(Operand1);
-//			}
-//			case 3: // Builtins
-//			{
-//				Args = getArgs(NatlabExp);
-//				BuiltinMethodCall libCall = new BuiltinMethodCall();
-//				libCall.setBuiltinMethodName(new MethodId(RHS));
-//				libCall.setArgumentList(Args);
-//				return libCall;
-//
-//			}
-//			case 4: // user def methods and unmapped builtins
-//			{
-//				Args = getArgs(NatlabExp);
-//				UserDefMethodCall libCall = new UserDefMethodCall();
-//				libCall.setUserDefMethodName(new MethodId(NatlabExp.getVarName()));
-//				libCall.setArgumentList(Args);
-//
-//				return libCall;
-//
-//			}
-//
-//			case 5: // built in constants
-//			{
-//				return new Literal(RHS);
-//			}
-//
-//			default: {
-//				return new Literal("//TODO;");
-//			}
-//
-//			}
+			else if (NatlabExp.getVarName().equals("cellhorzcat")) {
+				return CellArrayGetSet.createCellArray(NatlabExp, target);
+
+			}
+
+			else {
+				UserDefMethodCall libCall = new UserDefMethodCall();
+				if (x10Mapping.isMaybeBuiltin(NatlabExp.getVarName()))
+					libCall.setUserDefMethodName(new MethodId("Mix10."
+							+ NatlabExp.getVarName()));
+				else
+					libCall.setUserDefMethodName(new MethodId(NatlabExp
+							.getVarName()));
+				libCall.setArgumentList(Args);
+				// System.out.println(((IDUse)libCall.getArgumentList().getChild(0)).getID()+"@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
+				return libCall;
+			}
+			// }
+
+			// switch (RHStype) {
+			// case 1: // Binary expression
+			// {
+			// Operand1 = getOperand1(NatlabExp);
+			// Operand2 = getOperand2(NatlabExp);
+			// if (RHS.equals("+"))
+			// return new AddExp(Operand1, Operand2);
+			// if (RHS.equals("&"))
+			// return new AndExp(Operand1, Operand2);
+			// if (RHS.equals("|"))
+			// return new OrExp(Operand1, Operand2);
+			// if (RHS.equals("<"))
+			// return new LTExp(Operand1, Operand2);
+			// if (RHS.equals(">"))
+			// return new GTExp(Operand1, Operand2);
+			// if (RHS.equals("<="))
+			// return new LEExp(Operand1, Operand2);
+			// if (RHS.equals(">="))
+			// return new GEExp(Operand1, Operand2);
+			// if (RHS.equals("!="))
+			// return new NEExp(Operand1, Operand2);
+			// if (RHS.equals("-"))
+			// return new SubExp(Operand1, Operand2);
+			// }
+			// case 2: // Unary expressions
+			// { Operand1 = getOperand1(NatlabExp);
+			//
+			// if (RHS.equals("+"))
+			// return new PlusExp(Operand1);
+			// if (RHS.equals("-")){
+			// //System.out.println("^^"+NatlabExp.getPrettyPrinted()+"^^"+NatlabExp.getChild(1).getChild(0).getPrettyPrinted()+"^^^^^^^^^^^^^^^^^^^");////////////
+			// return new MinusExp(Operand1);
+			// }
+			// if (RHS.equals("!"))
+			// return new NegExp(Operand1);
+			// }
+			// case 3: // Builtins
+			// {
+			// Args = getArgs(NatlabExp);
+			// BuiltinMethodCall libCall = new BuiltinMethodCall();
+			// libCall.setBuiltinMethodName(new MethodId(RHS));
+			// libCall.setArgumentList(Args);
+			// return libCall;
+			//
+			// }
+			// case 4: // user def methods and unmapped builtins
+			// {
+			// Args = getArgs(NatlabExp);
+			// UserDefMethodCall libCall = new UserDefMethodCall();
+			// libCall.setUserDefMethodName(new
+			// MethodId(NatlabExp.getVarName()));
+			// libCall.setArgumentList(Args);
+			//
+			// return libCall;
+			//
+			// }
+			//
+			// case 5: // built in constants
+			// {
+			// return new Literal(RHS);
+			// }
+			//
+			// default: {
+			// return new Literal("//TODO;");
+			// }
+			//
+			// }
 		}
 		return new EmptyExp();
 	}

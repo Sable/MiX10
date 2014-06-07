@@ -29,8 +29,10 @@ public class Mix10 {
 		String fileIn = file;
 		String fileOutName = file.substring(file.lastIndexOf("/") + 1,
 				file.lastIndexOf("."))
-				+ ".x10";
-		String fileOut = args[2] + "/" + fileOutName;
+				+ "_x10";
+		String fileOut;
+		fileOut = getOutFilePath(args, fileOutName);
+			
 		// String fileOutTame = file + "_tame.m";
 		GenericFile gFile = GenericFile.create(fileIn);
 		FileEnvironment env = new FileEnvironment(gFile); // get path
@@ -60,6 +62,15 @@ public class Mix10 {
 			System.out.println("Exception ");
 		}
 		BuiltinWriter.classWriter(args[2] + "/");
+	}
+
+	private static String getOutFilePath(String[] args, String fileOutName) {
+		String fileOut;
+		if(!args[2].endsWith("/"))
+			fileOut = args[2] + "/" + fileOutName+".x10";
+		else
+			fileOut = args[2] + fileOutName+".x10";
+		return fileOut;
 	}
 
 	public static void compile(Options options) {

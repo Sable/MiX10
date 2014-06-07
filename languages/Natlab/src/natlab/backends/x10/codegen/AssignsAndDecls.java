@@ -269,11 +269,6 @@ public class AssignsAndDecls {
 			list_assign_stmt.setMultiAssignLHS(LHSinfo);
 			for (ast.Name name : ((TIRAbstractAssignToListStmt) node)
 					.getTargets().asNameList()) {
-//				if(name.getID().equals("mc_t31")){
-//				System.err.println(name.getID()
-//						+ "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!");
-//				System.exit(0);
-//				}
 				list_assign_stmt.getMultiAssignLHS().addIDInfo(
 						Helper.generateIDInfo(target.analysis, target.index,
 								node, name.getID()));

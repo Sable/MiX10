@@ -1,6 +1,7 @@
 package natlab.backends.x10.codegen;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 
 import natlab.backends.x10.IRx10.ast.Type;
@@ -14,6 +15,8 @@ public class x10Mapping {
 	private static HashMap<String, String> x10BuiltinMap = new HashMap<String, String>();
 	private static HashMap<String, String> x10MethodMap = new HashMap<String, String>();
 	private static ArrayList<String> x10BuiltinList = new ArrayList<String>();
+	private static ArrayList<String> maybeX10BuiltinList = new ArrayList<String>();
+	private static String[] ArrayOfBuiltins;
 	public x10Mapping() {
 		makex10TypeMap();
 /*
@@ -24,6 +27,13 @@ public class x10Mapping {
 		makex10BuiltinConstMap();
 		makex10MethodMap();
 		makex10BuiltinList();
+		makeMaybeX10BuiltinList();
+	}
+
+	private void makeMaybeX10BuiltinList() {
+		String listOfBuiltins="rand,mtimes,times";
+		ArrayOfBuiltins = listOfBuiltins.split(",");
+		
 	}
 
 	private void makex10BuiltinList() {
@@ -152,6 +162,15 @@ public class x10Mapping {
 
 	public static String getX10MethodMapping(String MethodName) {
 		return x10MethodMap.get(MethodName);
+	}
+
+	public static boolean isMaybeBuiltin(String varName) {
+		ArrayList<String> ArrayOfBuiltinsList = new ArrayList<String>();
+		Collections.addAll(ArrayOfBuiltinsList, ArrayOfBuiltins);
+		if(ArrayOfBuiltinsList.contains(varName))
+			return true;
+		else
+			return false;
 	}
 
 }

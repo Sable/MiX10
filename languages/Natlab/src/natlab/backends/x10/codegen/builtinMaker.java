@@ -25,7 +25,6 @@ public class builtinMaker {
 		 * and creates a x10 method ("literally" node in the mix10 class
 		 */
 		
-		System.out.println(builtinName+"YOYOYOYOYOYO");
 		builtin = getBuiltinFromXml(natlabExp, builtinName,target);
 		if (!builtin.equals("processed")){
 			BuiltinWriter.mix10Append(builtin, args, natlabExp.getVarName(),getExprType(natlabExp,target), target);
