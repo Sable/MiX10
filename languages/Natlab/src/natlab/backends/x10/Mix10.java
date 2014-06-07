@@ -1,6 +1,7 @@
 package natlab.backends.x10;
 
 import java.io.BufferedWriter;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,6 +19,8 @@ import natlab.toolkits.filehandling.GenericFile;
 import natlab.toolkits.path.FileEnvironment;
 
 public class Mix10 {
+	private static boolean debug = false;
+
 	/**
 	 * @param args
 	 */
@@ -27,16 +30,14 @@ public class Mix10 {
 		// args[2]: output dir path
 		String file = args[0];
 		String fileIn = file;
-		String fileOutName = file.substring(file.lastIndexOf("/") + 1,
-				file.lastIndexOf("."))
-				+ "_x10";
+		String fileOutName = getOutFileName(args, file);
 		String fileOut;
 		fileOut = getOutFilePath(args, fileOutName);
-			
+
 		// String fileOutTame = file + "_tame.m";
 		GenericFile gFile = GenericFile.create(fileIn);
 		FileEnvironment env = new FileEnvironment(gFile); // get path
-		String[] newArgs = {args[1]};
+		String[] newArgs = { args[1] };
 		ValueAnalysis<AggrValue<BasicMatrixValue>> analysis = BasicTamerTool
 				.analyze(newArgs, env);
 		int size = analysis.getNodeList().size();
@@ -47,7 +48,7 @@ public class Mix10 {
 		// System.out.println("UNCOMMENT IN MAIN");
 		Program irx10Program = new Program();
 		irx10Program.setClassBlock(IRx10ASTGenerator.x10ClassMaker(analysis,
-				size, listOfUsedBuiltins, args[2], fileOutName));
+				size, listOfUsedBuiltins, args[2], fileOutName, args[4]));
 		String x10Program = irx10Program.pp("", fileOutName);
 		System.out
 				.println("\n~~~~~~~~~~~~~~~~X10 code~~~~~~~~~~~~~~~~~~~~~~~\n");
@@ -64,22 +65,40 @@ public class Mix10 {
 		BuiltinWriter.classWriter(args[2] + "/");
 	}
 
+	private static String getOutFileName(String[] args, String file) {
+		String fileOutName = "";
+		if (args.length >= 4) {
+			fileOutName = args[3].trim();
+		}
+		if (fileOutName.equals("")) {
+			fileOutName = file.substring(file.lastIndexOf("/") + 1,
+					file.lastIndexOf("."));
+			fileOutName = fileOutName.replaceFirst("_driver", "");
+			fileOutName += "_x10";
+		}
+		return fileOutName;
+	}
+
 	private static String getOutFilePath(String[] args, String fileOutName) {
 		String fileOut;
-		if(!args[2].endsWith("/"))
-			fileOut = args[2] + "/" + fileOutName+".x10";
+		if (!args[2].endsWith("/"))
+			fileOut = args[2] + "/" + fileOutName + ".x10";
 		else
-			fileOut = args[2] + fileOutName+".x10";
+			fileOut = args[2] + fileOutName + ".x10";
 		return fileOut;
 	}
 
 	public static void compile(Options options) {
-		String[] args = new String[3];
+		String[] args = new String[5];
 		args[0] = options.main();
 		args[1] = options.arg_info();
 		args[2] = options.od();
-		
-		System.out.println(args[0]+" "+args[1]+" "+args[2]);
+		args[3] = options.class_name();
+		args[4] = "false";
+		if (options.use_region_arrays())
+			args[4] = "true";
+		if (debug)
+			System.out.println(args[0] + " " + args[1] + " " + args[2]);
 		main(args);
 	}
 }

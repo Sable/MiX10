@@ -23,6 +23,9 @@ String ClassBlock.pp(String indent,String className){
 	for (Method method : getMethodList()){
 		x.append(method.pp(indent+"	", getUseNewArray()));
 	}
+	
+	x.append ("public static def main(Rail[String]) {\n}");
+	
 	x.append("\n}");
 	return x.toString();
 }
