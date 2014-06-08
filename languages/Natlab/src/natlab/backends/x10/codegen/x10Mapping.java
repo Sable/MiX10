@@ -17,13 +17,13 @@ public class x10Mapping {
 	private static ArrayList<String> x10BuiltinList = new ArrayList<String>();
 	private static ArrayList<String> maybeX10BuiltinList = new ArrayList<String>();
 	private static String[] ArrayOfBuiltins;
+
 	public x10Mapping() {
 		makex10TypeMap();
-/*
-		makex10BinOperatorMap();
-		makex10UnOperatorMap();
-		makex10DirectBuiltinMap();
-*/
+		/*
+		 * makex10BinOperatorMap(); makex10UnOperatorMap();
+		 * makex10DirectBuiltinMap();
+		 */
 		makex10BuiltinConstMap();
 		makex10MethodMap();
 		makex10BuiltinList();
@@ -31,41 +31,44 @@ public class x10Mapping {
 	}
 
 	private void makeMaybeX10BuiltinList() {
-		String listOfBuiltins="rand,mtimes,times";
+		String listOfBuiltins = "rand,mtimes,times,rdivide,mrdivide,"
+				+ "colon,sin,pi,mpower,zeros,ones,mean,fix,floor,"
+				+ "round,abs,lt,le,uminus,and,i,randn,horzcat,vertcat,"
+				+ "mean,sqrt,ceil,gt,ge";
 		ArrayOfBuiltins = listOfBuiltins.split(",");
-		
+
 	}
 
 	private void makex10BuiltinList() {
-		
+
 		x10BuiltinList.add("plus");
 		x10BuiltinList.add("minus");
 		x10BuiltinList.add("gt");
 		x10BuiltinList.add("length");
 		x10BuiltinList.add("sqrt");
-		//x10BuiltinList.add("rand");
+		// x10BuiltinList.add("rand");
 		x10BuiltinList.add("horzcat");
-	//	x10BuiltinList.add("mtimes");
-	//	x10BuiltinList.add("times");
-	//	x10BuiltinList.add("rdivide");
-	//	x10BuiltinList.add("mrdivide");
+		// x10BuiltinList.add("mtimes");
+		// x10BuiltinList.add("times");
+		// x10BuiltinList.add("rdivide");
+		// x10BuiltinList.add("mrdivide");
 		x10BuiltinList.add("colon");
-	//	x10BuiltinList.add("sin");
-	//	x10BuiltinList.add("pi");
-	//	x10BuiltinList.add("mpower");
-	//	x10BuiltinList.add("zeros");
+		// x10BuiltinList.add("sin");
+		// x10BuiltinList.add("pi");
+		// x10BuiltinList.add("mpower");
+		// x10BuiltinList.add("zeros");
 		x10BuiltinList.add("ones");
-	//	x10BuiltinList.add("mean");
+		// x10BuiltinList.add("mean");
 		x10BuiltinList.add("fix");
 		x10BuiltinList.add("floor");
-	//	x10BuiltinList.add("round");
-//		x10BuiltinList.add("abs");
-//		x10BuiltinList.add("lt");
-//		x10BuiltinList.add("le");
-//		x10BuiltinList.add("uminus");
-//		x10BuiltinList.add("and");
-//		x10BuiltinList.add("i");
-		
+		// x10BuiltinList.add("round");
+		// x10BuiltinList.add("abs");
+		// x10BuiltinList.add("lt");
+		// x10BuiltinList.add("le");
+		// x10BuiltinList.add("uminus");
+		// x10BuiltinList.add("and");
+		// x10BuiltinList.add("i");
+
 	}
 
 	private void makex10TypeMap() {
@@ -81,7 +84,7 @@ public class x10Mapping {
 		x10TypeMap.put("uint32", new Type("UInt"));
 		x10TypeMap.put("uint64", new Type("ULong"));
 		x10TypeMap.put("logical", new Type("Boolean"));
-		x10TypeMap.put(null, new Type("Double")); /*This is the default type*/
+		x10TypeMap.put(null, new Type("Double")); /* This is the default type */
 	}
 
 	private void makex10BuiltinConstMap() {
@@ -146,7 +149,7 @@ public class x10Mapping {
 		else
 			return false;
 	}
-	
+
 	public static String getX10BuiltinConstMapping(String BuiltinName) {
 
 		return x10BuiltinMap.get(BuiltinName);
@@ -167,7 +170,7 @@ public class x10Mapping {
 	public static boolean isMaybeBuiltin(String varName) {
 		ArrayList<String> ArrayOfBuiltinsList = new ArrayList<String>();
 		Collections.addAll(ArrayOfBuiltinsList, ArrayOfBuiltins);
-		if(ArrayOfBuiltinsList.contains(varName))
+		if (ArrayOfBuiltinsList.contains(varName))
 			return true;
 		else
 			return false;
