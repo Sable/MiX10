@@ -1,7 +1,6 @@
 package natlab.backends.x10;
 
 import java.io.BufferedWriter;
-import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -33,11 +32,13 @@ public class Mix10 {
 		String fileOutName = getOutFileName(args, file);
 		String fileOut;
 		fileOut = getOutFilePath(args, fileOutName);
-
+		String willUseRegionArrays;
+		willUseRegionArrays = getWillUseRegionArrays(args);
 		// String fileOutTame = file + "_tame.m";
 		GenericFile gFile = GenericFile.create(fileIn);
 		FileEnvironment env = new FileEnvironment(gFile); // get path
 		String[] newArgs = { args[1] };
+		setIntegerOkay(args);
 		ValueAnalysis<AggrValue<BasicMatrixValue>> analysis = BasicTamerTool
 				.analyze(newArgs, env);
 		int size = analysis.getNodeList().size();
@@ -65,6 +66,24 @@ public class Mix10 {
 		BuiltinWriter.classWriter(args[2] + "/");
 	}
 
+	private static void setIntegerOkay(String[] args) {
+		if (args.length >= 6 && args[5].equals("false")) {
+			BasicTamerTool.setDoIntOk(false);
+		} else {
+			BasicTamerTool.setDoIntOk(true);
+		}
+	}
+
+	private static String getWillUseRegionArrays(String[] args) {
+		String willUseRegionArrays;
+		if (args.length >= 5)
+			willUseRegionArrays = args[4];
+		else {
+			willUseRegionArrays = "false";
+		}
+		return willUseRegionArrays;
+	}
+
 	private static String getOutFileName(String[] args, String file) {
 		String fileOutName = "";
 		if (args.length >= 4) {
@@ -89,14 +108,17 @@ public class Mix10 {
 	}
 
 	public static void compile(Options options) {
-		String[] args = new String[5];
+		String[] args = new String[6];
 		args[0] = options.main();
 		args[1] = options.arg_info();
 		args[2] = options.od();
 		args[3] = options.class_name();
 		args[4] = "false";
+		args[5] = "true";
 		if (options.use_region_arrays())
 			args[4] = "true";
+		if (options.no_intok())
+			args[5] = "false";
 		if (debug)
 			System.out.println(args[0] + " " + args[1] + " " + args[2]);
 		main(args);
