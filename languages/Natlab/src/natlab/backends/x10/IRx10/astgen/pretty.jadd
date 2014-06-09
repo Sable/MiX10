@@ -8,23 +8,27 @@ aspect PrettyPrinter{
 String ASTNode.pp(String indent, Boolean useNewArray){return indent;}
 
 public String Program.pp(String indent, String className){
-	return getClassBlock().pp(indent, className);
+StringBuffer x = new StringBuffer();
+    x.append("import x10.array.Array_1;\n");
+    x.append("import x10.array.Array_2;\n");
+    x.append("import x10.array.Array_3;\n");
+    x.append("import x10.regionarray.Array;\n\n");
+    x.append("class "+className+"{\n");
+	x.append (getClassBlock().pp(indent, className));
+	return x.toString();
 }
 
 String ClassBlock.pp(String indent,String className){
-	StringBuffer x = new StringBuffer();
-	x.append("import x10.array.Array_1;\n");
-	x.append("import x10.array.Array_2;\n");
-	x.append("import x10.array.Array_3;\n\n");
-	x.append("class "+className+"{\n");
+	
+StringBuffer x = new StringBuffer();
 	for(Stmt decl_stmt : getDeclStmtList()){
-		x.append(decl_stmt.pp(indent+"	", getUseNewArray()));
+		x.append(decl_stmt.pp(indent+"  ", getUseNewArray()));
 	}
 	for (Method method : getMethodList()){
-		x.append(method.pp(indent+"	", getUseNewArray()));
+		x.append(method.pp(indent+"  ", getUseNewArray()));
 	}
 	
-	x.append ("public static def main(Rail[String]) {\n}");
+	x.append (indent+"  "+"public static def main(Rail[String]) {\n"+indent+"  }");
 	
 	x.append("\n}");
 	return x.toString();
@@ -32,6 +36,7 @@ String ClassBlock.pp(String indent,String className){
 
 String DeclStmt.pp(String indent, Boolean useNewArray){
 				StringBuffer x = new StringBuffer();
+				x.append(indent);
 		int size;
 
 		if (null != getLHS()) {
@@ -147,6 +152,7 @@ String DeclStmt.pp(String indent, Boolean useNewArray){
 	String RegionBuilder.pp(String indent, Boolean useNewArray){
 	   
 		StringBuffer x = new StringBuffer();
+		x.append(indent);
 		if(true == useNewArray){
 			String type = ((AssignStmt)getParent()).getLHS().getType().getName();
 			x.append(indent+"new Array_"+getLowers().getNumChild()+"["+type+"](Helper.getSubArray("/*+getLowers().getNumChild()*/);
@@ -224,8 +230,8 @@ String DeclStmt.pp(String indent, Boolean useNewArray){
 	
 String ArraySetStmt.pp(String indent, Boolean useNewArray){
 		StringBuffer x = new StringBuffer();
-		
-						
+	       	
+			x.append(indent);			
 			x.append(getLHS().getName()+"(");
 			x.append(getIndicesList().getChild(0).pp("", useNewArray)+" as Long -1");
 		  	  for(int i=1; i<getIndicesList().getNumChild() ; i++)
@@ -240,10 +246,14 @@ String ArraySetStmt.pp(String indent, Boolean useNewArray){
   
   String SubArraySetStmt.pp(String indent, Boolean useNewArray){
 		StringBuffer x = new StringBuffer();
-		
-			if (useNewArray){	
+		      
+			x.append(indent);			
+		      String helperName = "Helper";
+			if (!useNewArray){
+			     helperName = "Helperr";
+			     }	
 				
-			x.append(getLHS().getName()+" = Helper.setSubArray(");
+			x.append(getLHS().getName()+" = "+helperName+".setSubArray(");
 			x.append(getLHS().getName());
 			
 		  	  for(int i=0; i<getLowerList().getNumChild() ; i++)
@@ -254,16 +264,17 @@ String ArraySetStmt.pp(String indent, Boolean useNewArray){
 		  	  
 		  	 x.append(", "+getRHS().pp("", useNewArray)+");\n");
 			
-		}	
 		return x.toString();
 	}
 	
 	String SubArrayGetExp.pp(String indent, Boolean useNewArray){
 		StringBuffer x = new StringBuffer();
-		
-			if (useNewArray){	
+	        String helperName = "Helper";	
+			if (!useNewArray){
+			 helperName = "Helperr";
+			 }	
 				
-			x.append("Helper.getSubArray(");
+			x.append(helperName+".getSubArray(");
 			
 		  	  for(int i=0; i<getLowerList().getNumChild() ; i++)
 		  	  {
@@ -273,7 +284,6 @@ String ArraySetStmt.pp(String indent, Boolean useNewArray){
 		  	  
 		  	 x.append(getArrayID().pp("", useNewArray)+");\n");
 			
-		}	
 		return x.toString();
 	}
   
@@ -338,7 +348,7 @@ static String PPHelper.makeRange(ArrayList Shape){
 String Method.pp(String indent, Boolean useNewArray)
 {
 	  StringBuffer x = new StringBuffer();
-	  x.append(indent+ getMethodHeader().pp("", useNewArray)+"\n"+getMethodBlock().pp(indent+"    ", useNewArray));
+	  x.append(indent+ getMethodHeader().pp("", useNewArray)+"\n"+getMethodBlock().pp(indent, useNewArray));
 	  
 	  return x.toString();
 }
@@ -434,17 +444,18 @@ String StmtBlock.pp(String indent, Boolean useNewArray)
   	x.append(indent+"{\n");
   	for (Stmt stmt : getStmtList())
   	{
-  		x.append(stmt.pp(indent, useNewArray));
+  		x.append(stmt.pp(indent+"  ", useNewArray));
   	}
-  	x.append("}\n");
+  	x.append(indent+"}\n");
   	return x.toString();
   }
 
 
 String AssignStmt.pp(String indent, Boolean useNewArray) {
 				StringBuffer x = new StringBuffer();
+				x.append(indent);
 		if (null != getAtomic() && true == getAtomic())
-			x.append(indent+"atomic ");
+			x.append(" atomic ");
 		if (null != getLHS()) {
 			/**
 			 * It is not a list assignment
@@ -662,11 +673,13 @@ String ForStmt.pp (String indent, Boolean useNewArray){
 	  x.append(indent);
 	  if (this.getisParfor() == true){
 	  x.append("finish for ("+this.getAssignStmt().getLHS().getName()
-	  +" in ("+this.getLower().pp("", useNewArray)+" as Long)..("+getUpper().pp("", useNewArray)+" as Long))\n"+"async "+getLoopBody().pp(indent+"    ", useNewArray));
+	  +" in ("+this.getLower().pp("", useNewArray)+" as Long)..("+getUpper().pp("", useNewArray)+" as Long))\n"+"async "+getLoopBody().pp(indent+"", useNewArray));
 	  
 	  }
 	  else
-	  x.append("for ("+this.getAssignStmt().pp("", useNewArray)+getCondition().pp("", useNewArray)+";"+getStepper().getLeftOp().pp("", useNewArray)+" = "+getStepper().pp("", useNewArray)+")\n"+getLoopBody().pp(indent+"    ", useNewArray));
+	  x.append("for ("+this.getAssignStmt().pp("", useNewArray)+indent+"    "+
+	       getCondition().pp("", useNewArray)+";"+getStepper().getLeftOp().pp("", useNewArray)+
+	       " = "+getStepper().pp("", useNewArray)+")\n"+getLoopBody().pp(indent+"", useNewArray));
 	  
 	  return x.toString();
 }
@@ -675,7 +688,7 @@ String WhileStmt.pp(String indent, Boolean useNewArray)
 {
 	  StringBuffer x = new StringBuffer();
 	  x.append(indent);
-	  x.append("while ("+getCondition().pp("", useNewArray)+")\n"+getLoopBody().pp(indent+"   ", useNewArray));
+	  x.append("while ("+getCondition().pp("", useNewArray)+")\n"+getLoopBody().pp(indent+"", useNewArray));
 	  return x.toString();
 }
 
@@ -686,13 +699,13 @@ String IfElseStmt.pp(String indent, Boolean useNewArray)
 	x.append(indent);
 	//  x.append("inside if else ");
 	x.append("if ("+getIfElseIfList().getChild(0).getCondition().pp("", useNewArray)+")\n");
-	x.append(getIfElseIfList().getChild(0).getIfBody().pp(indent+"    ", useNewArray));
+	x.append(getIfElseIfList().getChild(0).getIfBody().pp(indent+"", useNewArray));
 	for (int i=1; i<getIfElseIfList().getNumChild() ; i++){
 		x.append("else if ("+getIfElseIfList().getChild(i).getCondition().pp("", useNewArray)+")\n");
-	  	x.append(getIfElseIfList().getChild(i).getIfBody().pp(indent+"    ", useNewArray));
+	  	x.append(getIfElseIfList().getChild(i).getIfBody().pp(indent+"", useNewArray));
 	}
-	if(null != getElseBody()){
-		x.append("else \n"+getElseBody().pp(indent+"    ", useNewArray));
+	if(null != getElseBody() && getElseBody().getStmtList().getNumChild() > 0){
+		x.append(indent+"else \n"+getElseBody().pp(indent+"", useNewArray));
 	}
 	return x.toString();
 }
@@ -729,6 +742,7 @@ String UserDefMethodCall.pp(String indent, Boolean useNewArray)
 String CommentStmt.pp(String indent, Boolean useNewArray)
 {
 	StringBuffer x = new StringBuffer();
+	x.append(indent);
 	String trimmedComment = getComment().trim();
 	if(!(("").equals(trimmedComment)))
 	{
