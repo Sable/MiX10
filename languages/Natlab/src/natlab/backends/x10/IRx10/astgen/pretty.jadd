@@ -34,6 +34,16 @@ StringBuffer x = new StringBuffer();
 	return x.toString();
 }
 
+static String PPHelper.getInitValue(String type){
+    if(type.equals("Double") || type.equals("Long")){
+        return "0";
+     }
+     else{
+        return "null";
+     }
+}        
+        
+
 String DeclStmt.pp(String indent, Boolean useNewArray){
 				StringBuffer x = new StringBuffer();
 				x.append(indent);
@@ -49,15 +59,20 @@ String DeclStmt.pp(String indent, Boolean useNewArray){
 				if (null == getMutable() || getMutable())
 					x.append("var ");
 				else if (null != getMutable() && !getMutable())
-					x.append("var ");
+					x.append("val ");
 				x.append(getLHS().getName() + ": "
 						+ PPHelper.getCorrectTypeName(getLHS()));
 				if (hasRHS()) {
 					x.append(" = ");
 					x.append(getRHS().pp("", useNewArray));
 				}
+				else{
+				//FIXIT
+				    //x.append(" = ");
+				    //x.append(PPHelper.getInitValue(PPHelper.getCorrectTypeName(getLHS())));
+				}
 				x.append(";\n");
-
+                
 			}
 
 			else if (null != getLHS().getShape()) {
@@ -82,6 +97,11 @@ String DeclStmt.pp(String indent, Boolean useNewArray){
 						x.append(" = ");
 						x.append(getRHS().pp("", useNewArray));
 					}
+					else{
+					//FIXIT
+				    //x.append(" = ");
+				    //x.append(PPHelper.getInitValue(PPHelper.getCorrectTypeName(getLHS())));
+				}
 					x.append(";\n");
 				}
 
@@ -133,7 +153,10 @@ String DeclStmt.pp(String indent, Boolean useNewArray){
 							x.append(getRHS().pp("", useNewArray) + ")");
 						} else if (hasRHS()) {
 							x.append(" = " + getRHS().pp("", useNewArray));
+						} else {
+							x.append(" = null");
 						}
+						
 					}
 					x.append(";\n");
 				}
