@@ -9,11 +9,7 @@ String ASTNode.pp(String indent, Boolean useNewArray){return indent;}
 
 public String Program.pp(String indent, String className){
 StringBuffer x = new StringBuffer();
-    x.append("import x10.array.Array_1;\n");
-    x.append("import x10.array.Array_2;\n");
-    x.append("import x10.array.Array_3;\n");
-    x.append("import x10.regionarray.Array;\n\n");
-    x.append("class "+className+"{\n");
+
 	x.append (getClassBlock().pp(indent, className));
 	return x.toString();
 }
@@ -21,6 +17,21 @@ StringBuffer x = new StringBuffer();
 String ClassBlock.pp(String indent,String className){
 	
 StringBuffer x = new StringBuffer();
+if(getUseNewArray()){
+    x.append("import x10.array.Array_1;\n");
+    x.append("import x10.array.Array_2;\n");
+    x.append("import x10.array.Array_3;\n");
+    x.append("import simpleArrayLib.Mix10;\n");
+    x.append("import simpleArrayLib.Helper;\n\n");
+    }
+    else{
+    x.append("import x10.regionarray.Array;\n");
+    x.append("import regionArrayLib.Mix10;\n");
+    x.append("import regionArrayLib.Helper;\n\n");
+    }
+    
+     x.append("class "+className+"{\n");
+    
 	for(Stmt decl_stmt : getDeclStmtList()){
 		x.append(decl_stmt.pp(indent+"  ", getUseNewArray()));
 	}
@@ -273,7 +284,7 @@ String ArraySetStmt.pp(String indent, Boolean useNewArray){
 			x.append(indent);			
 		      String helperName = "Helper";
 			if (!useNewArray){
-			     helperName = "Helperr";
+			     helperName = "Helper";
 			     }	
 				
 			x.append(getLHS().getName()+" = "+helperName+".setSubArray(");
@@ -294,7 +305,7 @@ String ArraySetStmt.pp(String indent, Boolean useNewArray){
 		StringBuffer x = new StringBuffer();
 	        String helperName = "Helper";	
 			if (!useNewArray){
-			 helperName = "Helperr";
+			 helperName = "Helper";
 			 }	
 				
 			x.append(helperName+".getSubArray(");

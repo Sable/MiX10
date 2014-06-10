@@ -15,33 +15,35 @@ public class BuiltinWriter {
 			String methodName, String exprType, IRx10ASTGenerator target) {
 
 		mix10.append("public static def " + methodName + "(");
-		
+
 		int i;
 		for (i = 0; i < args.getNumChild() - 1; i++) {
-			/*System.out.println(target.symbolMap.get(args.getChild(i))
-							.getType().getName());
-			*/				
+			/*
+			 * System.out.println(target.symbolMap.get(args.getChild(i))
+			 * .getType().getName());
+			 */
 			/*
 			 * char(i+97) creates parameter names starting from a..z
 			 */
 			/*
-			 * TODO:
-			 * target.symbolMap.get(((IDUse) args.getChild(i)).getID() can be null 
-			 * if it is inside parfor. check and fix in AssignAndDecls.
+			 * TODO: target.symbolMap.get(((IDUse) args.getChild(i)).getID() can
+			 * be null if it is inside parfor. check and fix in AssignAndDecls.
 			 */
-			mix10.append(((char)(i+97))
-					+ ":");
-			if (target.symbolMap.get(((IDUse) args.getChild(i)).getID()) != null){
-				mix10.append(paramType(target.symbolMap.get(((IDUse) args.getChild(i)).getID())
-							.getType().getName(), exprType, i) + ", ");
+			mix10.append(((char) (i + 97)) + ":");
+			if (target.symbolMap.get(((IDUse) args.getChild(i)).getID()) != null) {
+				mix10.append(paramType(
+						target.symbolMap
+								.get(((IDUse) args.getChild(i)).getID())
+								.getType().getName(), exprType, i)
+						+ ", ");
 			}
-           
+
 		}
-		mix10.append(((char)(i+97))
-				+ ":");
-		if (target.symbolMap.get(((IDUse) args.getChild(i)).getID()) != null){
-				mix10.append(paramType(target.symbolMap.get(((IDUse) args.getChild(i)).getID()).getType()
-						.getName(), exprType, i));
+		mix10.append(((char) (i + 97)) + ":");
+		if (target.symbolMap.get(((IDUse) args.getChild(i)).getID()) != null) {
+			mix10.append(paramType(
+					target.symbolMap.get(((IDUse) args.getChild(i)).getID())
+							.getType().getName(), exprType, i));
 		}
 		mix10.append(")" + method + "\n");
 
@@ -62,24 +64,33 @@ public class BuiltinWriter {
 				params = "Array[" + typeName + "]";
 
 		} else if (exprType.equals("type4")) {
-			if (1 == i)  //TODO this is a quick hack - assumes there are 2 params and 2nd is scalar
+			if (1 == i) // TODO this is a quick hack - assumes there are 2
+						// params and 2nd is scalar
 				params = typeName;
 			else
 				params = "Array[" + typeName + "]";
 
-		}else if (exprType.equals("type5")) {
+		} else if (exprType.equals("type5")) {
 			params = "Any";
 		}
 		return params;
 	}
 
-	public static void classWriter(String path) {
+	public static void classWriter(String path, String useRegionArray) {
 		try {
 
-			BufferedWriter out = new BufferedWriter(
-					new FileWriter(
-							path+"Mix10.x10",
-							false));
+			BufferedWriter out = new BufferedWriter(new FileWriter(path
+					+ "Mix10.x10", false));
+			if (useRegionArray.equals("true")) {
+				out.write("package regionArrayLib;\n");
+				out.write("import x10.regionarray.Array;\n");
+			} else {
+				out.write("package simpleArrayLib;\n");
+				out.write("import x10.array.Array_1;\n");
+				out.write("import x10.array.Array_2;\n");
+				out.write("import x10.array.Array_3;\n");
+			}
+
 			out.write("public class Mix10 {\n");
 
 			// out.close();

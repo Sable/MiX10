@@ -1,6 +1,7 @@
 package natlab.backends.x10;
 
 import java.io.BufferedWriter;
+import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -63,7 +64,27 @@ public class Mix10 {
 		} catch (IOException e) {
 			System.out.println("Exception ");
 		}
-		BuiltinWriter.classWriter(args[2] + "/");
+		File packageDir = new File(args[2] + "/" + getLibraryPackage(args[4]));
+
+		Boolean madePackage = false;
+		if (!packageDir.exists()) {
+			madePackage = packageDir.mkdir();
+			System.err
+					.println("Cannot create package directory.Press Enter to continue.");
+			System.console().readLine();
+		}
+
+		BuiltinWriter.classWriter(args[2] + "/" + getLibraryPackage(args[4])
+				+ "/", args[4]);
+	}
+
+	private static String getLibraryPackage(String useNewArray) {
+		if (useNewArray.equals("true")) {
+			return "regionArrayLib";
+
+		} else {
+			return "simpleArrayLib";
+		}
 	}
 
 	private static void setIntegerOkay(String[] args) {
