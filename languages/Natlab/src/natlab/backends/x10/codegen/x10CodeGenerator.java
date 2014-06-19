@@ -70,7 +70,7 @@ public class x10CodeGenerator extends TIRAbstractNodeCaseHandler {
 		buf.append(indent + "public static def ");
 		// TODO - CHANGE IT TO DETERMINE RETURN TYPE
 
-		buf.append(node.getName());
+		buf.append(node.getName().getID());
 
 		buf.append("(");
 		first = true;

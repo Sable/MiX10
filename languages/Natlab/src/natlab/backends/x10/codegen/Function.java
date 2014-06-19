@@ -23,7 +23,7 @@ public class Function {
 		List<IDInfo> arguments = new List<IDInfo>();
 		Name param;
 		MethodHeader method_header = new MethodHeader();
-		method_header.setName(node.getName());
+		method_header.setName(node.getName().getID());
 		method_header.setReturnType(null);
 		System.out.println("###"+node.getInputParams().getNumChild());
 		
