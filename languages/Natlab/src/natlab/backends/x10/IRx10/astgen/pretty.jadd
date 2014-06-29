@@ -17,6 +17,7 @@ StringBuffer x = new StringBuffer();
 String ClassBlock.pp(String indent,String className){
 	
 StringBuffer x = new StringBuffer();
+x.append("import x10.util.Timer;\n");
 if(getUseNewArray()){
     x.append("import x10.array.Array_1;\n");
     x.append("import x10.array.Array_2;\n");
@@ -39,8 +40,13 @@ if(getUseNewArray()){
 		x.append(method.pp(indent+"  ", getUseNewArray()));
 	}
 	
-	x.append (indent+"  "+"public static def main(Rail[String]) {\n"+indent+"  }");
-	
+	x.append (indent+"  "+"public static def main(Rail[String]) {\n");
+	x.append(indent+"    "+"val t1: Long = Timer.milliTime();\n");
+    x.append(indent+"    //Insert Call to driver function here\n") ;
+	x.append(indent+"    "+"val t2: Long = Timer.milliTime();\n");
+    x.append(indent+"    "+"val timet: Double = ((t2-t1) as Double)/1000.00;\n");
+    x.append(indent+"    "+"Console.OUT.println(timet);\n");
+	x.append(indent+"  }");
 	x.append("\n}");
 	return x.toString();
 }
@@ -142,7 +148,8 @@ String DeclStmt.pp(String indent, Boolean useNewArray){
 									+ PPHelper.getCorrectTypeName(getLHS()) + "]" + "(");
 							// + PPHelper.makeRange(getLHS().getShape()) + ", "
 
-							x.append(getRHS().pp("", useNewArray) + ")");
+							x.append(getRHS().pp("", useNewArray));
+							x.append(" as Array_"+size+"["+PPHelper.getCorrectTypeName(getLHS())+"]" + ")");
 						} else if (hasRHS()) {
 							x.append(" = " + getRHS().pp("", useNewArray));
 						} else {

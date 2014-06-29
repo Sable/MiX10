@@ -25,26 +25,23 @@ public class ForLoopStmt {
 			IRx10ASTGenerator target, StmtBlock block) {
 
 		ForStmt for_stmt = new ForStmt();
-		if (target.parforSwitch == true){
+		if (target.parforSwitch == true) {
 			for_stmt.setisParfor(true);
-			//target.parforSwitch = false;
-		}
-		else{
+			// target.parforSwitch = false;
+		} else {
 			for_stmt.setisParfor(false);
 		}
 		AssignStmt for_assign = new AssignStmt();
 
 		IDInfo LHSinfo = new IDInfo(new Type("Double"), node.getAssignStmt()
 				.getLHS().getVarName(), null, false, null, null);
-		
-		LHSinfo = (Helper.generateIDInfo(target.analysis,
-				target.index, node, node.getAssignStmt()
-				.getLHS().getVarName()));
+
+		LHSinfo = (Helper.generateIDInfo(target.analysis, target.index, node,
+				node.getAssignStmt().getLHS().getVarName()));
 		ShapeFactory sf = new ShapeFactory();
 		/*
-		 * TODO
-		 * below is a hack assuming for loop index will be a scalar.
-		 * use range value analysis later on
+		 * TODO below is a hack assuming for loop index will be a scalar. use
+		 * range value analysis later on
 		 */
 		ArrayList<Integer> s = new ArrayList<Integer>();
 		s.add(1);
@@ -64,13 +61,12 @@ public class ForLoopStmt {
 		IDUse upper = new IDUse(((RangeExpr) (node.getAssignStmt().getRHS()))
 				.getUpper().getVarName());
 		for_stmt.setUpper(upper);
-		
+
 		IDUse increment;
-		if(((RangeExpr) (node.getAssignStmt().getRHS())).hasIncr())
-		{
-			increment = new IDUse(((RangeExpr) (node.getAssignStmt().getRHS())).getIncr().getVarName());
-		}
-		else{
+		if (((RangeExpr) (node.getAssignStmt().getRHS())).hasIncr()) {
+			increment = new IDUse(((RangeExpr) (node.getAssignStmt().getRHS()))
+					.getIncr().getVarName());
+		} else {
 			increment = new IDUse("1");
 		}
 		for_stmt.setIncr(increment);
@@ -87,7 +83,12 @@ public class ForLoopStmt {
 		for_stmt.setAssignStmt(for_assign);
 		DeclStmt TempDeclStmt = new DeclStmt();
 		TempDeclStmt.setLHS(for_assign.getLHS());
-		block.addStmt(TempDeclStmt);
+		if (!target.symbolMap.containsKey(for_assign.getLHS().getName())) {
+			if (target.currentBlock.size() > 1)
+				target.currentBlock.get(0).addStmt(TempDeclStmt);
+			else
+				block.addStmt(TempDeclStmt);
+		}
 		target.symbolMap.put(LHSinfo.getName(), LHSinfo);
 		for_stmt.setCondition(new LEExp(
 				new IDUse(for_assign.getLHS().getName()), upper));
@@ -100,20 +101,20 @@ public class ForLoopStmt {
 		LoopBody loop_body_block = for_stmt.getLoopBody();
 		target.currentBlock.add(loop_body_block);
 		buildStmtsSubAST(node.getStmts(), target);
-		
-		
+
 		block.addStmt(fixLoopVar(for_stmt, block, target));
-			if (target.parforSwitch == true){
-			//for_stmt.setisParfor(true);
+		if (target.parforSwitch == true) {
+			// for_stmt.setisParfor(true);
 			target.parforSwitch = false;
-			}
+		}
 		target.currentBlock.remove(loop_body_block);
 
-}
-		// System.out.println(loop_body_block.getStmts().getNumChild());
-	
+	}
 
-	private static ForStmt fixLoopVar(ForStmt for_stmt, StmtBlock block, IRx10ASTGenerator target) {
+	// System.out.println(loop_body_block.getStmts().getNumChild());
+
+	private static ForStmt fixLoopVar(ForStmt for_stmt, StmtBlock block,
+			IRx10ASTGenerator target) {
 
 		boolean FixIt = false;
 		for (Stmt stmt : for_stmt.getLoopBody().getStmtList()) {
@@ -126,24 +127,24 @@ public class ForLoopStmt {
 				}
 			}
 		}
-		
+
 		if (FixIt) {
 			// rename loop variable
 			// assign old loop var to new one
 			String randomizer = UUID.randomUUID().toString();
 			DeclStmt InsertDeclStmt = new DeclStmt();
 			IDInfo temp = for_stmt.getAssignStmt().getLHS();
-			InsertDeclStmt.setLHS(new IDInfo(temp.getType(), temp.getName(), null,
-					false, null, null));
+			InsertDeclStmt.setLHS(new IDInfo(temp.getType(), temp.getName(),
+					null, false, null, null));
 			InsertDeclStmt.setRHS(new IDUse(for_stmt.getAssignStmt().getLHS()
 					.getName()
-					+ "_x10"+randomizer));
+					+ "_x10" + randomizer));
 			for_stmt.getLoopBody().getStmtList().insertChild(InsertDeclStmt, 0);
 			for_stmt.getAssignStmt()
 					.getLHS()
 					.setName(
 							for_stmt.getAssignStmt().getLHS().getName()
-									+ "_x10"+randomizer);
+									+ "_x10" + randomizer);
 			((IDUse) (((LEExp) (for_stmt.getCondition())).getLeftOp()))
 					.setID(for_stmt.getAssignStmt().getLHS().getName());
 			((IDUse) (((IncExp) (for_stmt.getStepper())).getLeftOp()))

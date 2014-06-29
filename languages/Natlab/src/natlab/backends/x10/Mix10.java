@@ -69,9 +69,6 @@ public class Mix10 {
 		Boolean madePackage = false;
 		if (!packageDir.exists()) {
 			madePackage = packageDir.mkdir();
-			System.err
-					.println("Cannot create package directory.Press Enter to continue.");
-			System.console().readLine();
 		}
 
 		BuiltinWriter.classWriter(args[2] + "/" + getLibraryPackage(args[4])

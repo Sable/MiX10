@@ -28,7 +28,7 @@ public class AssignsAndDecls {
 		String LHS;
 
 		boolean isReductionStmt = Helper.isReductionStmt(node, target, block);
-		
+
 		target.symbolMapKey = ((TIRAbstractAssignToVarStmt) node)
 				.getTargetName().getID();
 		LHS = target.symbolMapKey;
@@ -66,15 +66,13 @@ public class AssignsAndDecls {
 				target.symbolMap.put(target.symbolMapKey, assign_stmt.getLHS());
 			// TODO : Handle expressions of various types
 			// Set parent's value in various expressions
-			
-			if (true == isReductionStmt){
+
+			if (true == isReductionStmt) {
 				assign_stmt.setAtomic(true);
-			}
-			else{
+			} else {
 				assign_stmt.setAtomic(false);
 			}
-		} 
-		else {
+		} else {
 			isDecl = true;
 			DeclStmt decl_stmt = new DeclStmt();
 
@@ -116,19 +114,21 @@ public class AssignsAndDecls {
 			else {
 
 				target.symbolMap.put(target.symbolMapKey, decl_stmt.getLHS());
+				// if (target.currentBlock.size() > 1)
+				// target.currentBlock.get(0).addStmt(decl_stmt);
+				// else
 				block.addStmt(decl_stmt);
 				if (target.parforSwitch == false || isReductionStmt == true)
 					target.symbolMap.put(target.symbolMapKey,
 							decl_stmt.getLHS());
 			}
-			
-			if (true == isReductionStmt){
+
+			if (true == isReductionStmt) {
 				decl_stmt.setAtomic(true);
-			}
-			else{
+			} else {
 				decl_stmt.setAtomic(false);
 			}
-			
+
 		}
 
 	}
@@ -184,14 +184,13 @@ public class AssignsAndDecls {
 				if (target.parforSwitch == false || isReductionStmt == true)
 					target.symbolMap.put(target.symbolMapKey,
 							list_single_assign_stmt.getLHS());
-				
-				if (true == isReductionStmt){
+
+				if (true == isReductionStmt) {
 					list_single_assign_stmt.setAtomic(true);
-				}
-				else{
+				} else {
 					list_single_assign_stmt.setAtomic(false);
 				}
-				
+
 				target.symbolMap.put(target.symbolMapKey,
 						list_single_assign_stmt.getLHS());
 
@@ -217,20 +216,18 @@ public class AssignsAndDecls {
 				DeclStmt pseudoDecl = new DeclStmt();
 				pseudoDecl.setLHS(decl_stmt.getLHS());
 				//
-				
-				if (true == isReductionStmt){
+
+				if (true == isReductionStmt) {
 					decl_stmt.setAtomic(true);
-				}
-				else{
+				} else {
 					decl_stmt.setAtomic(false);
 				}
 				AssignStmt pseudoAssign = new AssignStmt();
 				pseudoAssign.setLHS(decl_stmt.getLHS());
 				pseudoAssign.setRHS(decl_stmt.getRHS());
-				if (true == isReductionStmt){
+				if (true == isReductionStmt) {
 					pseudoAssign.setAtomic(true);
-				}
-				else{
+				} else {
 					pseudoAssign.setAtomic(false);
 				}
 				if (target.currentBlock.size() > 1
