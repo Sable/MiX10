@@ -1,0 +1,855 @@
+//import natlab.backends.x10.IRx10.ast.Args;
+import natlab.backends.x10.IRx10.ast.List;
+import natlab.backends.x10.IRx10.ast.PPHelper;
+import natlab.backends.x10.IRx10.ast.Stmt;
+import java.util.*;
+
+aspect PrettyPrinter{
+String ASTNode.pp(String indent, Boolean useNewArray){return indent;}
+
+public String Program.pp(String indent, String className){
+StringBuffer x = new StringBuffer();
+
+	x.append (getClassBlock().pp(indent, className));
+	return x.toString();
+}
+
+String ClassBlock.pp(String indent,String className){
+	
+StringBuffer x = new StringBuffer();
+x.append("import x10.util.Timer;\n");
+if(getUseNewArray()){
+    x.append("import x10.array.Array_1;\n");
+    x.append("import x10.array.Array_2;\n");
+    x.append("import x10.array.Array_3;\n");
+    x.append("import simpleArrayLib.Mix10;\n");
+    x.append("import simpleArrayLib.Helper;\n\n");
+    }
+    else{
+    x.append("import x10.regionarray.Array;\n");
+    x.append("import regionArrayLib.Mix10;\n");
+    x.append("import regionArrayLib.Helper;\n\n");
+    }
+    
+     x.append("class "+className+"{\n");
+    
+	for(Stmt decl_stmt : getDeclStmtList()){
+		x.append(decl_stmt.pp(indent+"  ", getUseNewArray()));
+	}
+	for (Method method : getMethodList()){
+		x.append(method.pp(indent+"  ", getUseNewArray()));
+	}
+	
+	x.append (indent+"  "+"public static def main(Rail[String]) {\n");
+	x.append(indent+"    "+"val t1: Long = Timer.milliTime();\n");
+    x.append(indent+"    //Insert Call to driver function here\n") ;
+	x.append(indent+"    "+"val t2: Long = Timer.milliTime();\n");
+    x.append(indent+"    "+"val timet: Double = ((t2-t1) as Double)/1000.00;\n");
+    x.append(indent+"    "+"Console.OUT.println(timet);\n");
+	x.append(indent+"  }");
+	x.append("\n}");
+	return x.toString();
+}
+
+static String PPHelper.getInitValue(String type){
+    if(type.equals("Double") || type.equals("Long")){
+        return "0";
+     }
+     else{
+        return "null";
+     }
+}        
+        
+
+String DeclStmt.pp(String indent, Boolean useNewArray){
+				StringBuffer x = new StringBuffer();
+				x.append(indent);
+		int size;
+
+		if (null != getLHS()) {
+			/*
+			 * It is not a list assignment
+			 */
+
+			if (null == getLHS().getShape()) {
+				/* Scalar variable */
+				if (null == getMutable() || getMutable())
+					x.append("var ");
+				else if (null != getMutable() && !getMutable())
+					x.append("val ");
+				x.append(getLHS().getName() + ": "
+						+ PPHelper.getCorrectTypeName(getLHS()));
+				if (hasRHS()) {
+					x.append(" = ");
+					x.append(getRHS().pp("", useNewArray));
+				}
+				else{
+				//FIXIT
+				    //x.append(" = ");
+				    //x.append(PPHelper.getInitValue(PPHelper.getCorrectTypeName(getLHS())));
+				}
+				x.append(";\n");
+                
+			}
+
+			else if (null != getLHS().getShape()) {
+				boolean tf = true;
+				for (int i = 0; i < (getLHS().getShape().size()); i++) {
+					if (null != getLHS().getShape().get(i))
+						tf &= ("1").equals(getLHS().getShape().get(i)
+								.toString());
+					else
+						tf = false;
+				}
+				if (tf) {
+
+					/* Scalar variable */
+					if (null == getMutable() || getMutable())
+						x.append("var ");
+					else if (null != getMutable() && !getMutable())
+						x.append("var ");
+					x.append(getLHS().getName() + ": "
+							+ PPHelper.getCorrectTypeName(getLHS()));
+					if (hasRHS()) {
+						x.append(" = ");
+						x.append(getRHS().pp("", useNewArray));
+					}
+					else{
+					//FIXIT
+				    //x.append(" = ");
+				    //x.append(PPHelper.getInitValue(PPHelper.getCorrectTypeName(getLHS())));
+				}
+					x.append(";\n");
+				}
+
+				else // array
+				{
+					if (hasRHS() || (null != getMutable() && !getMutable()))
+						x.append("var " + getLHS().getName());
+					else
+						x.append("var " + getLHS().getName());
+
+					if (true == useNewArray) {
+
+						size = (getLHS().getShape().size());
+						
+						while(getLHS().getShape().get(size-1) == null){
+							size--;
+						}
+						if (size >= 1 && getLHS().getShape().get(0).toString().equals("1")) {
+							size = 1;
+						}
+						x.append(": Array_" + size);
+						x.append("[" + PPHelper.getCorrectTypeName(getLHS()) + "]");
+
+						if (hasRHS() && !(getRHS() instanceof SimpleArrayExp)) {
+							x.append(" = " + "new Array_"
+									+ size + "["
+									+ PPHelper.getCorrectTypeName(getLHS()) + "]" + "(");
+							// + PPHelper.makeRange(getLHS().getShape()) + ", "
+
+							x.append(getRHS().pp("", useNewArray));
+							x.append(" as Array_"+size+"["+PPHelper.getCorrectTypeName(getLHS())+"]" + ")");
+						} else if (hasRHS()) {
+							x.append(" = " + getRHS().pp("", useNewArray));
+						} else {
+							x.append(" = null");
+						}
+
+					} else { // true != useNewArray
+						x.append(": Array[" + PPHelper.getCorrectTypeName(getLHS())
+								+ "]");
+						/*
+						 * Add rank of the array if known
+						 */
+						x.append("(" + (getLHS().getShape().size()) + ")");
+						if (hasRHS() && !(getRHS() instanceof SimpleArrayExp)) {
+							x.append(" = " + "new Array["
+									+ PPHelper.getCorrectTypeName(getLHS()) + "]" + "(");
+							// + PPHelper.makeRange(getLHS().getShape()) + ", "
+
+							x.append(getRHS().pp("", useNewArray) + ")");
+						} else if (hasRHS()) {
+							x.append(" = " + getRHS().pp("", useNewArray));
+						} else {
+							x.append(" = null");
+						}
+						
+					}
+					x.append(";\n");
+				}
+			}
+
+		} else {
+			/*
+			 * TODO Case when assigned to a list
+			 */
+		}
+		return x.toString();
+	}
+
+	
+	
+	String RegionBuilder.pp(String indent, Boolean useNewArray){
+	   
+		StringBuffer x = new StringBuffer();
+		x.append(indent);
+		if(true == useNewArray){
+			String type = ((AssignStmt)getParent()).getLHS().getType().getName();
+			x.append(indent+"new Array_"+getLowers().getNumChild()+"["+type+"](Helper.getSubArray("/*+getLowers().getNumChild()*/);
+			int i;
+			for(i=0 ; i< getLowers().getNumChild();i++){
+				if (0!=i){
+				  x.append(", ");
+				}  
+				if(getLowers().getChild(0).getID().equals(getUppers().getChild(0).getID()) && !getUppers().getChild(0).getID().equals("__")){
+				  x.append(getLowers().getChild(i).getID()+", "+getUppers().getChild(0).getID());
+				}
+				else{
+					if(getLowers().getChild(i).getID().equals("__"))
+						x.append("0, "	);
+					else
+						x.append(getLowers().getChild(i).getID()+" as Long, ");
+					if(getUppers().getChild(i).getID().equals("__"))
+						x.append(getArrayID().getID()+".numElems_"+Integer.toString(i+1)+" -1"	);
+					else
+						x.append(""+getUppers().getChild(i).getID()+" as Long");
+				}
+				
+			
+			}
+			
+			x.append(", "+getArrayID().getID()+"))");
+		
+		}
+		else{ //use region arrays
+			String type = ((AssignStmt)getParent()).getLHS().getType().getName();
+			x.append(indent+"new Array["+type+"](");
+			if(getLowers().getChild(0).getID().equals(getUppers().getChild(0).getID()) && !getUppers().getChild(0).getID().equals("__")){
+				x.append("(1..1)");
+			}
+			else{
+			if(getLowers().getChild(0).getID().equals("__"))
+				x.append(
+				"(("+getArrayID().getID()+".region.min("+Integer.toString(0)+")).."	);
+			else
+				x.append("("+getLowers().getChild(0).getID()+" as Long..");
+			if(getUppers().getChild(0).getID().equals("__"))
+				x.append(
+				"("+getArrayID().getID()+".region.max("+Integer.toString(0)+")))"	);
+			else
+				x.append(""+getUppers().getChild(0).getID()+" as Long)");
+	        }
+			int i;
+			for(i=1 ; i< getLowers().getNumChild();i++){
+				x.append("*");
+				if(getLowers().getChild(i).getID().equals(getUppers().getChild(i).getID()) && !getUppers().getChild(i).getID().equals("__")){
+					x.append("(1..1)");
+				}
+				else{
+				
+				if(getLowers().getChild(i).getID().equals("__"))
+					x.append(
+					"(("+getArrayID().getID()+".region.min("+Integer.toString(i)+")).."	);
+				else
+					x.append("("+getLowers().getChild(i).getID()+" as Long..");
+				if(getUppers().getChild(i).getID().equals("__"))
+					x.append(
+					"("+getArrayID().getID()+".region.max("+Integer.toString(i)+")))"	);
+				else
+					x.append(""+getUppers().getChild(i).getID()+" as Long)");
+				}
+				
+			}
+			x.append(", (p:Point("+Integer.toString(i)+"))=>"+"mix10_ptOff_"+getArrayID().getID()+"(p.operator-("+"mix10_pt_"+getArrayID().getID()+")));\n");
+		}	
+		return x.toString();
+	}
+	
+	
+	
+	
+String ArraySetStmt.pp(String indent, Boolean useNewArray){
+		StringBuffer x = new StringBuffer();
+	       	
+			x.append(indent);			
+			x.append(getLHS().getName()+"(");
+			x.append(getIndicesList().getChild(0).pp("", useNewArray)+" as Long -1");
+		  	  for(int i=1; i<getIndicesList().getNumChild() ; i++)
+		  	  {
+		  		  x.append(", "+getIndicesList().getChild(i).pp("", useNewArray)+" as Long -1");
+		  	  }
+		  	  x.append(")");
+			x.append(" = ");
+			x.append(getRHS().pp("", useNewArray)+" ;\n");
+		return x.toString();
+	}
+  
+  String SubArraySetStmt.pp(String indent, Boolean useNewArray){
+		StringBuffer x = new StringBuffer();
+		      
+			x.append(indent);			
+		      String helperName = "Helper";
+			if (!useNewArray){
+			     helperName = "Helper";
+			     }	
+				
+			x.append(getLHS().getName()+" = "+helperName+".setSubArray(");
+			x.append(getLHS().getName());
+			
+		  	  for(int i=0; i<getLowerList().getNumChild() ; i++)
+		  	  {
+		  		  x.append(", "+getLowerList().getChild(i).pp("", useNewArray));
+		  		  x.append(", "+getUpperList().getChild(i).pp("", useNewArray));
+		  	  }
+		  	  
+		  	 x.append(", "+getRHS().pp("", useNewArray)+");\n");
+			
+		return x.toString();
+	}
+	
+	String SubArrayGetExp.pp(String indent, Boolean useNewArray){
+		StringBuffer x = new StringBuffer();
+	        String helperName = "Helper";	
+			if (!useNewArray){
+			 helperName = "Helper";
+			 }	
+				
+			x.append(helperName+".getSubArray(");
+			
+		  	  for(int i=0; i<getLowerList().getNumChild() ; i++)
+		  	  {
+		  		  x.append(getLowerList().getChild(i).pp("", useNewArray));
+		  		  x.append(", "+getUpperList().getChild(i).pp("", useNewArray)+", ");
+		  	  }
+		  	  
+		  	 x.append(getArrayID().pp("", useNewArray)+");\n");
+			
+		return x.toString();
+	}
+  
+  String SimpleArrayExp.pp(String indent, Boolean useNewArray){
+  	StringBuffer x = new StringBuffer();
+  	x.append("[");
+  	x.append(getValuesList().getChild(0).pp("", useNewArray)+" as "+getType().getName());
+  	for (int i=1; i<getValuesList().getNumChild(); i++)
+  	{
+  		x.append(" ,"+getValuesList().getChild(i).pp("", useNewArray)+" as "+getType().getName());
+  	}
+  	x.append("]"); //as "+getType().getName() );
+    return x.toString();
+    }
+    		
+  static String PPHelper.getCorrectTypeName(IDInfo lhs) {
+	// TODO Auto-generated method stub
+	if (lhs.getisComplex().equals("COMPLEX"))
+		return "Complex";
+	else
+		return lhs.getType().getName();
+}
+  
+  String StringLiteral.pp(String indent, Boolean useNewArray)
+  {
+    StringBuffer x = new StringBuffer();
+  	  x.append(indent);
+  	  x.append("Array_1.makeView("+getLiteral()+".chars())");
+  	  return x.toString();
+  }
+
+  String ArrayAccess.pp(String indent, Boolean useNewArray)
+  {
+  	  StringBuffer x = new StringBuffer();
+  	  x.append(indent);
+  	  x.append(getArrayID().getID()+"(");
+  	  x.append(getIndicesList().getChild(0).pp("", useNewArray)+" as Long -1");
+  	  for(int i=1; i<getIndicesList().getNumChild() ; i++)
+  	  {
+  		  x.append(", "+getIndicesList().getChild(i).pp("", useNewArray)+" as Long -1");
+  	  }
+  	  
+  	   if(null != getIsColVector() && null != getIndicesList() && getIsColVector() && getIndicesList().getNumChild() == 1){
+  	   x.append(", 0");
+  	   }
+  	  x.append(")");
+  	  return x.toString();
+  }
+
+
+//
+static String PPHelper.makeRange(ArrayList Shape){
+	StringBuffer s = new StringBuffer();
+	s.append("(1.."+Shape.get(0)+")");
+	for(int i=1; i<Shape.size();i++)
+			{
+				s.append("*(1.."+Shape.get(i)+")");
+			}
+	return s.toString();
+}
+
+String Method.pp(String indent, Boolean useNewArray)
+{
+	  StringBuffer x = new StringBuffer();
+	  x.append(indent+ getMethodHeader().pp("", useNewArray)+"\n"+getMethodBlock().pp(indent, useNewArray));
+	  
+	  return x.toString();
+}
+
+String MethodHeader.pp(String indent, Boolean useNewArray)
+{
+	StringBuffer x = new StringBuffer();
+	
+	x.append(indent+"static def "+getName()+" ("+PPHelper.makeArgs(getArgsList())+")");
+	
+	return x.toString();
+}
+
+
+
+static int PPHelper.getSize(ArrayList shape){
+	  int size =0;
+	  size = shape.size();
+	  int less=0;
+	  for (int i =0; i<size; i++){
+	   	if(null == shape.get(i))
+	   		less++;
+	  }
+	  size = size-less;
+		if (size >= 1 && shape.get(0).toString().equals("1")) {
+			size = 1;
+		}
+		return size;
+  }
+
+static String PPHelper.makeArgs(List<IDInfo> argsList) 
+{
+//TODO: Make arguments that are not redefined, as val
+		StringBuffer s = new StringBuffer();
+	int size;
+	if (argsList.getNumChild()>0){
+		
+		if (!isScalar(argsList.getChild(0))){
+		
+			
+			if(null != argsList.getChild(0).getShape()){
+			if (null == argsList.getChild(0).getdidShapeChange() || false == argsList.getChild(0).getdidShapeChange()){
+			s.append("var "+argsList.getChild(0).getName()+": Array_"+ getSize(argsList.getChild(0).getShape())+"["+getCorrectTypeName(argsList.getChild(0))+"]");
+			}
+				else{
+				s.append("var "+argsList.getChild(0).getName()+": Array["+getCorrectTypeName(argsList.getChild(0))+"]");
+			}	
+			}
+			else{
+				s.append("var "+argsList.getChild(0).getName()+": Array["+getCorrectTypeName(argsList.getChild(0))+"]");
+			}
+		}
+		else
+	s.append("var "+argsList.getChild(0).getName()+": "+getCorrectTypeName(argsList.getChild(0)));
+	for (int i=1; i<argsList.numChildren ; i++)
+	{	
+		if (!isScalar(argsList.getChild(i))){
+			if(null != argsList.getChild(i).getShape()){
+			if (null == argsList.getChild(0).getdidShapeChange() || false == argsList.getChild(i).getdidShapeChange()){
+				s.append(", "+"var "+argsList.getChild(i).getName()+": Array_"+getSize(argsList.getChild(i).getShape())+"["+getCorrectTypeName(argsList.getChild(i))+"]"
+						);
+				}
+				else{
+				s.append(", "+"var "+argsList.getChild(i).getName()+": Array["+getCorrectTypeName(argsList.getChild(i))+"]");
+			}	
+			}
+				else{
+			s.append(", "+"var "+argsList.getChild(i).getName()+": Array["+getCorrectTypeName(argsList.getChild(i))+"]");
+				}
+		}
+		else		
+		s.append(", "+"var "+argsList.getChild(i).getName()+": "+getCorrectTypeName(argsList.getChild(i)));
+	}
+	}
+	return s.toString();
+}
+
+static boolean PPHelper.isScalar(IDInfo id) {
+	  
+	if (null != id.getShape())
+	  for (int i =0 ; i<id.getShape().size();i++){
+		  if (null==id.getShape().get(i) || !("1").equals(id.getShape().get(i).toString()) ){
+			  return false;
+			  
+		  }
+	  }
+	return true;
+}
+
+String StmtBlock.pp(String indent, Boolean useNewArray)
+{
+  	StringBuffer x = new StringBuffer();
+  	x.append(indent+"{\n");
+  	for (Stmt stmt : getStmtList())
+  	{
+  		x.append(stmt.pp(indent+"  ", useNewArray));
+  	}
+  	x.append(indent+"}\n");
+  	return x.toString();
+  }
+
+
+String AssignStmt.pp(String indent, Boolean useNewArray) {
+				StringBuffer x = new StringBuffer();
+				x.append(indent);
+		if (null != getAtomic() && true == getAtomic())
+			x.append(" atomic ");
+		if (null != getLHS()) {
+			/**
+			 * It is not a list assignment
+			 */
+
+			if (null == getLHS().getShape()) {
+				/* Scalar variable */
+				x.append(getLHS().getName());
+				x.append(" = ");
+				x.append(getRHS().pp("", useNewArray) + ";\n");
+
+			}
+
+			else if (null != getLHS().getShape()) {
+				boolean tf = true;
+				for (int i = 0; i < getLHS().getShape().size(); i++) {
+					if (null != getLHS().getShape().get(i))
+						tf &= ("1").equals(getLHS().getShape().get(i)
+								.toString());
+					else
+						tf &= false;
+				}
+				if (tf) {
+
+					/* Scalar variable */
+					x.append(getLHS().getName());
+					x.append(" = ");
+					x.append(getRHS().pp("", useNewArray));
+					if(null != getTypeCast() && true==getTypeCast())
+						x.append("as "+PPHelper.getCorrectTypeName(getLHS()));
+					x.append(" ;\n");
+
+				}
+
+				else // array
+				{
+					/**
+					 * TODO Make sure if arrays can be aSSIGNED DIRECTLY LIKE
+					 * VARIABLES. wHAT ARE THE RESTRICTIONS ?
+					 */
+					x.append(getLHS().getName());
+					x.append(" = ");
+					x.append(getRHS().pp("", useNewArray));
+					if (false == useNewArray){
+					if(null != getTypeCast() && true==getTypeCast())
+						x.append("as Array["+PPHelper.getCorrectTypeName(getLHS())+"]");
+					}
+					else{
+						if(null != getTypeCast() && true==getTypeCast()){
+						x.append("as Array_"+getLHS().getShape().size()+"["+PPHelper.getCorrectTypeName(getLHS())+"]");
+						}
+					}		
+					x.append(" ;\n");
+					//
+					// x.append("var "+getLHS().getName()+" = "+
+					// "new Array["+PPHelper.getCorrectTypeName(getLHS())+"]"+
+					// "("+PPHelper.makeRange(getLHS().getShape())+
+					// ", "+getRHS().pp("", useNewArray)+");\n");
+				}
+			}
+		} else {
+
+			System.out.println("list assign:" + getRHS().pp(indent, useNewArray));
+			/**
+			 * TODO Case when assigned to a list
+			 */
+			if (!hasMultiAssignLHS()
+					|| 0 == getMultiAssignLHS().getIDInfoList().getNumChild()) { // ||
+																					// getMultiAssignLHS().getNumChild()
+																					// ==0
+				x.append(getRHS().pp(indent, useNewArray) + " ;\n");
+			} else {
+				x.append("var "
+						+ "generate_a_name"
+						+ " = "
+						+ "new Array_1[Any]" //multiAssign is a vector
+						+ "(0.."
+						+ (getMultiAssignLHS().getIDInfoList().getNumChild() - 1)
+						+ ", " + getRHS().pp("", useNewArray) + ");\n");
+			}
+
+		}
+		return x.toString();
+	}
+	
+	String Literally.pp(String indent, Boolean useNewArray){
+		if (false == useNewArray){
+		StringBuffer x = new StringBuffer();
+		x.append(indent+getVerbatim());
+		return x.toString();
+		}
+		else
+		return indent;
+  }
+	
+	String LiterallyExp.pp(String indent, Boolean useNewArray){
+		if (true == useNewArray){
+		StringBuffer x = new StringBuffer();
+		x.append(indent+getVerbatim());
+		return x.toString();
+		}
+		else
+		return indent;
+  }
+	
+String IDUse.pp(String indent, Boolean useNewArray){
+	StringBuffer x = new StringBuffer();
+	x.append(indent+getID());
+	return x.toString();
+}
+
+String PreIncExp.pp(String indent, Boolean useNewArray)
+{
+	return (indent+"(++"+getOperand().pp("", useNewArray)+")");
+}
+
+String PreDecExp.pp(String indent, Boolean useNewArray)
+{
+	return (indent+"(--"+getOperand().pp("", useNewArray)+")");
+	
+}
+
+String MinusExp.pp(String indent, Boolean useNewArray)
+{
+	return (indent+"(-"+getOperand().pp("", useNewArray)+")");
+}
+
+String PlusExp.pp(String indent, Boolean useNewArray)
+{
+	return (indent+"(+"+getOperand().pp("", useNewArray)+")");
+}
+	
+String NegExp.pp(String indent, Boolean useNewArray)
+{
+	return (indent+"(!"+getOperand().pp("", useNewArray)+")");
+}
+
+String Literal.pp(String indent, Boolean useNewArray)
+{
+	return (indent+getLiteral());
+}
+
+String MulExp.pp(String indent, Boolean useNewArray)
+{
+	return(indent+"("+getLeftOp().pp("", useNewArray)+" * "+getRightOp().pp("", useNewArray)+")");
+}
+
+String DivExp.pp(String indent, Boolean useNewArray)
+{
+	return(indent+"("+getLeftOp().pp("", useNewArray)+" / "+getRightOp().pp("", useNewArray)+")");
+}
+
+String ModExp.pp(String indent, Boolean useNewArray)
+{
+	return(indent+"("+getLeftOp().pp("", useNewArray)+" % "+getRightOp().pp("", useNewArray)+")");
+}
+
+String AddExp.pp(String indent, Boolean useNewArray)
+{
+	return(indent+"("+getLeftOp().pp("", useNewArray)+" + "+getRightOp().pp("", useNewArray)+")");
+}
+
+String SubExp.pp(String indent, Boolean useNewArray)
+{
+	return(indent+"("+getLeftOp().pp("", useNewArray)+" - "+getRightOp().pp("", useNewArray)+")");
+}
+
+String IncExp.pp(String indent, Boolean useNewArray)
+{
+	return(indent+"("+getLeftOp().pp("", useNewArray)+" + "+getRightOp().pp("", useNewArray)+")");
+}
+
+String DecExp.pp(String indent, Boolean useNewArray)
+{
+	return(indent+"("+getLeftOp().pp("", useNewArray)+" - "+getRightOp().pp("", useNewArray)+")");
+}
+
+String LTExp.pp(String indent, Boolean useNewArray)
+{
+	return(indent+"("+getLeftOp().pp("", useNewArray)+" < "+getRightOp().pp("", useNewArray)+")");
+}
+
+String LEExp.pp(String indent, Boolean useNewArray)
+{
+	return(indent+"("+getLeftOp().pp("", useNewArray)+" <= "+getRightOp().pp("", useNewArray)+")");
+}
+
+String GEExp.pp(String indent, Boolean useNewArray)
+{
+	return(indent+"("+getLeftOp().pp("", useNewArray)+" >= "+getRightOp().pp("", useNewArray)+")");
+}
+
+String EQExp.pp(String indent, Boolean useNewArray)
+{
+	return(indent+"("+getLeftOp().pp("", useNewArray)+" == "+getRightOp().pp("", useNewArray)+")");
+}
+
+String NEExp.pp(String indent, Boolean useNewArray)
+{
+	return(indent+"("+getLeftOp().pp("", useNewArray)+" != "+getRightOp().pp("", useNewArray)+")");
+}
+
+String AndExp.pp(String indent, Boolean useNewArray)
+{
+	return(indent+"("+getLeftOp().pp("", useNewArray)+" && "+getRightOp().pp("", useNewArray)+")");
+}
+
+String OrExp.pp(String indent, Boolean useNewArray)
+{
+	return(indent+"("+getLeftOp().pp("", useNewArray)+" || "+getRightOp().pp("", useNewArray)+")");
+}
+
+String ForStmt.pp (String indent, Boolean useNewArray){
+	  StringBuffer x= new StringBuffer();
+	  x.append(indent);
+	  if (this.getisParfor() == true){
+	  x.append("finish for ("+this.getAssignStmt().getLHS().getName()
+	  +" in ("+this.getLower().pp("", useNewArray)+" as Long)..("+getUpper().pp("", useNewArray)+" as Long))\n"+"async "+getLoopBody().pp(indent+"", useNewArray));
+	  
+	  }
+	  else
+	  x.append("for ("+this.getAssignStmt().pp("", useNewArray)+indent+"    "+
+	       getCondition().pp("", useNewArray)+";"+getStepper().getLeftOp().pp("", useNewArray)+
+	       " = "+getStepper().pp("", useNewArray)+")\n"+getLoopBody().pp(indent+"", useNewArray));
+	  
+	  return x.toString();
+}
+
+String WhileStmt.pp(String indent, Boolean useNewArray)
+{
+	  StringBuffer x = new StringBuffer();
+	  x.append(indent);
+	  x.append("while ("+getCondition().pp("", useNewArray)+")\n"+getLoopBody().pp(indent+"", useNewArray));
+	  return x.toString();
+}
+
+String IfElseStmt.pp(String indent, Boolean useNewArray)
+{   
+	
+	StringBuffer x = new StringBuffer();
+	x.append(indent);
+	//  x.append("inside if else ");
+	x.append("if ("+getIfElseIfList().getChild(0).getCondition().pp("", useNewArray)+")\n");
+	x.append(getIfElseIfList().getChild(0).getIfBody().pp(indent+"", useNewArray));
+	for (int i=1; i<getIfElseIfList().getNumChild() ; i++){
+		x.append("else if ("+getIfElseIfList().getChild(i).getCondition().pp("", useNewArray)+")\n");
+	  	x.append(getIfElseIfList().getChild(i).getIfBody().pp(indent+"", useNewArray));
+	}
+	if(null != getElseBody() && getElseBody().getStmtList().getNumChild() > 0){
+		x.append(indent+"else \n"+getElseBody().pp(indent+"", useNewArray));
+	}
+	return x.toString();
+}
+
+String BuiltinMethodCall.pp(String indent, Boolean useNewArray)
+{
+	  StringBuffer x = new StringBuffer();
+	  x.append(indent);
+	  x.append(getBuiltinMethodName().getName()+"(");
+	  x.append(getArgumentList().getChild(0).pp("", useNewArray));
+	  for(int i=1; i<getArgumentList().getNumChild() ; i++)
+	  {
+		  x.append(", "+getArgumentList().getChild(i).pp("", useNewArray));
+	  }
+	  x.append(")");
+	  return x.toString();
+}
+
+String UserDefMethodCall.pp(String indent, Boolean useNewArray)
+{
+	  StringBuffer x = new StringBuffer();
+	  x.append(indent);
+	  x.append(getUserDefMethodName().getName()+"(");
+	  if(getArgumentList().getNumChild()>0){
+	  x.append(getArgumentList().getChild(0).pp("", useNewArray));
+	  for(int i=1; i<getArgumentList().getNumChild() ; i++)
+	  {
+		  x.append(", "+getArgumentList().getChild(i).pp("", useNewArray));
+	  }
+	  }
+	  x.append(")");
+	  return x.toString();
+}
+String CommentStmt.pp(String indent, Boolean useNewArray)
+{
+	StringBuffer x = new StringBuffer();
+	x.append(indent);
+	String trimmedComment = getComment().trim();
+	if(!(("").equals(trimmedComment)))
+	{
+	x.append("//");
+	x.append(getComment());
+	x.append("\n");
+	}
+	return x.toString();
+}
+
+String ReturnStmt.pp(String indent, Boolean useNewArray) {
+	  if (1 == getNumReturnVal()){
+		  return (indent+"return "+getReturnVal(0).pp("", useNewArray)+";\n");
+		  		  
+	  }
+	  String listOfVals;
+	  if (1< getNumReturnVal()){
+		  listOfVals = getReturnVal(0).pp("", useNewArray)+" as Any";
+		  for (int i=1;i<getNumReturnVal();i++){
+			  listOfVals = listOfVals + ","+getReturnVal(i).pp("", useNewArray)+" as Any";
+		  }
+		  
+		   return (indent+"return ["+listOfVals+"];\n");
+		  
+		  
+	  }
+	  
+	  else 
+		  return ""; 
+  }
+  
+String BreakStmt.pp(String indent, Boolean useNewArray){
+  return(indent+"break;\n"); 
+}
+
+String ContinueStmt.pp(String indent, Boolean useNewArray){
+  return(indent+"continue;\n"); 
+}
+
+String BlockEnd.pp(String indent, Boolean useNewArray){
+StringBuffer x = new StringBuffer();
+	  x.append(indent+getVerbatim());
+	  return x.toString();
+	  
+}
+
+
+String AsyncStmt.pp(String indent, Boolean useNewArray){
+	StringBuffer x = new StringBuffer();
+	  x.append(indent);
+	  x.append("async{\n");//+getAsyncBlock().pp(indent+"   ", useNewArray));
+	  return x.toString();
+}
+
+String FinishStmt.pp(String indent, Boolean useNewArray){
+	StringBuffer x = new StringBuffer();
+	  x.append(indent);
+	  x.append("finish{\n");
+	  return x.toString();
+}
+
+String AtomicStmt.pp(String indent, Boolean useNewArray){
+	StringBuffer x = new StringBuffer();
+	  x.append(indent);
+	  x.append("atomic{\n");
+	  return x.toString();
+}
+}	
+	

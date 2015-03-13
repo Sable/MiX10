@@ -1,0 +1,9 @@
+For every variable
+- get all defs for it
+- get all uses for it
+Run analysisFirstPass
+	For every def of a var
+		check if it can be intok
+	For every use of that var
+		check if it can be intok
+	

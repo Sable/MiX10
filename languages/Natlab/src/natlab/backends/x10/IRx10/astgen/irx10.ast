@@ -1,0 +1,116 @@
+Program ::= ClassBlock;
+PPHelper;
+ClassBlock ::= DeclStmt:Stmt* Method* <UseNewArray:Boolean>;
+abstract Stmt;
+CommentStmt:Stmt ::= <Comment:String>;
+BreakStmt:Stmt;
+ContinueStmt:Stmt;
+DeclStmt:Stmt ::= [MultiDeclLHS] LHS:IDInfo [RHS:Exp] <Mutable:Boolean> <Atomic:Boolean>;
+Literally:Stmt ::= <Verbatim:String>;
+LiterallyExp:Exp ::= <Verbatim:String>;
+BlockEnd:Literally;
+PointLooper:Stmt ::= PointID:IDUse ArrayID:IDUse <DimNumber:int> [Min:Exp] [Max:Exp];
+Method ::= MethodHeader MethodBlock;
+MethodHeader ::= ReturnType:AccessVal <Name:String> Args:IDInfo*;
+ReturnStmt:Stmt ::= ReturnVal:Exp*;
+Type:AccessVal ::= <Name:String>;
+MethodBlock:StmtBlock;
+AssignStmt:Stmt ::=  [MultiAssignLHS] LHS:IDInfo RHS:Exp <TypeCast:Boolean> <Atomic:Boolean>;
+ExpStmt:Stmt ::= Exp;
+IDUse:Exp ::= <ID:String>;
+Dims ::= [Exp];
+IDInfo:Exp ::= Type <Name:String> <Shape:ArrayList> <didShapeChange:Boolean> <isComplex:String> Value:Exp;
+MultiDeclLHS:Exp ::=  IDInfo* ;
+MultiAssignLHS:Exp ::=  IDInfo* ;
+abstract UnaryExp:Exp ::= Operand:Exp;
+PreIncExp:UnaryExp;
+PreDecExp:UnaryExp;
+MinusExp:UnaryExp;
+PlusExp:UnaryExp;
+NegExp:UnaryExp;
+EmptyExp:Exp;
+
+RegionBuilder:Exp ::= Lower:IDUse* Upper:IDUse* ArrayID:IDUse;
+SimpleArrayExp:Exp ::= Values:Exp* Point* Type;
+Point:Exp ::= CoOrd:IntLiteral* ;
+
+
+ArrayAccess:AccessVal ::= ArrayID:IDUse Indices:Exp* <IsColVector:Boolean>;
+ArraySetStmt:Stmt ::= LHS:IDInfo Indices:Exp* RHS:Exp;
+SubArraySetStmt:Stmt ::= LHS:IDInfo Lower:Exp* Upper:Exp* RHS:Exp;
+SubArrayGetExp:Exp ::= Lower:Exp* Upper:Exp* ArrayID:IDUse;
+
+abstract LiteralExp:Exp;
+Literal:LiteralExp ::= <Literal:String>;
+StringLiteral:Literal;
+FPLiteral:Literal;
+DoubleLiteral:Literal;
+IntLiteral:Literal;
+BoolLiteral:Literal;
+LongLiteral:Literal;
+CharLiteral:Literal;
+
+
+
+abstract BinaryExp:Exp ::= LeftOp:Exp RightOp:Exp;
+abstract ArithExp:BinaryExp;
+abstract MultiplicativeExp:ArithExp;
+MulExp:MultiplicativeExp;
+DivExp:MultiplicativeExp;
+ModExp:MultiplicativeExp;
+abstract AdditiveExp:BinaryExp;
+AddExp:AdditiveExp;
+SubExp:AdditiveExp;
+IncExp:AdditiveExp; //foo+=bar
+DecExp:AdditiveExp;
+
+
+//Add more BinaryExp : Shift, Logical
+
+abstract RelationalExp:BinaryExp;
+LTExp : RelationalExp ;                                                       
+GTExp : RelationalExp ;                                                       
+LEExp : RelationalExp ;                                                       
+GEExp : RelationalExp ;  
+abstract EqualityExp : RelationalExp;                                         
+EQExp : EqualityExp ;                                                         
+NEExp : EqualityExp ;
+
+abstract LogicalExp:BinaryExp;
+AndExp:LogicalExp;
+OrExp:LogicalExp;
+
+Modifiers ::= Modifier*;                                                        
+Modifier ::= <ID:String>;     
+  
+Identifier:AccessVal ::= <Name:String>;
+
+ForStmt:Stmt ::= <isParfor:Boolean> AssignStmt Condition:Exp Stepper:AdditiveExp LoopBody Lower:IDUse Upper:IDUse Incr:IDUse;
+//TODO: Add an iterator for stmt. Move Upper, Lower, Incr to it
+WhileStmt:Stmt ::= Condition:Exp LoopBody;
+StmtBlock:Stmt ::= Stmt*;
+LoopBody:StmtBlock;
+IfElseStmt:Stmt ::= IfElseIf* [ElseBody];
+IfElseIf:Stmt ::= Condition:Exp IfBody;
+IfBody:StmtBlock;
+ElseBody:StmtBlock;
+abstract Exp;
+
+AtStmt:Stmt ::= Place:Exp AtBlock;
+AtBlock:StmtBlock;
+AsyncStmt:Stmt ::= AsyncBlock;
+AsyncBlock:StmtBlock;
+FinishStmt:Stmt ::= FinishBlock;
+FinishBlock:StmtBlock;
+AtomicStmt:Stmt ::= AtomicBlock;
+AtomicBlock:StmtBlock;
+WhenStmt:Stmt ::= Condition:Exp WhenBlock;
+WhenBlock:StmtBlock;
+
+abstract AccessVal:Exp;
+abstract MethodCall:Exp;
+BuiltinMethodCall:MethodCall ::= BuiltinMethodName:MethodId Argument:Exp*;
+MethodId:AccessVal ::= <Name:String>;
+UserDefMethodCall:MethodCall ::= UserDefMethodName:MethodId Argument:Exp*;
+
+
