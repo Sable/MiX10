@@ -99,9 +99,6 @@ java -jar "${basedir}/@{basename}.jar" "$$@"</echo>
 	<target name="test" depends="build, CommandLineInterface.test" description="runs all JUnit tests" />
 
 
-	<!-- jar build without tame and backend-->
-
-	<!-- jar build without backend-->
 	<!-- jar build with x10 backend-->
   <target name="jar" depends="clean, jar_noclean"
           description="creates an executable release jar" />
