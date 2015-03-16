@@ -1,7 +1,13 @@
 <project name="Natlab" default="build">
 	<!-- load properties -->
 	<property file="natlab.properties" />
-
+	<property name = "version.name" value=""/>
+	<!--<condition property ="version.name" value="">
+		<not>
+			<isset property="version.name" />
+		</not>
+	</condition>
+	-->
   <!-- setup a local basename -->
   <dirname property="Natlab.basedir" file="${ant.file.Natlab}" />
 
@@ -103,7 +109,7 @@ java -jar "${basedir}/@{basename}.jar" "$$@"</echo>
   <target name="jar" depends="clean, jar_noclean"
           description="creates an executable release jar" />
 	<target name="jar_noclean" depends="gen, compile" description="creates an executable release jar without cleaning first">
-		<natlab-jar basename="${entrypoint.x10_backend.name}"/>
+		<natlab-jar basename="${entrypoint.x10_backend.name}${version.name}"/>
 	</target>
  
 
