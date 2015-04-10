@@ -10,6 +10,7 @@ import natlab.backends.x10.IRx10.ast.Program;
 import natlab.backends.x10.codegen.BuiltinWriter;
 import natlab.backends.x10.codegen.IRx10ASTGenerator;
 import natlab.backends.x10.codegen.collectBuiltins;
+import natlab.options.MiX10Options;
 import natlab.options.Options;
 import natlab.tame.BasicTamerTool;
 import natlab.tame.valueanalysis.ValueAnalysis;
@@ -125,7 +126,7 @@ public class Mix10 {
 		return fileOut;
 	}
 
-	public static void compile(Options options) {
+	public static void compile(MiX10Options options) {
 		String[] args = new String[6];
 		args[0] = options.main();
 		args[1] = options.arg_info();

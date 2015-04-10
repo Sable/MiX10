@@ -59,8 +59,7 @@
 	<import file="../shared/gen.xml" />
 	<import file="../shared/compile.xml" />
 	<import file="../shared/bindir.xml" />
-	<import file="../shared/options.xml" />
-
+	
 	<!-- Extend and override parts of gen.xml -->
   <import optional="true" file="local.xml" />
 
@@ -72,7 +71,7 @@
 
 	<!-- jflex, beaver, jastadd, and tests -->
 	<!-- NB: overrides target from gen.xml -->
-	<target name="gen" depends="options,jastadd" />
+	<target name="gen" depends="jastadd" />
 
 
 	<!--=====================================================================-->
