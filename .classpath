@@ -2,15 +2,6 @@
 <classpath>
 	<classpathentry kind="src" path="languages/Natlab/gen"/>
 	<classpathentry kind="src" path="languages/Natlab/src"/>
-	<classpathentry kind="src" path="lib/antlr-3.0.1/runtime/Java/src"/>
-	<classpathentry kind="src" path="lib/antlr-3.0.1/src"/>
-	<classpathentry kind="src" path="lib/beaver-0.9.6.2/src"/>
-	<classpathentry kind="src" path="lib/jflex-1.4.1/examples/binary"/>
-	<classpathentry kind="src" path="lib/jflex-1.4.1/examples/cup"/>
-	<classpathentry kind="src" path="lib/jflex-1.4.1/examples/interpreter"/>
-	<classpathentry kind="src" path="lib/jflex-1.4.1/examples/java"/>
-	<classpathentry kind="src" path="lib/jflex-1.4.1/examples/simple"/>
-	<classpathentry kind="src" path="lib/jflex-1.4.1/src"/>
 	<classpathentry kind="lib" path="lib/guava-16.0.1/guava-16.0.1-javadoc.jar"/>
 	<classpathentry kind="lib" path="lib/guava-16.0.1/guava-16.0.1-sources.jar"/>
 	<classpathentry kind="lib" path="lib/guava-16.0.1/guava-16.0.1.jar"/>

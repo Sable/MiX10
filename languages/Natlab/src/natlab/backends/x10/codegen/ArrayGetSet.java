@@ -29,7 +29,7 @@ public class ArrayGetSet {
   public static void handleTIRAbstractArraySetStmt(TIRArraySetStmt node,
       IRx10ASTGenerator target, StmtBlock block) {
     if (Debug) {
-      System.out.println(node.getIndizes().getChild(0));
+      System.out.println(node.getIndices().getChild(0));
       System.out.println(node.getLHS().getPrettyPrinted()
           + "~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~");
     }
@@ -52,10 +52,10 @@ public class ArrayGetSet {
      * index
      */
     boolean hasColon = false;
-    for (int i = 0; i < node.getIndizes().getNumChild(); i++) {
+    for (int i = 0; i < node.getIndices().getNumChild(); i++) {
       // array_set.setIndices(Expressions.makeIRx10Exp(node.getIndizes()
       // .getChild(i), false, target), i);
-      if (((IDUse) (Expressions.makeIRx10Exp(node.getIndizes().getChild(i),
+      if (((IDUse) (Expressions.makeIRx10Exp(node.getIndices().getChild(i),
           false, target))).getID().equals("__")) {
         hasColon = true;
       }
@@ -76,8 +76,8 @@ public class ArrayGetSet {
       array_set.setLHS(Helper.generateIDInfo(target.analysis, target.index,
           node, LHS));
       array_set.getLHS().setName(LHS.toString());
-      for (int i = 0; i < node.getIndizes().getNumChild(); i++) {
-        array_set.setIndices(Expressions.makeIRx10Exp(node.getIndizes()
+      for (int i = 0; i < node.getIndices().getNumChild(); i++) {
+        array_set.setIndices(Expressions.makeIRx10Exp(node.getIndices()
             .getChild(i), false, target), i);
       }
       target.symbolMap.put(target.symbolMapKey, array_set.getLHS());
@@ -95,9 +95,9 @@ public class ArrayGetSet {
       subArraySet.setLowerList(new List<Exp>());
       subArraySet.setUpperList(new List<Exp>());
       if (null != subArraySet.getLHS().getShape())
-        for (int i = 0; i < node.getIndizes().getNumChild(); i++) {
+        for (int i = 0; i < node.getIndices().getNumChild(); i++) {
           if (((IDUse) (Expressions.makeIRx10Exp(
-              node.getIndizes().getChild(i), false, target))).getID().equals(
+              node.getIndices().getChild(i), false, target))).getID().equals(
               "__")) {
             /*
              * Case when index is a ':' Note that this fails if number of
@@ -105,7 +105,7 @@ public class ArrayGetSet {
              */
             LiterallyExp low = new LiterallyExp("1");
             LiterallyExp high = new LiterallyExp();
-            if (1 < node.getIndizes().getNumChild())
+            if (1 < node.getIndices().getNumChild())
               high.setVerbatim(LHS.toString() + ".numElems_"
                   + Integer.toString(i + 1));
             else
@@ -120,7 +120,7 @@ public class ArrayGetSet {
              * last value
              */
             String indexId = ((IDUse) (Expressions.makeIRx10Exp(node
-                .getIndizes().getChild(i), false, target))).getID();
+                .getIndices().getChild(i), false, target))).getID();
             System.err.println(target.symbolMap.get(indexId));
             if (Helper.isScalar(target.symbolMap.get(indexId).getShape())) {
               IDUse low = new IDUse(indexId);
