@@ -263,8 +263,8 @@ public class CellArrayGetSet {
 				node, LHS));
 		array_set.getLHS().setName(LHS.toString());
 		boolean hasColon = false;
-		for (int i = 0; i < node.getIndizes().getNumChild(); i++) {
-			array_set.setIndices(Expressions.makeIRx10Exp(node.getIndizes()
+		for (int i = 0; i < node.getIndices().getNumChild(); i++) {
+			array_set.setIndices(Expressions.makeIRx10Exp(node.getIndices()
 					.getChild(i), false, target), i);
 			if (((IDUse) (array_set.getIndices(i))).getID().equals("__")) {
 				hasColon = true;
