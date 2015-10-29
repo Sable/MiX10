@@ -9,6 +9,7 @@
 
 	
 	<!-- generates Java files from JastAdd specs -->
+	<mkdir dir="${basedir}/${gen.dir}" />
 	<target name="jastadd" depends="def.jastadd.task">
     <jastadd package="${x10.ast.pkg}" beaver="true" rewrite="regular" outdir="${basedir}/${gen.dir}">
       <fileset dir="${src.dir}/${x10.src.dir}">
