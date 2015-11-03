@@ -38,14 +38,14 @@ public class MiX10Main {
 	public static void main(String[] args) throws Exception {
 		if (args.length == 0) {
 			System.err.println("No options given\nTry -help for usage");
-			return;
+			System.exit(1);
 		}
 
 		options = new MiX10Options();
 		options.parse(args);
 
 		if (options.mix10c()) {
-			if (options.files().isEmpty()) {
+			if (options.files().isEmpty() && !options.help()) {
 				if (!options.main().isEmpty()) {
 					/*
 					 * If the user provided an entry point function and did not
@@ -53,12 +53,10 @@ public class MiX10Main {
 					 * file.
 					 */
 					options.files().add(options.main());
-					return;
 				} else {
-					System.err
-							.println("No files provided, must have at least one file.");
+					System.err.println("No files provided, must have at least one file.");
+					System.exit(1);
 				}
-				return;
 			}
 			Mix10.compile(options);
 		}
