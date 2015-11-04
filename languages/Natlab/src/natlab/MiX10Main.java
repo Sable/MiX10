@@ -44,13 +44,13 @@ public class MiX10Main {
 		options = new MiX10Options();
 		options.parse(args);
 
-    if (options.help()) {
-      options.getUsage();
-      return;
-    }
+    		if (options.help()) {
+      			options.getUsage();
+      			return;
+    		}
 
 		if (options.mix10c()) {
-			if (options.files().isEmpty() && !options.help()) {
+			if (options.files().isEmpty()) {
 				if (!options.main().isEmpty()) {
 					/*
 					 * If the user provided an entry point function and did not
