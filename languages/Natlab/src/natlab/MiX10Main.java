@@ -37,12 +37,17 @@ public class MiX10Main {
 	 */
 	public static void main(String[] args) throws Exception {
 		if (args.length == 0) {
-			System.err.println("No options given\nTry -help for usage");
+			System.err.println("No options given\nTry --help for usage");
 			System.exit(1);
 		}
 
 		options = new MiX10Options();
 		options.parse(args);
+
+    if (options.help()) {
+      options.getUsage();
+      return;
+    }
 
 		if (options.mix10c()) {
 			if (options.files().isEmpty() && !options.help()) {
